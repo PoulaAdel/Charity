@@ -1,0 +1,37 @@
+"""
+Author: Developed by Poula Adel
+License: MIT License 2022
+Copyright ©,All rights reserved
+"""
+from django.urls import include, path
+from django.contrib import admin
+from rest_framework import routers
+from <AppName> import views
+
+router = routers.DefaultRouter()
+
+
+# Wire up our API using automatic URL routing.
+# Additionally, we include login URLs for the browsable API.
+urlpatterns = [
+    path('', include(router.urls)),
+    path('admin/', admin.site.urls),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+]router.register(r'users', views.UserViewSet)
+router.register(r'branchs', views.BranchViewSet)
+router.register(r'cashiers', views.CashierViewSet)
+router.register(r'suppliers', views.SupplierViewSet)
+router.register(r'customers', views.CustomerViewSet)
+router.register(r'departments', views.DepartmentViewSet)
+router.register(r'employees', views.EmployeeViewSet)
+router.register(r'categorys', views.CategoryViewSet)
+router.register(r'products', views.ProductViewSet)
+router.register(r'prices', views.PriceViewSet)
+router.register(r'stocks', views.StockViewSet)
+router.register(r'coupons', views.CouponViewSet)
+router.register(r'receipts', views.ReceiptViewSet)
+router.register(r'entrys', views.EntryViewSet)
+router.register(r'weights', views.WeightViewSet)
+router.register(r'shipments', views.ShipmentViewSet)
+router.register(r'expenses', views.ExpenseViewSet)
+router.register(r'purchases', views.PurchaseViewSet)

@@ -1,0 +1,32 @@
+"""
+Author: Developed by Poula Adel
+License: MIT License 2022
+Copyright ©,All rights reserved
+"""
+
+================================
+: Create Dump data to test app :
+================================
+
+Prerequests:
+------------
+Note: take care of business logic
+Make sure that Models are organized in 'models.csv'
+i.e.
+	
+    Category
+	Product
+	....
+
+    Note: take care of business logic
+    if Products have a foreign key of categories
+    then Category must be ubove Product
+
+========================================================
+
+Usage: 
+------
+
+    $ python3 manage.py dummydata <app_name>
+
+    

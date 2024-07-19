@@ -1,0 +1,45 @@
+"""
+Author: Developed by Poula Adel
+License: MIT License 2022
+Copyright ©,All rights reserved
+"""
+
+===============================
+: Setup Project Automagically :
+===============================
+
+Prerequests:
+------------
+
+1# Make Sure You Added App To Settings
+
+2# Make Sure You added your models successfully to you <AppName>/models.py
+
+===================================================================================
+
+Usage: 
+------
+
+    $ python3 manage.py init_app <app_name>
+
+1# Unzip folder to <appname>/management/commands
+
+2# Add Model Names to the csv file at <appname>/management/commands/data/models.csv
+	as a list (like typing requirements.txt)
+
+	i.e.
+	
+    Category
+	Product
+	....
+
+    Note: take care of business logic
+    if Products have a foreign key of categories
+    then Category must be ubove Product
+
+3# Run command
+	python3 manage.py init_app <app_name>
+
+4# Copy content of file at  <appname>/management/commands/temp/temp.txt
+	and paste routes at <projectfolder>/urls.py
+

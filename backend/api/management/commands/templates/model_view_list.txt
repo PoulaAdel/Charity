@@ -1,0 +1,24 @@
+
+"""
+:List View for <CLASSNAME>
+"""
+class <CLASSNAME>ViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows <CLASSNAME>s to be viewed or edited.
+    """
+    queryset = <CLASSNAME>.objects.all()
+    serializer_class = <CLASSNAME>Serializer
+    # permission_classes = [permissions.IsAuthenticated]
+    
+"""
+:<CLASSNAME> Item Control
+"""
+class <CLASSNAME>ViewDetail(RetrieveUpdateDestroyAPIView):
+    """
+    API endpoint that allows <CLASSNAME>s to be viewed or edited.
+    """
+    queryset = <CLASSNAME>.objects.all()
+    serializer_class = <CLASSNAME>Serializer
+    lookup_field = 'pk'
+    # permission_classes = [permissions.IsAuthenticated]
+    

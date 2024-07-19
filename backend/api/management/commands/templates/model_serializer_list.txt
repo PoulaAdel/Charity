@@ -1,0 +1,8 @@
+
+"""
+:<CLASSNAME> Serializer
+"""
+class <CLASSNAME>Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = <CLASSNAME>
+        fields = '__all__'
