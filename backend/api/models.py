@@ -47,48 +47,59 @@ Orgnization Assets
 
 # ==Services Offered
 class Service(models.Model):
-    name = models.CharField(_("Name"),max_length=255)
+    name = models.CharField(_("Name"), max_length=255)
     description = models.TextField(_("Description"))
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return self.name
+
 
 # ==Donations
 class Donation(models.Model):
     FINANCIAL = 0
     MATERIAL = 1
-    DONATION_TYPE_CHOICES = (('FINANCIAL', _('Financial')), ('MATERIAL', _('Material')))
-    donor = models.ForeignKey(User, on_delete=models.CASCADE)  # Use User model for donor
-    amount = models.DecimalField(_("Amount"),max_digits=10, decimal_places=2)
-    donation_type = models.CharField(_("Type"),max_length=20, choices=DONATION_TYPE_CHOICES)
+    DONATION_TYPE_CHOICES = (("FINANCIAL", _("Financial")), ("MATERIAL", _("Material")))
+    donor = models.ForeignKey(
+        User, on_delete=models.CASCADE
+    )  # Use User model for donor
+    amount = models.DecimalField(_("Amount"), max_digits=10, decimal_places=2)
+    donation_type = models.CharField(
+        _("Type"), max_length=20, choices=DONATION_TYPE_CHOICES
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return self.donor
 
+
 # ==Families
 class Family(models.Model):
-    name = models.CharField(_("Name"),max_length=255)
-    count = models.PositiveIntegerField(_("Count"),blank=True, null=True)
-    contact = models.TextField(_("Contact"),blank=True)
+    name = models.CharField(_("Name"), max_length=255)
+    count = models.PositiveIntegerField(_("Count"), blank=True, null=True)
+    contact = models.TextField(_("Contact"), blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return self.name
+
 
 # ==Family Members
 class Person(models.Model):
     family = models.ForeignKey(Family, on_delete=models.CASCADE)
-    name = models.CharField(_("Name"),max_length=255)
-    nid = models.FileField(_("National ID"),upload_to='ids/') #adjust path
-    face_img = models.FileField(_("Face Image"),upload_to='faces/')  #adjust path
+    name = models.CharField(_("Name"), max_length=255)
+    nid = models.FileField(_("National ID"), upload_to="ids/")  # adjust path
+    face_img = models.FileField(_("Face Image"), upload_to="faces/")  # adjust path
     age = models.PositiveIntegerField(_("Age"))
-    education = models.TextField(_("Education"),blank=True)
-    income = models.TextField(_("Income"),blank=True)
-    health = models.TextField(_("Health"),blank=True)
+    education = models.TextField(_("Education"), blank=True)
+    income = models.TextField(_("Income"), blank=True)
+    health = models.TextField(_("Health"), blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return self.name
 
@@ -105,25 +116,31 @@ class Statement(models.Model):
     family = models.ForeignKey(Family, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    def __str__(self):
-        return self.family+self.created_at
 
-# Statement 
+    def __str__(self):
+        return self.family + self.created_at
+
+
+# Statement Leaves
 class Social(models.Model):
     statement = models.ForeignKey(Statement, on_delete=models.CASCADE)
     content = models.TextField(_("Content"))
+
 
 class Spiritual(models.Model):
     statement = models.ForeignKey(Statement, on_delete=models.CASCADE)
     content = models.TextField(_("Content"))
 
+
 class Residential(models.Model):
     statement = models.ForeignKey(Statement, on_delete=models.CASCADE)
     content = models.TextField(_("Content"))
 
+
 class Economical(models.Model):
     statement = models.ForeignKey(Statement, on_delete=models.CASCADE)
     content = models.TextField(_("Content"))
+
 
 # Opinion
 class Opinion(models.Model):
@@ -131,8 +148,10 @@ class Opinion(models.Model):
     content = models.TextField(_("Content"))
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return self.statement
+
 
 # Suggestion
 class Suggestion(models.Model):
@@ -140,8 +159,10 @@ class Suggestion(models.Model):
     content = models.TextField(_("Content"))
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return self.statement
+
 
 # Judgement
 class Judgement(models.Model):
@@ -149,8 +170,10 @@ class Judgement(models.Model):
     content = models.TextField(_("Content"))
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return self.statement
+
 
 """
 Action Plan 
@@ -162,21 +185,21 @@ Action Plan
 class Supply(models.Model):
     family = models.ForeignKey(Family, on_delete=models.CASCADE)
     service = models.ForeignKey(Service, on_delete=models.DO_NOTHING)
-    status = models.BooleanField(_("Status"),default=False)
-    amount = models.DecimalField(_("Amount"),max_digits=10, decimal_places=2)
+    status = models.BooleanField(_("Status"), default=False)
+    amount = models.DecimalField(_("Amount"), max_digits=10, decimal_places=2)
     note = models.TextField(_("Notes"))
+
     def __str__(self):
         return self.family
-    
+
+
 # Check
 class Check(models.Model):
     supply = models.ForeignKey(Supply, on_delete=models.DO_NOTHING)
-    receiver = models.ForeignKey(Person)
-    sponsor = models.ForeignKey(User)
+    receiver = models.ForeignKey(Person, on_delete=models.DO_NOTHING)
+    sponsor = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return self.pk
-    
-    
-
