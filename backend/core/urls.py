@@ -11,15 +11,6 @@ from api import views
 
 router = routers.DefaultRouter()
 
-# Wire up our API using automatic URL routing.
-# Additionally, we include login URLs for the browsable API.
-urlpatterns = [
-    path('', include(router.urls)),
-    path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
-]
-
-
 router.register(r'users', views.UserViewSet)
 router.register(r'services', views.ServiceViewSet)
 router.register(r'donations', views.DonationViewSet)
@@ -35,3 +26,11 @@ router.register(r'suggestions', views.SuggestionViewSet)
 router.register(r'judgements', views.JudgementViewSet)
 router.register(r'supplys', views.SupplyViewSet)
 router.register(r'checks', views.CheckViewSet)
+
+# Wire up our API using automatic URL routing.
+# Additionally, we include login URLs for the browsable API.
+urlpatterns = [
+    path('', include(router.urls)),
+    path('admin/', admin.site.urls),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+]

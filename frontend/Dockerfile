@@ -1,10 +1,14 @@
-FROM python:3.9-slim-buster
+# Use a Flutter base image
+FROM dart:latest
 
-WORKDIR /code
+# Set the working directory
+WORKDIR /app
 
-COPY ../requirements.txt requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy the Flutter project
+COPY ./ui .
 
-COPY . .
+# Install dependencies
+RUN flutter pub get
 
-CMD ["python", "main.py"]
+# Command to run the Flutter application
+CMD ["flutter", "run"]
