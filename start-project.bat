@@ -1,9 +1,9 @@
 @ECHO OFF
 
 REM Change these to match your project directory and container names
-SET PROJECT_DIR=%~dp0..
-SET BACKEND_CONTAINER_NAME=Backend
-SET FRONTEND_CONTAINER_NAME=Frontend
+SET PROJECT_DIR=./
+SET BACKEND_CONTAINER_NAME=backend
+SET FRONTEND_CONTAINER_NAME=frontend
 
 docker-compose up -d
 
@@ -19,5 +19,5 @@ IF ERRORLEVEL 1 (
 docker logs -f "$BACKEND_CONTAINER_NAME"
 
 ECHO Starting Flutter development server...
-cd %PROJECT_DIR%\frontend
+cd %PROJECT_DIR%/frontend
 flutter run
