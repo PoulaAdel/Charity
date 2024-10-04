@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../shared/widgets/ui/search_field.dart';
-import '../../../shared/widgets/ui/today_text.dart';
+import '../../../shared/widgets/search_field.dart';
+import '../../../shared/widgets/today_text.dart';
 import '../../../shared/constants/app_constants.dart';
 
 class Header extends StatelessWidget {

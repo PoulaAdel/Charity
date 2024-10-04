@@ -5,10 +5,8 @@ import '../../database/models/app_models.dart';
 
 class AuthService extends GetxService {
   bool _isAuthenticated = false;
-  final UserHelper _userHelper = UserHelper(objectBox.store);
-  final LocalSecureStorage _localSecureStorage = Get.find();
-
   bool get isAuthenticated => _isAuthenticated;
+  final LocalSecureStorage _localSecureStorage = Get.find();
 
   Future<void> login(String uid, String pwd) async {
     // Perform login logic

@@ -1,26 +1,25 @@
 library reports_products;
 
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../config/routes/app_pages.dart';
 import '../../../../database/models/app_models.dart';
-import '../../../../shared/widgets/ui/sidebar_header.dart';
+import '../../../../shared/widgets/sidebar_header.dart';
 import '../../../../utils/services/authetication_services.dart';
 import '../../../../utils/services/local_secure_storage_services.dart';
 
 import '../../../../shared/constants/app_constants.dart';
-import '../../../../shared/widgets/ui/chatting_card.dart';
-import '../../../../shared/widgets/ui/get_premium_card.dart';
-import '../../../../shared/widgets/ui/list_profil_image.dart';
+import '../../../../shared/widgets/chatting_card.dart';
+import '../../../../shared/widgets/get_premium_card.dart';
+import '../../../../shared/widgets/list_profil_image.dart';
 import '../../../../utils/ui/ui_utils.dart';
 
 // models
 import '../../models/profile.dart';
 
 // component
-import '../../../../shared/widgets/ui/sidebar.dart';
+import '../../../../shared/widgets/sidebar.dart';
 import '../components/header.dart';
 import '../components/profile_tile.dart';
 import '../components/recent_messages.dart';
@@ -208,7 +207,7 @@ class ReportsProductsScreen extends StatelessWidget {
               padding: const EdgeInsets.only(right: kSpacing),
               child: IconButton(
                 onPressed: onPressedMenu,
-                icon: const Icon(EvaIcons.menu),
+                icon: const Icon(Icons.menu),
                 tooltip: "menu",
               ),
             ),

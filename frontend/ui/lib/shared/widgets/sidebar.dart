@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import '../../../shared/widgets/ui/sidebar_header.dart';
+// import 'package:get/get.dart';
+import '../../../shared/widgets/sidebar_header.dart';
 
-import '../../../features/dashboard/views/screens/dashboard_screen.dart';
-import '../../../features/reports/views/screens/reports_daily_screen.dart';
-import '../../../features/reports/views/screens/reports_monthly_screen.dart';
-import '../../../features/reports/views/screens/reports_products_screen.dart';
-import '../../constants/app_constants.dart';
+import '../constants/app_constants.dart';
 
 class Sidebar extends StatelessWidget {
   const Sidebar({
@@ -34,160 +30,147 @@ class Sidebar extends StatelessWidget {
             scrollDirection: Axis.vertical,
             children: [
               ListTile(
-                leading: const Icon(EvaIcons.grid),
+                leading: const Icon(Icons.abc),
                 title: const Text("Dashboard"),
                 onTap: () {
-                  Get.offAll(() => DashboardScreen(),
-                      binding: DashboardBinding());
+                  // Get.offAll(() => DashboardScreen(),
+                  //     binding: DashboardBinding());
                 },
               ),
-              ListTile(
-                leading: const Icon(Icons.money),
-                title: const Text("Cashier"),
-                onTap: () {
-                  Get.offAll(() => CashierScreen(), binding: CashierBinding());
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.list),
-                title: const Text("Categories"),
-                onTap: () {
-                  Get.offAll(() => CategoriesListScreen(),
-                      binding: CategoriesListBinding());
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.wallet),
-                title: const Text("Coupons"),
-                onTap: () {
-                  Get.offAll(() => CouponsListScreen(),
-                      binding: CouponsListBinding());
-                },
-              ),
+              const Divider(thickness: 1),
               ExpansionTile(
-                title: const Text("Products"),
-                children: <Widget>[
-                  ListTile(
-                    leading: const Icon(Icons.list),
-                    title: const Text("List Products"),
-                    onTap: () {
-                      Get.offAll(() => ProductsListScreen(),
-                          binding: ProductsListBinding());
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.code_off),
-                    title: const Text("Products Barcode"),
-                    onTap: () {
-                      Get.offAll(() => ProductsPrintBarcodeScreen(),
-                          binding: ProductsPrintBarcodeBinding());
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.print),
-                    title: const Text("Print Label"),
-                    onTap: () {
-                      Get.offAll(() => ProductsPrintLabelScreen(),
-                          binding: ProductsPrintLabelBinding());
-                    },
-                  ),
-                ],
-              ),
-              ExpansionTile(
-                title: const Text("Cash Flow"),
-                children: <Widget>[
-                  ListTile(
-                    leading: const Icon(Icons.money),
-                    title: const Text("Sales"),
-                    onTap: () {
-                      Get.offAll(() => SalesListScreen(),
-                          binding: SalesListBinding());
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.money),
-                    title: const Text("Sales On Hold"),
-                    onTap: () {
-                      Get.offAll(() => SalesOnHoldScreen(),
-                          binding: SalesOnHoldBinding());
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.list),
-                    title: const Text("Purchases"),
-                    onTap: () {
-                      Get.offAll(() => PurchasesListScreen(),
-                          binding: PurchasesListBinding());
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.list),
-                    title: const Text("Expenses"),
-                    onTap: () {
-                      Get.offAll(() => ExpensesListScreen(),
-                          binding: ExpensesListBinding());
-                    },
-                  ),
-                ],
-              ),
-              ExpansionTile(
-                title: const Text("People"),
+                title: const Text("Accounts Management"),
                 children: <Widget>[
                   ListTile(
                     leading: const Icon(Icons.list),
                     title: const Text("Users"),
                     onTap: () {
-                      Get.offAll(() => UsersListScreen(),
-                          binding: UsersListBinding());
+                      // Get.offAll(() => UsersScreen(), binding: UsersBinding());
                     },
                   ),
                   ListTile(
-                    leading: const Icon(Icons.list),
-                    title: const Text("Customers"),
+                    leading: const Icon(Icons.code_off),
+                    title: const Text("Donors"),
                     onTap: () {
-                      Get.offAll(() => CustomersListScreen(),
-                          binding: CustomersListBinding());
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.list),
-                    title: const Text("Suppliers"),
-                    onTap: () {
-                      Get.offAll(() => SuppliersListScreen(),
-                          binding: SuppliersListBinding());
+                      // Get.offAll(() => DonorsScreen(),
+                      //     binding: DonorsBinding());
                     },
                   ),
                 ],
               ),
+              const Divider(thickness: 1),
+              ExpansionTile(
+                title: const Text("Orgnizations Assets"),
+                children: <Widget>[
+                  ListTile(
+                    leading: const Icon(Icons.list),
+                    title: const Text("Donations"),
+                    onTap: () {
+                      // Get.offAll(() => DonationsScreen(),
+                      //     binding: DonationsBinding());
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.code_off),
+                    title: const Text("Services"),
+                    onTap: () {
+                      // Get.offAll(() => ServicesScreen(),
+                      //     binding: ServicesBinding());
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.print),
+                    title: const Text("Served Families"),
+                    onTap: () {
+                      // Get.offAll(() => FamiliesScreen(),
+                      //     binding: FamiliesBinding());
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.print),
+                    title: const Text("Served Members"),
+                    onTap: () {
+                      // Get.offAll(() => MembersScreen(),
+                      //     binding: MembersBinding());
+                    },
+                  ),
+                ],
+              ),
+              const Divider(thickness: 1),
+              ExpansionTile(
+                title: const Text("Statements Management"),
+                children: <Widget>[
+                  ListTile(
+                    leading: const Icon(Icons.list),
+                    title: const Text("Info Gathering"),
+                    onTap: () {
+                      // Get.offAll(() => InfoGatheringScreen(),
+                      //     binding: InfoGatheringBinding());
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.code_off),
+                    title: const Text("Info Processing"),
+                    onTap: () {
+                      // Get.offAll(() => InfoProcessingScreen(),
+                      //     binding: InfoProcessingBinding());
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.print),
+                    title: const Text("Final Decision"),
+                    onTap: () {
+                      // Get.offAll(() => FinalDecisionScreen(),
+                      //     binding: FinalDecisionBinding());
+                    },
+                  ),
+                ],
+              ),
+              const Divider(thickness: 1),
+              ExpansionTile(
+                title: const Text("Action Plan"),
+                children: <Widget>[
+                  ListTile(
+                    leading: const Icon(Icons.list),
+                    title: const Text("Supplies"),
+                    onTap: () {
+                      // Get.offAll(() => SuppliesScreen(),
+                      //     binding: SuppliesBinding());
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.code_off),
+                    title: const Text("Supplies Check"),
+                    onTap: () {
+                      // Get.offAll(() => ChecksScreen(),
+                      //     binding: ChecksBinding());
+                    },
+                  ),
+                ],
+              ),
+              const Divider(thickness: 1),
               ExpansionTile(
                 title: const Text("Reports"),
                 children: <Widget>[
                   ListTile(
                     leading: const Icon(Icons.list),
-                    title: const Text("Daily Report"),
+                    title: const Text("Custom"),
                     onTap: () {
-                      Get.offAll(() => ReportsDailyScreen(),
-                          binding: ReportsDailyBinding());
+                      // Get.offAll(() => CustomReportScreen(),
+                      //     binding: CustomReportBinding());
                     },
                   ),
                   ListTile(
-                    leading: const Icon(Icons.list),
-                    title: const Text("Monthly Report"),
+                    leading: const Icon(Icons.code_off),
+                    title: const Text("Monthly"),
                     onTap: () {
-                      Get.offAll(() => ReportsMonthlyScreen(),
-                          binding: ReportsMonthlyBinding());
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.list),
-                    title: const Text("Stock Report"),
-                    onTap: () {
-                      Get.offAll(() => ReportsProductsScreen(),
-                          binding: ReportsProductsBinding());
+                      // Get.offAll(() => MonthlyReportScreen(),
+                      //     binding: MonthlyReportBinding());
                     },
                   ),
                 ],
               ),
+              const Divider(thickness: 1),
               const Divider(thickness: 1),
             ], //ListViewChildren
           ),
@@ -196,7 +179,7 @@ class Sidebar extends StatelessWidget {
           padding: EdgeInsets.all(kSpacing),
           child: Column(
             children: [
-              Text("The Poulagrammer Corp."),
+              Text("Developed By Poula Adel."),
               Text("MIT License 2022 - 2032"),
               Align(
                 alignment: Alignment.center,

@@ -1,4 +1,3 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../shared/constants/app_constants.dart';
@@ -38,7 +37,7 @@ class TeamMember extends StatelessWidget {
         const Spacer(),
         IconButton(
           onPressed: onPressedAdd,
-          icon: const Icon(EvaIcons.plus),
+          icon: const Icon(Icons.plus_one),
           tooltip: "add member",
         )
       ],

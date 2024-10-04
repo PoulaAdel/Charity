@@ -21,6 +21,11 @@ class AppPages {
 
   static final routes = [
     GetPage(
+      name: _Paths.welcome,
+      page: () => WelcomeScreen(),
+      binding: WelcomeBinding(),
+    ),
+    GetPage(
       name: _Paths.login,
       page: () => LoginScreen(),
       binding: LoginBinding(),
@@ -29,11 +34,6 @@ class AppPages {
       name: _Paths.register,
       page: () => RegisterScreen(),
       binding: RegisterBinding(),
-    ),
-    GetPage(
-      name: _Paths.welcome,
-      page: () => WelcomeScreen(),
-      binding: WelcomeBinding(),
     ),
     GetPage(
       name: _Paths.dashboard,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../utils/helpers/app_helpers.dart';
-import '../../constants/app_constants.dart';
+import '../constants/app_constants.dart';
 
 class OverviewHeader extends StatelessWidget {
   const OverviewHeader({

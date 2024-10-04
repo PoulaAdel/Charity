@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
-import '../../constants/app_constants.dart';
+import '../constants/app_constants.dart';
 
 class ProjectCardData {
   final double percent;

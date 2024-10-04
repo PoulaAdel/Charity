@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../constants/app_constants.dart';
+import '../constants/app_constants.dart';
 import 'project_card.dart';
 
 class ActiveProjectCard extends StatelessWidget {

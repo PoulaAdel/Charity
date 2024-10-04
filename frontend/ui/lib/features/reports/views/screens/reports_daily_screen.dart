@@ -1,24 +1,23 @@
 library reports_daily;
 
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../config/routes/app_pages.dart';
 import '../../../../database/models/app_models.dart';
-import '../../../../shared/widgets/ui/overview_header.dart';
-import '../../../../shared/widgets/ui/progress_card.dart';
-import '../../../../shared/widgets/ui/progress_report_card.dart';
-import '../../../../shared/widgets/ui/sidebar_header.dart';
+import '../../../../shared/widgets/overview_header.dart';
+import '../../../../shared/widgets/progress_card.dart';
+import '../../../../shared/widgets/progress_report_card.dart';
+import '../../../../shared/widgets/sidebar_header.dart';
 import '../../../../utils/services/authetication_services.dart';
 import '../../../../utils/services/local_secure_storage_services.dart';
 
 import '../../../../shared/constants/app_constants.dart';
-import '../../../../shared/widgets/ui/chatting_card.dart';
-import '../../../../shared/widgets/ui/get_premium_card.dart';
-import '../../../../shared/widgets/ui/list_profil_image.dart';
-import '../../../../shared/widgets/ui/project_card.dart';
-import '../../../../shared/widgets/ui/task_card.dart';
+import '../../../../shared/widgets/chatting_card.dart';
+import '../../../../shared/widgets/get_premium_card.dart';
+import '../../../../shared/widgets/list_profil_image.dart';
+import '../../../../shared/widgets/project_card.dart';
+import '../../../../shared/widgets/task_card.dart';
 import '../../../../utils/helpers/app_helpers.dart';
 import '../../../../utils/ui/ui_utils.dart';
 
@@ -26,8 +25,8 @@ import '../../../../utils/ui/ui_utils.dart';
 import '../../models/profile.dart';
 
 // component
-import '../../../../shared/widgets/ui/sidebar.dart';
-import '../../../../shared/widgets/ui/active_project_card.dart';
+import '../../../../shared/widgets/sidebar.dart';
+import '../../../../shared/widgets/active_project_card.dart';
 import '../components/header.dart';
 import '../components/profile_tile.dart';
 import '../components/recent_messages.dart';
@@ -217,7 +216,7 @@ class ReportsDailyScreen extends StatelessWidget {
               padding: const EdgeInsets.only(right: kSpacing),
               child: IconButton(
                 onPressed: onPressedMenu,
-                icon: const Icon(EvaIcons.menu),
+                icon: const Icon(Icons.menu),
                 tooltip: "menu",
               ),
             ),

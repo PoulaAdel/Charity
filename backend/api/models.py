@@ -98,7 +98,7 @@ class Family(models.Model):
 
 
 # ==Family Members
-class Person(models.Model):
+class Member(models.Model):
     FATHER = 0
     MOTHER = 1
     SON = 2
@@ -223,7 +223,7 @@ class Supply(models.Model):
 # Check
 class Check(models.Model):
     supply = models.ForeignKey(Supply, on_delete=models.DO_NOTHING)
-    receiver = models.ForeignKey(Person, on_delete=models.DO_NOTHING)
+    receiver = models.ForeignKey(Member, on_delete=models.DO_NOTHING)
     sponsor = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

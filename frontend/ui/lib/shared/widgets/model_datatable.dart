@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../shared/constants/app_constants.dart';
-import '../../../shared/widgets/ui/scrollable_datatable.dart';
+import '../../shared/widgets/scrollable_datatable.dart';
 
 abstract class ModelDataTableUI extends StatelessWidget {
   final String title;

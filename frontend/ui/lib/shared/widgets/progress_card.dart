@@ -38,7 +38,7 @@ class ProgressCard extends StatelessWidget {
                 child: SizedBox(
                   height: 200,
                   width: 200,
-                  child: SvgPicture.asset(
+                  child: Image.asset(
                     ImageVectorPath.happy2,
                     fit: BoxFit.fitHeight,
                   ),

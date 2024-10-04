@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import '../../../shared/constants/app_constants.dart';
 
@@ -35,7 +34,7 @@ class UpgradePremiumCard extends StatelessWidget {
                 padding: const EdgeInsets.only(
                   top: 80,
                 ),
-                child: SvgPicture.asset(
+                child: Image.asset(
                   ImageVectorPath.happy,
                   fit: BoxFit.contain,
                 ),

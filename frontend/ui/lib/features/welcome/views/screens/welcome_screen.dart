@@ -1,9 +1,9 @@
 library welcome;
 
-import 'package:e_pos/app/utils/ui/ui_utils.dart';
+import '../../../../utils/ui/ui_utils.dart';
 
 import 'package:flutter/material.dart';
-import 'package:e_pos/app/utils/localization/changelocal.dart';
+import '../../../../utils/localization/changelocal.dart';
 import 'package:get/get.dart';
 
 // component
@@ -13,8 +13,6 @@ part '../../bindings/welcome_binding.dart';
 
 // controller
 part '../../controllers/welcome_controller.dart';
-
-// models
 
 class WelcomeScreen extends GetView<TrasnlationController> {
   WelcomeScreen({Key? key}) : super(key: key);

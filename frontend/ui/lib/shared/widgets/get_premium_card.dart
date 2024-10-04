@@ -31,7 +31,7 @@ class GetPremiumCard extends StatelessWidget {
             children: [
               Align(
                 alignment: Alignment.topRight,
-                child: SvgPicture.asset(
+                child: Image.asset(
                   ImageVectorPath.wavyBus,
                   width: 180,
                   height: 180,

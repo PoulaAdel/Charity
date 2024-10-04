@@ -31,6 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   http: 
+  intl:
   get:
   flutter_secure_storage:
   shared_preferences: 

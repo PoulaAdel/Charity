@@ -1,4 +1,3 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../shared/constants/app_constants.dart';
@@ -92,13 +91,13 @@ class TaskCard extends StatelessWidget {
               child: Row(
                 children: [
                   _IconButton(
-                    iconData: EvaIcons.messageCircleOutline,
+                    iconData: Icons.message_outlined,
                     onPressed: onPressedComments,
                     totalContributors: data.totalComments,
                   ),
                   const SizedBox(width: kSpacing / 2),
                   _IconButton(
-                    iconData: EvaIcons.peopleOutline,
+                    iconData: Icons.people_outline_outlined,
                     onPressed: onPressedContributors,
                     totalContributors: data.totalContributors,
                   ),

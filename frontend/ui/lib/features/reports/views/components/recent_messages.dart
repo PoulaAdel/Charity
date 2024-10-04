@@ -1,4 +1,3 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 
 class RecentMessages extends StatelessWidget {
@@ -13,7 +12,7 @@ class RecentMessages extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Icon(EvaIcons.messageCircle),
+        const Icon(Icons.message_rounded),
         const SizedBox(width: 10),
         const Text(
           "Recent Messages",
@@ -21,7 +20,7 @@ class RecentMessages extends StatelessWidget {
         const Spacer(),
         IconButton(
           onPressed: onPressedMore,
-          icon: const Icon(EvaIcons.moreVertical),
+          icon: const Icon(Icons.more),
           tooltip: "more",
         )
       ],

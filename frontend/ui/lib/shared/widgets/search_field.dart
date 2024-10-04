@@ -18,7 +18,7 @@ class SearchField extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide.none,
         ),
-        prefixIcon: const Icon(EvaIcons.search),
+        prefixIcon: const Icon(Icons.search),
         hintText: (hText == null) ? "Search ..." : hText,
         isDense: true,
         fillColor: Theme.of(context).cardColor,
