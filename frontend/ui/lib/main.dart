@@ -29,7 +29,7 @@ Future<void> initialServices() async {
   // initial secure app prefrences (session)
   Get.put(LocalSecureStorage().init());
   // intial auhentication
-  Get.put(AuthService());
+  Get.put(AuthService("http://127.0.0.1:8000"));
 }
 
 class MyApp extends StatelessWidget {

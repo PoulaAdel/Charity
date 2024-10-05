@@ -36,7 +36,8 @@ class LoginController extends GetxController {
   }
 
   bool usernameExists(String usernamInput) {
-    return UserHelper(objectBox.store).checkUIDExists(usernamInput);
+    // return UserHelper(objectBox.store).checkUIDExists(usernamInput);
+    return false;
   }
 
   Future<void> loginCheck() async {
@@ -45,8 +46,8 @@ class LoginController extends GetxController {
       controllerID.text.toString().trim(),
       controllerPWD.text.toString(),
     );
-
-    if (_authService.isAuthenticated) {
+    final bool success = await _authService.isAuthenticated();
+    if (success) {
       Get.offAllNamed(Routes.dashboard);
     } else {
       Get.snackbar("Wrong Password!", "Please recheck you password!");

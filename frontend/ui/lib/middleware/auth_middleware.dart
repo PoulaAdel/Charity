@@ -7,14 +7,19 @@ import '../utils/services/authetication_services.dart';
 class AuthMiddleware extends GetMiddleware {
   final AuthService _authService = Get.find();
 
+  bool userGranted = false;
+
   @override
   RouteSettings? redirect(String? route) {
-    if (!_authService.isAuthenticated) {
+    authinticate();
+    if (userGranted && (route == Routes.login)) {
+      return const RouteSettings(name: Routes.dashboard);
+    } else {
       return const RouteSettings(name: Routes.login);
     }
-    if (_authService.isAuthenticated && (route == Routes.login)) {
-      return const RouteSettings(name: Routes.dashboard);
-    }
-    return null;
+  }
+
+  Future<void> authinticate() async {
+    userGranted = await _authService.isAuthenticated();
   }
 }
