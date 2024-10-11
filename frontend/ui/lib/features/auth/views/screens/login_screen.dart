@@ -4,9 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../config/routes/app_pages.dart';
-
-// component
-import '../../../../database/models/app_models.dart';
 import '../../../../utils/services/authetication_services.dart';
 
 // binding
@@ -14,8 +11,6 @@ part '../../bindings/login_binding.dart';
 
 // controller
 part '../../controllers/login_controller.dart';
-
-// models
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
@@ -47,17 +42,20 @@ class LoginScreen extends StatelessWidget {
               child: Column(
                 children: [
                   TextFormField(
-                    controller: controller.controllerID,
-                    validator: (value) => controller.usernameExists(value!)
-                        ? null
-                        : "No Users Found!",
+                    controller: controller._usernameController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your username';
+                      }
+                      return null;
+                    },
                     maxLines: 1,
                     decoration: InputDecoration(
                       errorStyle: const TextStyle(
                         fontSize: 16.0,
                         color: Colors.yellow,
                       ),
-                      hintText: 'Enter your username or phone',
+                      hintText: 'Enter your username',
                       prefixIcon: const Icon(Icons.email),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -68,7 +66,7 @@ class LoginScreen extends StatelessWidget {
                     height: 20,
                   ),
                   TextFormField(
-                    controller: controller.controllerPWD,
+                    controller: controller._passwordController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your password';
@@ -90,7 +88,7 @@ class LoginScreen extends StatelessWidget {
                     ),
                     onEditingComplete: () {
                       if (controller.loginFormKey.currentState!.validate()) {
-                        controller.loginCheck();
+                        controller.login();
                       }
                     },
                   ),
@@ -100,7 +98,7 @@ class LoginScreen extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {
                       if (controller.loginFormKey.currentState!.validate()) {
-                        controller.loginCheck();
+                        controller.login();
                       }
                     },
                     style: ElevatedButton.styleFrom(

@@ -9,15 +9,11 @@ import '../../../../config/routes/app_pages.dart';
 import '../../../../database/models/app_models.dart';
 import '../../../../utils/services/authetication_services.dart';
 
-// component
-
 // binding
 part '../../bindings/register_binding.dart';
 
 // controller
 part '../../controllers/register_controller.dart';
-
-// models
 
 class RegisterScreen extends StatelessWidget {
   RegisterScreen({Key? key}) : super(key: key);
@@ -53,15 +49,11 @@ class RegisterScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         child: TextFormField(
-                          controller: controller.controllerUsername,
-                          validator: (value) => value
-                                      .toString()
-                                      .trim()
-                                      .isNotEmpty &&
-                                  !controller
-                                      .usernameExists(value.toString().trim())
-                              ? null
-                              : "Please enter unique username",
+                          controller: controller._usernameController,
+                          validator: (value) =>
+                              value.toString().trim().isNotEmpty
+                                  ? null
+                                  : "Please enter unique username",
                           maxLines: 1,
                           decoration: InputDecoration(
                             errorStyle: const TextStyle(
@@ -81,7 +73,7 @@ class RegisterScreen extends StatelessWidget {
                       ),
                       Expanded(
                         child: TextFormField(
-                          controller: controller.controllerPhone,
+                          controller: controller._phoneController,
                           keyboardType: TextInputType.phone,
                           validator: (value) => value.toString().length == 11
                               ? null
@@ -106,7 +98,7 @@ class RegisterScreen extends StatelessWidget {
                     height: kSpacing,
                   ),
                   TextFormField(
-                    controller: controller.controllerEmail,
+                    controller: controller._emailController,
                     keyboardType: TextInputType.emailAddress,
                     validator: (value) => EmailValidator.validate(value!)
                         ? null
@@ -128,7 +120,7 @@ class RegisterScreen extends StatelessWidget {
                     height: 20,
                   ),
                   TextFormField(
-                    controller: controller.controllerPwd,
+                    controller: controller._passwordController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your password';
@@ -153,16 +145,7 @@ class RegisterScreen extends StatelessWidget {
                     height: kSpacing,
                   ),
                   ElevatedButton(
-                    onPressed: () {
-                      int createdPK = 0;
-                      createdPK = controller.registerNewUser();
-                      if (createdPK > 0) {
-                        Get.snackbar("Success!",
-                            "User Created Successfully and waiting for manager to give permissions");
-                      } else {
-                        Get.snackbar("Failed!", "Somthing went wrong!");
-                      }
-                    },
+                    onPressed: () => controller.register(),
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
                     ),

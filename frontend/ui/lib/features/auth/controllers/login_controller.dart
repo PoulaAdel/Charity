@@ -2,17 +2,15 @@ part of auth_login;
 
 class LoginController extends GetxController {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-
-  // for handling authenticaion
-  final AuthService _authService = Get.find();
-
+  // Access AuthService
+  final AuthService _authService = Get.find<AuthService>();
   //fields needed for handling login form
   final loginFormKey = GlobalKey<FormState>();
-  TextEditingController controllerID = TextEditingController();
-  TextEditingController controllerPWD = TextEditingController();
-
-  // the user who is currentlly active
-  User? currentUser;
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  //fields needed for handling request
+  final _isLoading = false.obs;
+  final _errorMessage = ''.obs;
 
   void openDrawer() {
     if (scaffoldKey.currentState != null) {
@@ -23,34 +21,48 @@ class LoginController extends GetxController {
   @override
   void onInit() {
     // initiate text fields
-    controllerID.clear();
-    controllerPWD.clear();
+    _usernameController.clear();
+    _passwordController.clear();
     super.onInit();
   }
 
   @override
   void onClose() {
-    controllerID.dispose();
-    controllerPWD.dispose();
+    _usernameController.dispose();
+    _passwordController.dispose();
     super.onClose();
   }
 
-  bool usernameExists(String usernamInput) {
-    // return UserHelper(objectBox.store).checkUIDExists(usernamInput);
-    return false;
+  Future<void> login() async {
+    try {
+      _isLoading.value = true;
+
+      final username = _usernameController.text;
+      final password = _passwordController.text;
+
+      final result =
+          await _authService.login(username, password); // Use AuthService
+
+      if (result) {
+        // Successfully logged in, save token or handle further processing
+        _isLoading.value = false;
+        Get.offNamed('/homepage'); // Replace with your desired route
+      } else {
+        _isLoading.value = false;
+        _errorMessage.value = 'Login failed. Please check your credentials.';
+        update();
+      }
+    } catch (e) {
+      _isLoading.value = false;
+      _errorMessage.value = 'An error occurred. Please try again later.';
+      update();
+    }
   }
 
-  Future<void> loginCheck() async {
-    // check if credentials are exitis and right
-    await _authService.login(
-      controllerID.text.toString().trim(),
-      controllerPWD.text.toString(),
-    );
-    final bool success = await _authService.isAuthenticated();
-    if (success) {
-      Get.offAllNamed(Routes.dashboard);
-    } else {
-      Get.snackbar("Wrong Password!", "Please recheck you password!");
-    }
+  void clearFields() {
+    _usernameController.clear();
+    _passwordController.clear();
+    _errorMessage.value = '';
+    update();
   }
 }
