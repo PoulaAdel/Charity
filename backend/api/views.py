@@ -9,6 +9,10 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.contrib.auth.models import Group
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+from django.contrib.auth import authenticate
 from rest_framework import permissions,viewsets
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from api.serializers import *
@@ -24,7 +28,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :User Item Control
@@ -36,7 +40,7 @@ class UserViewDetail(RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     lookup_field = 'pk'
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :List View for Service
@@ -47,7 +51,7 @@ class ServiceViewSet(viewsets.ModelViewSet):
     """
     queryset = Service.objects.all()
     serializer_class = ServiceSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :Service Item Control
@@ -59,7 +63,7 @@ class ServiceViewDetail(RetrieveUpdateDestroyAPIView):
     queryset = Service.objects.all()
     serializer_class = ServiceSerializer
     lookup_field = 'pk'
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :List View for Donation
@@ -70,7 +74,7 @@ class DonationViewSet(viewsets.ModelViewSet):
     """
     queryset = Donation.objects.all()
     serializer_class = DonationSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :Donation Item Control
@@ -82,7 +86,7 @@ class DonationViewDetail(RetrieveUpdateDestroyAPIView):
     queryset = Donation.objects.all()
     serializer_class = DonationSerializer
     lookup_field = 'pk'
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :List View for Family
@@ -93,7 +97,7 @@ class FamilyViewSet(viewsets.ModelViewSet):
     """
     queryset = Family.objects.all()
     serializer_class = FamilySerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :Family Item Control
@@ -105,7 +109,7 @@ class FamilyViewDetail(RetrieveUpdateDestroyAPIView):
     queryset = Family.objects.all()
     serializer_class = FamilySerializer
     lookup_field = 'pk'
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :List View for Member
@@ -116,7 +120,7 @@ class MemberViewSet(viewsets.ModelViewSet):
     """
     queryset = Member.objects.all()
     serializer_class = MemberSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :Member Item Control
@@ -128,7 +132,7 @@ class MemberViewDetail(RetrieveUpdateDestroyAPIView):
     queryset = Member.objects.all()
     serializer_class = MemberSerializer
     lookup_field = 'pk'
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :List View for Statement
@@ -139,7 +143,7 @@ class StatementViewSet(viewsets.ModelViewSet):
     """
     queryset = Statement.objects.all()
     serializer_class = StatementSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :Statement Item Control
@@ -151,7 +155,7 @@ class StatementViewDetail(RetrieveUpdateDestroyAPIView):
     queryset = Statement.objects.all()
     serializer_class = StatementSerializer
     lookup_field = 'pk'
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :List View for Social
@@ -162,7 +166,7 @@ class SocialViewSet(viewsets.ModelViewSet):
     """
     queryset = Social.objects.all()
     serializer_class = SocialSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :Social Item Control
@@ -174,7 +178,7 @@ class SocialViewDetail(RetrieveUpdateDestroyAPIView):
     queryset = Social.objects.all()
     serializer_class = SocialSerializer
     lookup_field = 'pk'
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :List View for Spiritual
@@ -185,7 +189,7 @@ class SpiritualViewSet(viewsets.ModelViewSet):
     """
     queryset = Spiritual.objects.all()
     serializer_class = SpiritualSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :Spiritual Item Control
@@ -197,7 +201,7 @@ class SpiritualViewDetail(RetrieveUpdateDestroyAPIView):
     queryset = Spiritual.objects.all()
     serializer_class = SpiritualSerializer
     lookup_field = 'pk'
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :List View for Residential
@@ -208,7 +212,7 @@ class ResidentialViewSet(viewsets.ModelViewSet):
     """
     queryset = Residential.objects.all()
     serializer_class = ResidentialSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :Residential Item Control
@@ -220,7 +224,7 @@ class ResidentialViewDetail(RetrieveUpdateDestroyAPIView):
     queryset = Residential.objects.all()
     serializer_class = ResidentialSerializer
     lookup_field = 'pk'
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :List View for Economical
@@ -231,7 +235,7 @@ class EconomicalViewSet(viewsets.ModelViewSet):
     """
     queryset = Economical.objects.all()
     serializer_class = EconomicalSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :Economical Item Control
@@ -243,7 +247,7 @@ class EconomicalViewDetail(RetrieveUpdateDestroyAPIView):
     queryset = Economical.objects.all()
     serializer_class = EconomicalSerializer
     lookup_field = 'pk'
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :List View for Opinion
@@ -254,7 +258,7 @@ class OpinionViewSet(viewsets.ModelViewSet):
     """
     queryset = Opinion.objects.all()
     serializer_class = OpinionSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :Opinion Item Control
@@ -266,7 +270,7 @@ class OpinionViewDetail(RetrieveUpdateDestroyAPIView):
     queryset = Opinion.objects.all()
     serializer_class = OpinionSerializer
     lookup_field = 'pk'
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :List View for Suggestion
@@ -277,7 +281,7 @@ class SuggestionViewSet(viewsets.ModelViewSet):
     """
     queryset = Suggestion.objects.all()
     serializer_class = SuggestionSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :Suggestion Item Control
@@ -289,7 +293,7 @@ class SuggestionViewDetail(RetrieveUpdateDestroyAPIView):
     queryset = Suggestion.objects.all()
     serializer_class = SuggestionSerializer
     lookup_field = 'pk'
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :List View for Judgement
@@ -300,7 +304,7 @@ class JudgementViewSet(viewsets.ModelViewSet):
     """
     queryset = Judgement.objects.all()
     serializer_class = JudgementSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :Judgement Item Control
@@ -312,7 +316,7 @@ class JudgementViewDetail(RetrieveUpdateDestroyAPIView):
     queryset = Judgement.objects.all()
     serializer_class = JudgementSerializer
     lookup_field = 'pk'
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :List View for Supply
@@ -323,7 +327,7 @@ class SupplyViewSet(viewsets.ModelViewSet):
     """
     queryset = Supply.objects.all()
     serializer_class = SupplySerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :Supply Item Control
@@ -335,7 +339,7 @@ class SupplyViewDetail(RetrieveUpdateDestroyAPIView):
     queryset = Supply.objects.all()
     serializer_class = SupplySerializer
     lookup_field = 'pk'
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :List View for Check
@@ -346,7 +350,7 @@ class CheckViewSet(viewsets.ModelViewSet):
     """
     queryset = Check.objects.all()
     serializer_class = CheckSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :Check Item Control
@@ -358,7 +362,7 @@ class CheckViewDetail(RetrieveUpdateDestroyAPIView):
     queryset = Check.objects.all()
     serializer_class = CheckSerializer
     lookup_field = 'pk'
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     from django.contrib.auth.models import Group
 from rest_framework import permissions,viewsets
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
@@ -375,7 +379,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :User Item Control
@@ -387,7 +391,7 @@ class UserViewDetail(RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     lookup_field = 'pk'
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :List View for Donor
@@ -398,7 +402,7 @@ class DonorViewSet(viewsets.ModelViewSet):
     """
     queryset = Donor.objects.all()
     serializer_class = DonorSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :Donor Item Control
@@ -410,7 +414,7 @@ class DonorViewDetail(RetrieveUpdateDestroyAPIView):
     queryset = Donor.objects.all()
     serializer_class = DonorSerializer
     lookup_field = 'pk'
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :List View for Service
@@ -421,7 +425,7 @@ class ServiceViewSet(viewsets.ModelViewSet):
     """
     queryset = Service.objects.all()
     serializer_class = ServiceSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :Service Item Control
@@ -433,7 +437,7 @@ class ServiceViewDetail(RetrieveUpdateDestroyAPIView):
     queryset = Service.objects.all()
     serializer_class = ServiceSerializer
     lookup_field = 'pk'
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :List View for Donation
@@ -444,7 +448,7 @@ class DonationViewSet(viewsets.ModelViewSet):
     """
     queryset = Donation.objects.all()
     serializer_class = DonationSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :Donation Item Control
@@ -456,7 +460,7 @@ class DonationViewDetail(RetrieveUpdateDestroyAPIView):
     queryset = Donation.objects.all()
     serializer_class = DonationSerializer
     lookup_field = 'pk'
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :List View for Family
@@ -467,7 +471,7 @@ class FamilyViewSet(viewsets.ModelViewSet):
     """
     queryset = Family.objects.all()
     serializer_class = FamilySerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :Family Item Control
@@ -479,7 +483,7 @@ class FamilyViewDetail(RetrieveUpdateDestroyAPIView):
     queryset = Family.objects.all()
     serializer_class = FamilySerializer
     lookup_field = 'pk'
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :List View for Member
@@ -490,7 +494,7 @@ class MemberViewSet(viewsets.ModelViewSet):
     """
     queryset = Member.objects.all()
     serializer_class = MemberSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :Member Item Control
@@ -502,7 +506,7 @@ class MemberViewDetail(RetrieveUpdateDestroyAPIView):
     queryset = Member.objects.all()
     serializer_class = MemberSerializer
     lookup_field = 'pk'
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :List View for Statement
@@ -513,7 +517,7 @@ class StatementViewSet(viewsets.ModelViewSet):
     """
     queryset = Statement.objects.all()
     serializer_class = StatementSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :Statement Item Control
@@ -525,7 +529,7 @@ class StatementViewDetail(RetrieveUpdateDestroyAPIView):
     queryset = Statement.objects.all()
     serializer_class = StatementSerializer
     lookup_field = 'pk'
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :List View for Social
@@ -536,7 +540,7 @@ class SocialViewSet(viewsets.ModelViewSet):
     """
     queryset = Social.objects.all()
     serializer_class = SocialSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :Social Item Control
@@ -548,7 +552,7 @@ class SocialViewDetail(RetrieveUpdateDestroyAPIView):
     queryset = Social.objects.all()
     serializer_class = SocialSerializer
     lookup_field = 'pk'
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :List View for Spiritual
@@ -559,7 +563,7 @@ class SpiritualViewSet(viewsets.ModelViewSet):
     """
     queryset = Spiritual.objects.all()
     serializer_class = SpiritualSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :Spiritual Item Control
@@ -571,7 +575,7 @@ class SpiritualViewDetail(RetrieveUpdateDestroyAPIView):
     queryset = Spiritual.objects.all()
     serializer_class = SpiritualSerializer
     lookup_field = 'pk'
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :List View for Residential
@@ -582,7 +586,7 @@ class ResidentialViewSet(viewsets.ModelViewSet):
     """
     queryset = Residential.objects.all()
     serializer_class = ResidentialSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :Residential Item Control
@@ -594,7 +598,7 @@ class ResidentialViewDetail(RetrieveUpdateDestroyAPIView):
     queryset = Residential.objects.all()
     serializer_class = ResidentialSerializer
     lookup_field = 'pk'
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :List View for Economical
@@ -605,7 +609,7 @@ class EconomicalViewSet(viewsets.ModelViewSet):
     """
     queryset = Economical.objects.all()
     serializer_class = EconomicalSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :Economical Item Control
@@ -617,7 +621,7 @@ class EconomicalViewDetail(RetrieveUpdateDestroyAPIView):
     queryset = Economical.objects.all()
     serializer_class = EconomicalSerializer
     lookup_field = 'pk'
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :List View for Opinion
@@ -628,7 +632,7 @@ class OpinionViewSet(viewsets.ModelViewSet):
     """
     queryset = Opinion.objects.all()
     serializer_class = OpinionSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :Opinion Item Control
@@ -640,7 +644,7 @@ class OpinionViewDetail(RetrieveUpdateDestroyAPIView):
     queryset = Opinion.objects.all()
     serializer_class = OpinionSerializer
     lookup_field = 'pk'
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :List View for Suggestion
@@ -651,7 +655,7 @@ class SuggestionViewSet(viewsets.ModelViewSet):
     """
     queryset = Suggestion.objects.all()
     serializer_class = SuggestionSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :Suggestion Item Control
@@ -663,7 +667,7 @@ class SuggestionViewDetail(RetrieveUpdateDestroyAPIView):
     queryset = Suggestion.objects.all()
     serializer_class = SuggestionSerializer
     lookup_field = 'pk'
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :List View for Judgement
@@ -674,7 +678,7 @@ class JudgementViewSet(viewsets.ModelViewSet):
     """
     queryset = Judgement.objects.all()
     serializer_class = JudgementSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :Judgement Item Control
@@ -686,7 +690,7 @@ class JudgementViewDetail(RetrieveUpdateDestroyAPIView):
     queryset = Judgement.objects.all()
     serializer_class = JudgementSerializer
     lookup_field = 'pk'
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :List View for Supply
@@ -697,7 +701,7 @@ class SupplyViewSet(viewsets.ModelViewSet):
     """
     queryset = Supply.objects.all()
     serializer_class = SupplySerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :Supply Item Control
@@ -709,7 +713,7 @@ class SupplyViewDetail(RetrieveUpdateDestroyAPIView):
     queryset = Supply.objects.all()
     serializer_class = SupplySerializer
     lookup_field = 'pk'
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :List View for Check
@@ -720,7 +724,7 @@ class CheckViewSet(viewsets.ModelViewSet):
     """
     queryset = Check.objects.all()
     serializer_class = CheckSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     
 """
 :Check Item Control
@@ -732,5 +736,5 @@ class CheckViewDetail(RetrieveUpdateDestroyAPIView):
     queryset = Check.objects.all()
     serializer_class = CheckSerializer
     lookup_field = 'pk'
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     

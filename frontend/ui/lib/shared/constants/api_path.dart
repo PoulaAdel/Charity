@@ -7,7 +7,9 @@ class ApiPath {
   // static const products = "$_baseURL/products/";
 
   static const String _baseURL =
-      "http://172.0.0.1:8000/"; // Environment variable placeholder
+      "http://localhost:8000"; // Environment variable placeholder
+
+  static String baseURL() => _baseURL;
 
   static String users(String id) => Uri.parse('$_baseURL/users/$id').toString();
   static String usersList() => Uri.parse('$_baseURL/users/').toString();

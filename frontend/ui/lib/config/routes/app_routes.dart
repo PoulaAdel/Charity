@@ -16,17 +16,11 @@ class Routes {
   static const donations = _Paths.donations;
   static const families = _Paths.families;
   static const persons = _Paths.persons;
-  // Info Gathering
+  // Statement Managemnt
   static const statements = _Paths.statements;
-  static const socials = _Paths.socials;
-  static const spirituals = _Paths.spirituals;
-  static const residentials = _Paths.residentials;
-  static const economicals = _Paths.economicals;
-  // Info Processing
-  static const opinions = _Paths.opinions;
-  static const suggestions = _Paths.suggestions;
-  // Final Judgement
-  static const judgements = _Paths.judgements;
+  static const infogathering = _Paths.infogathering;
+  static const infoprocessing = _Paths.infoprocessing;
+  static const finaldecision = _Paths.finaldecision;
   // Action Plan
   static const supplies = _Paths.supplies;
   static const checks = _Paths.checks;
@@ -54,15 +48,9 @@ class _Paths {
   static const persons = '/persons';
 
   static const statements = '/statements';
-  static const socials = '/socials';
-  static const spirituals = '/spirituals';
-  static const residentials = '/residentials';
-  static const economicals = '/economicals';
-
-  static const opinions = '/opinions';
-  static const suggestions = '/suggestions';
-
-  static const judgements = '/judgements';
+  static const infogathering = '/infogathering';
+  static const infoprocessing = '/infoprocessing';
+  static const finaldecision = '/finaldecision';
 
   static const supplies = '/supplies';
   static const checks = '/checks';

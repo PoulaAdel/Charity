@@ -2,14 +2,15 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '/config/themes/app_theme.dart';
+import 'config/themes/app_theme.dart';
 
-import '/config/routes/app_pages.dart';
-import '/utils/localization/changelocal.dart';
-import '/utils/localization/translation.dart';
-import '/utils/services/app_prefrences_services.dart';
-import '/utils/services/local_secure_storage_services.dart';
-import '/utils/services/authetication_services.dart';
+import 'config/routes/app_pages.dart';
+import 'shared/constants/app_constants.dart';
+import 'utils/localization/changelocal.dart';
+import 'utils/localization/translation.dart';
+import 'utils/services/app_prefrences_services.dart';
+import 'utils/services/local_secure_storage_services.dart';
+import 'utils/services/authetication_services.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,7 +30,7 @@ Future<void> initialServices() async {
   // initial secure app prefrences (session)
   Get.put(LocalSecureStorage().init());
   // intial auhentication
-  Get.put(AuthService("http://127.0.0.1:8000"));
+  Get.put(AuthService(ApiPath.baseURL()));
 }
 
 class MyApp extends StatelessWidget {

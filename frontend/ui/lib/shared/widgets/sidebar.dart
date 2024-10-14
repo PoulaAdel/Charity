@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
+import 'package:get/get.dart';
 import '../../../shared/widgets/sidebar_header.dart';
 
+import '../../features/dashboard/views/screens/dashboard_screen.dart';
 import '../constants/app_constants.dart';
 
 class Sidebar extends StatelessWidget {
@@ -33,11 +34,10 @@ class Sidebar extends StatelessWidget {
                 leading: const Icon(Icons.abc),
                 title: const Text("Dashboard"),
                 onTap: () {
-                  // Get.offAll(() => DashboardScreen(),
-                  //     binding: DashboardBinding());
+                  Get.offAll(() => DashboardScreen(),
+                      binding: DashboardBinding());
                 },
               ),
-              const Divider(thickness: 1),
               ExpansionTile(
                 title: const Text("Accounts Management"),
                 children: <Widget>[
@@ -58,7 +58,6 @@ class Sidebar extends StatelessWidget {
                   ),
                 ],
               ),
-              const Divider(thickness: 1),
               ExpansionTile(
                 title: const Text("Orgnizations Assets"),
                 children: <Widget>[
@@ -96,7 +95,6 @@ class Sidebar extends StatelessWidget {
                   ),
                 ],
               ),
-              const Divider(thickness: 1),
               ExpansionTile(
                 title: const Text("Statements Management"),
                 children: <Widget>[
@@ -126,7 +124,6 @@ class Sidebar extends StatelessWidget {
                   ),
                 ],
               ),
-              const Divider(thickness: 1),
               ExpansionTile(
                 title: const Text("Action Plan"),
                 children: <Widget>[
@@ -148,7 +145,6 @@ class Sidebar extends StatelessWidget {
                   ),
                 ],
               ),
-              const Divider(thickness: 1),
               ExpansionTile(
                 title: const Text("Reports"),
                 children: <Widget>[
@@ -170,11 +166,10 @@ class Sidebar extends StatelessWidget {
                   ),
                 ],
               ),
-              const Divider(thickness: 1),
-              const Divider(thickness: 1),
             ], //ListViewChildren
           ),
         ),
+        const Divider(thickness: 1),
         const Padding(
           padding: EdgeInsets.all(kSpacing),
           child: Column(

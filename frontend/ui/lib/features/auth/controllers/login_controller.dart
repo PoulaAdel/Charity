@@ -46,7 +46,9 @@ class LoginController extends GetxController {
       if (result) {
         // Successfully logged in, save token or handle further processing
         _isLoading.value = false;
-        Get.offNamed('/homepage'); // Replace with your desired route
+
+        Get.snackbar("Successful!", "Signedin successfully!");
+        Get.offAll(() => DashboardScreen(), binding: DashboardBinding());
       } else {
         _isLoading.value = false;
         _errorMessage.value = 'Login failed. Please check your credentials.';
