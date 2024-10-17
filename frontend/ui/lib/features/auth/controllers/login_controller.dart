@@ -46,17 +46,18 @@ class LoginController extends GetxController {
       if (result) {
         // Successfully logged in, save token or handle further processing
         _isLoading.value = false;
-
         Get.snackbar("Successful!", "Signedin successfully!");
         Get.offAll(() => DashboardScreen(), binding: DashboardBinding());
       } else {
         _isLoading.value = false;
         _errorMessage.value = 'Login failed. Please check your credentials.';
+        Get.snackbar("Failed!", _errorMessage.value);
         update();
       }
     } catch (e) {
       _isLoading.value = false;
       _errorMessage.value = 'An error occurred. Please try again later.';
+      Get.snackbar("Failed!", _errorMessage.value);
       update();
     }
   }
