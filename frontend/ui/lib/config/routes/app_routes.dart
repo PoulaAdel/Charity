@@ -15,7 +15,7 @@ class Routes {
   static const services = _Paths.services;
   static const donations = _Paths.donations;
   static const families = _Paths.families;
-  static const persons = _Paths.persons;
+  static const members = _Paths.members;
   // Statement Managemnt
   static const statements = _Paths.statements;
   static const infogathering = _Paths.infogathering;
@@ -45,7 +45,7 @@ class _Paths {
   static const services = '/services';
   static const donations = '/donations';
   static const families = '/families';
-  static const persons = '/persons';
+  static const members = '/members';
 
   static const statements = '/statements';
   static const infogathering = '/infogathering';

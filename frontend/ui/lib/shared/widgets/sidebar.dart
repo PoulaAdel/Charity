@@ -2,7 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../shared/widgets/sidebar_header.dart';
 
+import '../../features/account_management/views/screens/donor_screen.dart';
+import '../../features/account_management/views/screens/user_screen.dart';
 import '../../features/dashboard/views/screens/dashboard_screen.dart';
+import '../../features/orgnization_assets/views/screens/donation_screen.dart';
+import '../../features/orgnization_assets/views/screens/family_screen.dart';
+import '../../features/orgnization_assets/views/screens/member_screen.dart';
+import '../../features/orgnization_assets/views/screens/service_screen.dart';
+import '../../features/statement/views/screens/info_gathering_screen.dart';
 import '../constants/app_constants.dart';
 
 class Sidebar extends StatelessWidget {
@@ -45,15 +52,14 @@ class Sidebar extends StatelessWidget {
                     leading: const Icon(Icons.list),
                     title: const Text("Users"),
                     onTap: () {
-                      // Get.offAll(() => UsersScreen(), binding: UsersBinding());
+                      Get.offAll(() => UserScreen(), binding: UserBinding());
                     },
                   ),
                   ListTile(
                     leading: const Icon(Icons.code_off),
                     title: const Text("Donors"),
                     onTap: () {
-                      // Get.offAll(() => DonorsScreen(),
-                      //     binding: DonorsBinding());
+                      Get.offAll(() => DonorScreen(), binding: DonorBinding());
                     },
                   ),
                 ],
@@ -65,32 +71,32 @@ class Sidebar extends StatelessWidget {
                     leading: const Icon(Icons.list),
                     title: const Text("Donations"),
                     onTap: () {
-                      // Get.offAll(() => DonationsScreen(),
-                      //     binding: DonationsBinding());
+                      Get.offAll(() => DonationScreen(),
+                          binding: DonationBinding());
                     },
                   ),
                   ListTile(
                     leading: const Icon(Icons.code_off),
                     title: const Text("Services"),
                     onTap: () {
-                      // Get.offAll(() => ServicesScreen(),
-                      //     binding: ServicesBinding());
+                      Get.offAll(() => ServiceScreen(),
+                          binding: ServiceBinding());
                     },
                   ),
                   ListTile(
                     leading: const Icon(Icons.print),
                     title: const Text("Served Families"),
                     onTap: () {
-                      // Get.offAll(() => FamiliesScreen(),
-                      //     binding: FamiliesBinding());
+                      Get.offAll(() => FamilyScreen(),
+                          binding: FamilyBinding());
                     },
                   ),
                   ListTile(
                     leading: const Icon(Icons.print),
                     title: const Text("Served Members"),
                     onTap: () {
-                      // Get.offAll(() => MembersScreen(),
-                      //     binding: MembersBinding());
+                      Get.offAll(() => MemberScreen(),
+                          binding: MemberBinding());
                     },
                   ),
                 ],
@@ -102,8 +108,8 @@ class Sidebar extends StatelessWidget {
                     leading: const Icon(Icons.list),
                     title: const Text("Info Gathering"),
                     onTap: () {
-                      // Get.offAll(() => InfoGatheringScreen(),
-                      //     binding: InfoGatheringBinding());
+                      Get.offAll(() => InfoGatheringScreen(),
+                          binding: InfoGatheringBinding());
                     },
                   ),
                   ListTile(

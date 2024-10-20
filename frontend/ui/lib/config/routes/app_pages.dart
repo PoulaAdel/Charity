@@ -1,9 +1,19 @@
 import 'package:get/get.dart';
 
+import '../../features/account_management/views/screens/donor_screen.dart';
+import '../../features/account_management/views/screens/user_screen.dart';
 import '../../features/auth/views/screens/login_screen.dart';
 import '../../features/auth/views/screens/register_screen.dart';
+
 import '../../features/dashboard/views/screens/dashboard_screen.dart';
+
+import '../../features/orgnization_assets/views/screens/donation_screen.dart';
+import '../../features/orgnization_assets/views/screens/family_screen.dart';
+import '../../features/orgnization_assets/views/screens/member_screen.dart';
+import '../../features/orgnization_assets/views/screens/service_screen.dart';
+
 import '../../features/welcome/views/screens/welcome_screen.dart';
+
 import '../../middleware/auth_middleware.dart';
 
 part 'app_routes.dart';
@@ -35,42 +45,42 @@ class AppPages {
       binding: DashboardBinding(),
       middlewares: [AuthMiddleware()],
     ),
-    // GetPage(
-    //   name: _Paths.user,
-    //   page: () => UserScreen(),
-    //   binding: UserBinding(),
-    //   // middlewares: [AuthMiddleware()],
-    // ),
-    // GetPage(
-    //   name: _Paths.donor,
-    //   page: () => DonorScreen(),
-    //   binding: DonorBinding(),
-    //   // middlewares: [AuthMiddleware()],
-    // ),
-    // GetPage(
-    //   name: _Paths.service,
-    //   page: () => ServiceScreen(),
-    //   binding: ServiceBinding(),
-    //   // middlewares: [AuthMiddleware()],
-    // ),
-    // GetPage(
-    //   name: _Paths.donation,
-    //   page: () => DonationScreen(),
-    //   binding: DonationBinding(),
-    //   // middlewares: [AuthMiddleware()],
-    // ),
-    // GetPage(
-    //   name: _Paths.family,
-    //   page: () => FamilyScreen(),
-    //   binding: FamilyBinding(),
-    //   // middlewares: [AuthMiddleware()],
-    // ),
-    // GetPage(
-    //   name: _Paths.member,
-    //   page: () => MemberScreen(),
-    //   binding: MemberBinding(),
-    //   // middlewares: [AuthMiddleware()],
-    // ),
+    GetPage(
+      name: _Paths.users,
+      page: () => UserScreen(),
+      binding: UserBinding(),
+      middlewares: [AuthMiddleware()],
+    ),
+    GetPage(
+      name: _Paths.donors,
+      page: () => DonorScreen(),
+      binding: DonorBinding(),
+      middlewares: [AuthMiddleware()],
+    ),
+    GetPage(
+      name: _Paths.services,
+      page: () => ServiceScreen(),
+      binding: ServiceBinding(),
+      middlewares: [AuthMiddleware()],
+    ),
+    GetPage(
+      name: _Paths.donations,
+      page: () => DonationScreen(),
+      binding: DonationBinding(),
+      middlewares: [AuthMiddleware()],
+    ),
+    GetPage(
+      name: _Paths.families,
+      page: () => FamilyScreen(),
+      binding: FamilyBinding(),
+      middlewares: [AuthMiddleware()],
+    ),
+    GetPage(
+      name: _Paths.members,
+      page: () => MemberScreen(),
+      binding: MemberBinding(),
+      middlewares: [AuthMiddleware()],
+    ),
     // GetPage(
     //   name: _Paths.statement,
     //   page: () => StatementScreen(),
