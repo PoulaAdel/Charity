@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 
 import '../../features/account_management/views/screens/donor_screen.dart';
 import '../../features/account_management/views/screens/user_screen.dart';
+import '../../features/action_plan/views/screens/check_screen.dart';
+import '../../features/action_plan/views/screens/supply_screen.dart';
 import '../../features/auth/views/screens/login_screen.dart';
 import '../../features/auth/views/screens/register_screen.dart';
 
@@ -12,6 +14,9 @@ import '../../features/orgnization_assets/views/screens/family_screen.dart';
 import '../../features/orgnization_assets/views/screens/member_screen.dart';
 import '../../features/orgnization_assets/views/screens/service_screen.dart';
 
+import '../../features/statement/views/screens/final_decision_screen.dart';
+import '../../features/statement/views/screens/info_gathering_screen.dart';
+import '../../features/statement/views/screens/info_processing_screen.dart';
 import '../../features/welcome/views/screens/welcome_screen.dart';
 
 import '../../middleware/auth_middleware.dart';
@@ -87,36 +92,36 @@ class AppPages {
     //   binding: StatementBinding(),
     //   // middlewares: [AuthMiddleware()],
     // ),
-    // GetPage(
-    //   name: _Paths.statement,
-    //   page: () => InfoGatheringScreen(),
-    //   binding: InfoGatheringBinding(),
-    //   // middlewares: [AuthMiddleware()],
-    // ),
-    // GetPage(
-    //   name: _Paths.statement,
-    //   page: () => InfoProcessingScreen(),
-    //   binding: InfoProcessingBinding(),
-    //   // middlewares: [AuthMiddleware()],
-    // ),
-    // GetPage(
-    //   name: _Paths.statement,
-    //   page: () => FinalDecisionScreen(),
-    //   binding: FinalDecisionBinding(),
-    //   // middlewares: [AuthMiddleware()],
-    // ),
-    // GetPage(
-    //   name: _Paths.supply,
-    //   page: () => SupplyScreen(),
-    //   binding: SupplyBinding(),
-    //   // middlewares: [AuthMiddleware()],
-    // ),
-    // GetPage(
-    //   name: _Paths.check,
-    //   page: () => CheckScreen(),
-    //   binding: CheckBinding(),
-    //   // middlewares: [AuthMiddleware()],
-    // ),
+    GetPage(
+      name: _Paths.infogathering,
+      page: () => InfoGatheringScreen(),
+      binding: InfoGatheringBinding(),
+      middlewares: [AuthMiddleware()],
+    ),
+    GetPage(
+      name: _Paths.infoprocessing,
+      page: () => InfoProcessingScreen(),
+      binding: InfoProcessingBinding(),
+      middlewares: [AuthMiddleware()],
+    ),
+    GetPage(
+      name: _Paths.finaldecision,
+      page: () => FinalDecisionScreen(),
+      binding: FinalDecisionBinding(),
+      middlewares: [AuthMiddleware()],
+    ),
+    GetPage(
+      name: _Paths.supplies,
+      page: () => SupplyScreen(),
+      binding: SupplyBinding(),
+      middlewares: [AuthMiddleware()],
+    ),
+    GetPage(
+      name: _Paths.checks,
+      page: () => CheckScreen(),
+      binding: CheckBinding(),
+      middlewares: [AuthMiddleware()],
+    ),
     // GetPage(
     //   name: _Paths.reportsDaily,
     //   page: () => ReportsDailyScreen(),
