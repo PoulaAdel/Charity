@@ -4,6 +4,8 @@ import '../../../shared/widgets/sidebar_header.dart';
 
 import '../../features/account_management/views/screens/donor_screen.dart';
 import '../../features/account_management/views/screens/user_screen.dart';
+import '../../features/action_plan/views/screens/check_screen.dart';
+import '../../features/action_plan/views/screens/supply_screen.dart';
 import '../../features/dashboard/views/screens/dashboard_screen.dart';
 import '../../features/orgnization_assets/views/screens/donation_screen.dart';
 import '../../features/orgnization_assets/views/screens/family_screen.dart';
@@ -139,16 +141,15 @@ class Sidebar extends StatelessWidget {
                     leading: const Icon(Icons.list),
                     title: const Text("Supplies"),
                     onTap: () {
-                      // Get.offAll(() => SuppliesScreen(),
-                      //     binding: SuppliesBinding());
+                      Get.offAll(() => SupplyScreen(),
+                          binding: SupplyBinding());
                     },
                   ),
                   ListTile(
                     leading: const Icon(Icons.code_off),
                     title: const Text("Supplies Check"),
                     onTap: () {
-                      // Get.offAll(() => ChecksScreen(),
-                      //     binding: ChecksBinding());
+                      Get.offAll(() => CheckScreen(), binding: CheckBinding());
                     },
                   ),
                 ],
