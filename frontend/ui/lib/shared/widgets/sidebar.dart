@@ -9,7 +9,9 @@ import '../../features/orgnization_assets/views/screens/donation_screen.dart';
 import '../../features/orgnization_assets/views/screens/family_screen.dart';
 import '../../features/orgnization_assets/views/screens/member_screen.dart';
 import '../../features/orgnization_assets/views/screens/service_screen.dart';
+import '../../features/statement/views/screens/final_decision_screen.dart';
 import '../../features/statement/views/screens/info_gathering_screen.dart';
+import '../../features/statement/views/screens/info_processing_screen.dart';
 import '../constants/app_constants.dart';
 
 class Sidebar extends StatelessWidget {
@@ -116,16 +118,16 @@ class Sidebar extends StatelessWidget {
                     leading: const Icon(Icons.code_off),
                     title: const Text("Info Processing"),
                     onTap: () {
-                      // Get.offAll(() => InfoProcessingScreen(),
-                      //     binding: InfoProcessingBinding());
+                      Get.offAll(() => InfoProcessingScreen(),
+                          binding: InfoProcessingBinding());
                     },
                   ),
                   ListTile(
                     leading: const Icon(Icons.print),
                     title: const Text("Final Decision"),
                     onTap: () {
-                      // Get.offAll(() => FinalDecisionScreen(),
-                      //     binding: FinalDecisionBinding());
+                      Get.offAll(() => FinalDecisionScreen(),
+                          binding: FinalDecisionBinding());
                     },
                   ),
                 ],

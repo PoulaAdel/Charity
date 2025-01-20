@@ -1,6 +1,6 @@
-part of <name>_;
+part of info_processing;
 
-class <Name>_Controller extends GetxController {
+class InfoProcessingController extends GetxController {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   // for handling authenticaion
   final AuthService _authService = Get.find();
@@ -51,7 +51,7 @@ class <Name>_Controller extends GetxController {
   SidebarHeaderData getSelectedProject() {
     return SidebarHeaderData(
       projectImage: const AssetImage(ImageRasterPath.logo1),
-      projectName: "<Name>_",
+      projectName: "InfoProcessing",
       releaseTime: DateTime.now(),
     );
   }
@@ -61,6 +61,4 @@ class <Name>_Controller extends GetxController {
   //     AssetImage(ImageRasterPath.avatar1),
   //   ];
   // }
-
-  
 }

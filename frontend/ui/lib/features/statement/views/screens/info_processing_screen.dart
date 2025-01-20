@@ -1,4 +1,4 @@
-library <name>_;
+library info_processing;
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,20 +10,19 @@ import '../../../../utils/services/authetication_services.dart';
 import '../../../../utils/services/local_secure_storage_services.dart';
 import '../../../../utils/ui/ui_utils.dart';
 
-
 // component
 import '../../../../shared/widgets/sidebar.dart';
 
 // binding
-part '../../bindings/<name>__binding.dart';
+part '../../bindings/info_processing_binding.dart';
 
 // controller
-part '../../controllers/<name>__controller.dart';
+part '../../controllers/info_processing_controller.dart';
 
-class <Name>_Screen extends StatelessWidget {
-  <Name>_Screen({Key? key}) : super(key: key);
+class InfoProcessingScreen extends StatelessWidget {
+  InfoProcessingScreen({Key? key}) : super(key: key);
 
-  final <Name>_Controller controller = Get.find();
+  final InfoProcessingController controller = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -85,9 +84,7 @@ class <Name>_Screen extends StatelessWidget {
                   scrollDirection: Axis.vertical,
                   primary: false,
                   child: Column(
-                    children: [
-                      
-                    ],
+                    children: [],
                   ),
                 ),
               ),
@@ -118,5 +115,4 @@ class <Name>_Screen extends StatelessWidget {
           : null,
     );
   }
-
 }

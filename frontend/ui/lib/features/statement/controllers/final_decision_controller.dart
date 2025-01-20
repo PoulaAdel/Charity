@@ -1,6 +1,6 @@
-part of <name>_;
+part of final_decision;
 
-class <Name>_Controller extends GetxController {
+class FinalDecisionController extends GetxController {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   // for handling authenticaion
   final AuthService _authService = Get.find();
@@ -51,7 +51,7 @@ class <Name>_Controller extends GetxController {
   SidebarHeaderData getSelectedProject() {
     return SidebarHeaderData(
       projectImage: const AssetImage(ImageRasterPath.logo1),
-      projectName: "<Name>_",
+      projectName: "FinalDecision",
       releaseTime: DateTime.now(),
     );
   }
@@ -61,6 +61,4 @@ class <Name>_Controller extends GetxController {
   //     AssetImage(ImageRasterPath.avatar1),
   //   ];
   // }
-
-  
 }
