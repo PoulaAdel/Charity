@@ -40,12 +40,14 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "api.apps.ApiConfig",
+    "corsheaders",
 ]
 
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -134,3 +136,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # change default user model
 AUTH_USER_MODEL = "api.User"
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5000",  # Add your frontend URL here
+    "http://127.0.0.1:8000",
+    # Add other origins as needed
+]
