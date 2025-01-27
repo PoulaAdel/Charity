@@ -10,14 +10,12 @@ class ServiceController extends GetxController {
 
   Rx<User?> currentUser = Rx<User?>(null);
 
+  var services = <Service>[].obs;
+
   @override
   void onInit() {
-    // // get current user from secure storage
-    // Future.delayed(Duration.zero, () async {
-    //   //your async 'await' codes goes here
-    //   //..
-    // });
     assignCurrentUser();
+    fetchServices();
     super.onInit();
   }
 
@@ -25,6 +23,12 @@ class ServiceController extends GetxController {
     User? secureData = await _localSecureStorage.getUser;
     currentUser.value = secureData;
     update();
+  }
+
+  void fetchServices() {
+    ServiceProvider().fetchServices().then((value) {
+      services.assignAll(ServiceProvider().services);
+    });
   }
 
   void logoutUser() {
@@ -48,48 +52,25 @@ class ServiceController extends GetxController {
     );
   }
 
-  List<TaskCardData> getAllTask() {
-    return [
-      const TaskCardData(
-        title: "Landing page UI Design",
-        dueDay: 2,
-        totalComments: 50,
-        type: TaskType.todo,
-        totalContributors: 30,
-        profilContributors: [
-          AssetImage(ImageRasterPath.avatar1),
-          AssetImage(ImageRasterPath.avatar2),
-          AssetImage(ImageRasterPath.avatar3),
-          AssetImage(ImageRasterPath.avatar4),
-        ],
-      ),
-      const TaskCardData(
-        title: "Landing page UI Design",
-        dueDay: -1,
-        totalComments: 50,
-        totalContributors: 34,
-        type: TaskType.inProgress,
-        profilContributors: [
-          AssetImage(ImageRasterPath.avatar5),
-          AssetImage(ImageRasterPath.avatar6),
-          AssetImage(ImageRasterPath.avatar7),
-          AssetImage(ImageRasterPath.avatar8),
-        ],
-      ),
-      const TaskCardData(
-        title: "Landing page UI Design",
-        dueDay: 1,
-        totalComments: 50,
-        totalContributors: 34,
-        type: TaskType.done,
-        profilContributors: [
-          AssetImage(ImageRasterPath.avatar5),
-          AssetImage(ImageRasterPath.avatar3),
-          AssetImage(ImageRasterPath.avatar4),
-          AssetImage(ImageRasterPath.avatar2),
-        ],
-      ),
-    ];
+  void addService(Service service) {
+    ServiceProvider().addService(service).then((value) {
+      services.add(service);
+    });
+  }
+
+  void updateService(Service service) {
+    ServiceProvider().updateService(service).then((value) {
+      final index = services.indexWhere((s) => s.pk == service.pk);
+      if (index != -1) {
+        services[index] = service;
+      }
+    });
+  }
+
+  void deleteService(int pk) {
+    ServiceProvider().deleteService(pk).then((value) {
+      services.removeWhere((service) => service.pk == pk);
+    });
   }
 
   SidebarHeaderData getSelectedProject() {
