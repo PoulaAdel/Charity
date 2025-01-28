@@ -1,12 +1,13 @@
 import 'dart:convert';
 
-import 'package:get/get.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
 
 import '../../database/models/app_models.dart';
 
 class LocalSecureStorage extends GetxService {
-  late FlutterSecureStorage _secureStorage;
+  static const _secureStorage = FlutterSecureStorage();
+  static const _tokenKey = 'Authorization';
 
   FlutterSecureStorage get secureStorage => _secureStorage;
 
@@ -19,8 +20,15 @@ class LocalSecureStorage extends GetxService {
     return currentUser;
   }
 
-  LocalSecureStorage init() {
-    _secureStorage = const FlutterSecureStorage();
-    return this;
+  static Future<String?> getToken() async {
+    return await _secureStorage.read(key: _tokenKey);
+  }
+
+  static Future<void> setToken(String token) async {
+    await _secureStorage.write(key: _tokenKey, value: token);
+  }
+
+  static Future<void> deleteToken() async {
+    await _secureStorage.delete(key: _tokenKey);
   }
 }

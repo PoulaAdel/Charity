@@ -2,15 +2,18 @@ part of service;
 
 class ServiceController extends GetxController {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  // for handling authenticaion
+
+  // for handling services
+  final LocalSecureStorage _localSecureStorage = Get.find();
   final AuthService _authService = Get.find();
+  final RestApiServices _api = Get.find();
 
+  // for ui
   final ScrollController scrollController = ScrollController();
-  final _localSecureStorage = Get.find<LocalSecureStorage>();
-
-  Rx<User?> currentUser = Rx<User?>(null);
-
   var services = <Service>[].obs;
+
+  // for authintication
+  Rx<User?> currentUser = Rx<User?>(null);
 
   @override
   void onInit() {
@@ -23,12 +26,6 @@ class ServiceController extends GetxController {
     User? secureData = await _localSecureStorage.getUser;
     currentUser.value = secureData;
     update();
-  }
-
-  void fetchServices() {
-    ServiceProvider().fetchServices().then((value) {
-      services.assignAll(ServiceProvider().services);
-    });
   }
 
   void logoutUser() {
@@ -52,27 +49,6 @@ class ServiceController extends GetxController {
     );
   }
 
-  void addService(Service service) {
-    ServiceProvider().addService(service).then((value) {
-      services.add(service);
-    });
-  }
-
-  void updateService(Service service) {
-    ServiceProvider().updateService(service).then((value) {
-      final index = services.indexWhere((s) => s.pk == service.pk);
-      if (index != -1) {
-        services[index] = service;
-      }
-    });
-  }
-
-  void deleteService(int pk) {
-    ServiceProvider().deleteService(pk).then((value) {
-      services.removeWhere((service) => service.pk == pk);
-    });
-  }
-
   SidebarHeaderData getSelectedProject() {
     return SidebarHeaderData(
       projectImage: const AssetImage(ImageRasterPath.logo1),
@@ -81,66 +57,45 @@ class ServiceController extends GetxController {
     );
   }
 
-  List<ProjectCardData> getActiveProject() {
-    return [
-      ProjectCardData(
-        percent: .3,
-        projectImage: const AssetImage(ImageRasterPath.logo2),
-        projectName: "Taxi Online",
-        releaseTime: DateTime.now().add(const Duration(days: 130)),
-      ),
-      ProjectCardData(
-        percent: .5,
-        projectImage: const AssetImage(ImageRasterPath.logo3),
-        projectName: "E-Movies Mobile",
-        releaseTime: DateTime.now().add(const Duration(days: 140)),
-      ),
-      ProjectCardData(
-        percent: .8,
-        projectImage: const AssetImage(ImageRasterPath.logo4),
-        projectName: "Video Converter App",
-        releaseTime: DateTime.now().add(const Duration(days: 100)),
-      ),
-    ];
+  void fetchServices() async {
+    try {
+      var fetchedServices = await _api.get('services');
+      services.value = (fetchedServices as List)
+          .map((json) => Service.fromJson(json))
+          .toList();
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to load services');
+    }
   }
 
-  List<ImageProvider> getMember() {
-    return const [
-      AssetImage(ImageRasterPath.avatar1),
-      AssetImage(ImageRasterPath.avatar2),
-      AssetImage(ImageRasterPath.avatar3),
-      AssetImage(ImageRasterPath.avatar4),
-      AssetImage(ImageRasterPath.avatar5),
-      AssetImage(ImageRasterPath.avatar6),
-    ];
+  void addService(Service service) async {
+    try {
+      var newService = await _api.post('services', service.toJson());
+      services.add(Service.fromJson(newService));
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to add service');
+    }
   }
 
-  List<ChattingCardData> getChatting() {
-    return const [
-      ChattingCardData(
-        image: AssetImage(ImageRasterPath.avatar6),
-        isOnline: true,
-        name: "Samantha",
-        lastMessage: "i added my new tasks",
-        isRead: false,
-        totalUnread: 100,
-      ),
-      ChattingCardData(
-        image: AssetImage(ImageRasterPath.avatar3),
-        isOnline: false,
-        name: "John",
-        lastMessage: "well done john",
-        isRead: true,
-        totalUnread: 0,
-      ),
-      ChattingCardData(
-        image: AssetImage(ImageRasterPath.avatar4),
-        isOnline: true,
-        name: "Alexander Purwoto",
-        lastMessage: "we'll have a meeting at 9AM",
-        isRead: false,
-        totalUnread: 1,
-      ),
-    ];
+  void updateService(Service service) async {
+    try {
+      var updatedService =
+          await _api.put('services/${service.pk}', service.toJson());
+      int index = services.indexWhere((s) => s.pk == service.pk);
+      if (index != -1) {
+        services[index] = Service.fromJson(updatedService);
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to update service');
+    }
+  }
+
+  void deleteService(int pk) async {
+    try {
+      await _api.delete('services/$pk');
+      services.removeWhere((service) => service.pk == pk);
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to delete service');
+    }
   }
 }

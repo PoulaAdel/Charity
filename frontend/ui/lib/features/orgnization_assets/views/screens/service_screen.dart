@@ -1,17 +1,16 @@
 library service;
 
+import 'package:charity/utils/services/rest_api_services.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../../../../config/routes/app_pages.dart';
 import '../../../../database/models/app_models.dart';
-import '../../../../database/providers/app_providers.dart';
+import '../../../../shared/constants/app_constants.dart';
 import '../../../../shared/widgets/sidebar_header.dart';
 import '../../../../utils/services/authetication_services.dart';
 import '../../../../utils/services/local_secure_storage_services.dart';
-import '../../../../shared/constants/app_constants.dart';
-import '../../../../shared/widgets/chatting_card.dart';
-import '../../../../shared/widgets/project_card.dart';
 import '../../../../utils/ui/ui_utils.dart';
 
 // component
@@ -50,6 +49,7 @@ class ServiceScreen extends StatelessWidget {
               const SizedBox(height: kSpacing * (kIsWeb ? 1 : 2)),
               _buildHeader(onPressedMenu: () => controller.openDrawer()),
               const SizedBox(height: kSpacing / 2),
+              _buildServicesSection(),
             ]),
           );
         },
@@ -69,27 +69,9 @@ class ServiceScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                const Flexible(
+                Flexible(
                   flex: 4,
-                  child: Column(
-                    children: [
-                      SizedBox(height: kSpacing * (kIsWeb ? 0.5 : 1.5)),
-                      // Obx(() => _buildProfile(data: controller.getProfil())),
-                      // const Divider(thickness: 1),
-                      // const SizedBox(height: kSpacing),
-                      // _buildTeamMember(data: controller.getMember()),
-                      // const SizedBox(height: kSpacing),
-                      // Padding(
-                      //   padding:
-                      //       const EdgeInsets.symmetric(horizontal: kSpacing),
-                      //   child: GetPremiumCard(onPressed: () {}),
-                      // ),
-                      // const SizedBox(height: kSpacing),
-                      // const Divider(thickness: 1),
-                      // const SizedBox(height: kSpacing),
-                      // _buildRecentMessages(data: controller.getChatting()),
-                    ],
-                  ),
+                  child: _buildServicesSection(),
                 )
               ],
             ),
@@ -171,22 +153,27 @@ class ServiceScreen extends StatelessWidget {
     );
   }
 
-  _buildServicesSection() {
-    return Column(children: [
-      ElevatedButton(
-        onPressed: () {
-          // Add a new service
-          controller.addService(Service(
-              pk: 1,
-              name: 'New Service',
-              description: 'Description',
-              createdAt: DateTime.now()));
-        },
-        child: const Text('Add Service'),
-      ),
-      Expanded(
-        child: Obx(() {
+  Widget _buildServicesSection() {
+    final ServiceController controller = Get.put(ServiceController());
+
+    return Column(
+      children: [
+        ElevatedButton(
+          onPressed: () {
+            // Add a new service
+            controller.addService(Service(
+                pk: 1,
+                name: 'New Service',
+                description: 'Description',
+                createdAt: DateTime.now()));
+          },
+          child: const Text('Add Service'),
+        ),
+        const SizedBox(height: 10),
+        Obx(() {
           return ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: controller.services.length,
             itemBuilder: (context, index) {
               final service = controller.services[index];
@@ -220,7 +207,7 @@ class ServiceScreen extends StatelessWidget {
             },
           );
         }),
-      )
-    ]);
+      ],
+    );
   }
 }

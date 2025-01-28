@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:charity/utils/services/rest_api_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'config/themes/app_theme.dart';
@@ -28,9 +29,11 @@ Future<void> initialServices() async {
   // initial app prefrences
   await Get.putAsync(() => AppPrefrencesServices().init());
   // initial secure app prefrences (session)
-  Get.put(LocalSecureStorage().init());
+  Get.put(LocalSecureStorage());
   // intial auhentication
   Get.put(AuthService(ApiPath.baseURL()));
+  // initial RestAPI connection
+  Get.put(RestApiServices(ApiPath.baseURL()));
 }
 
 class MyApp extends StatelessWidget {
