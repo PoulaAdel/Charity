@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 import '../../database/models/app_models.dart';
 
-class LocalSecureStorage extends GetxService {
+class LocalSecureStorageServices extends GetxService {
   static const _secureStorage = FlutterSecureStorage();
   static const _tokenKey = 'Authorization';
 

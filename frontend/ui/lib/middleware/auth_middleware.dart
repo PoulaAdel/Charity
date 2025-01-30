@@ -5,7 +5,7 @@ import '../config/routes/app_pages.dart';
 import '../utils/services/authetication_services.dart';
 
 class AuthMiddleware extends GetMiddleware {
-  final AuthService _authService = Get.find();
+  final AuthenticationServices _authService = Get.find();
 
   bool userGranted = false;
 

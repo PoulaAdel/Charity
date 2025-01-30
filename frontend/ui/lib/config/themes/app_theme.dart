@@ -1,30 +1,89 @@
 import 'package:flutter/material.dart';
-import '../../shared/constants/app_constants.dart';
 
-/// all custom application theme
+/// All custom application themes
 class AppTheme {
-  /// default application theme
+  /// Default application theme
   static ThemeData get basic => ThemeData(
-        fontFamily: Font.poppins,
-        primaryColorDark: const Color.fromRGBO(111, 88, 255, 1),
-        primaryColor: const Color.fromRGBO(128, 109, 255, 1),
-        primaryColorLight: const Color.fromRGBO(159, 84, 252, 1),
+        fontFamily: 'Poppins',
         brightness: Brightness.dark,
-        primarySwatch: Colors.deepPurple,
+        primaryColor: const Color(0xFF1E1E2C),
+        colorScheme: const ColorScheme.dark().copyWith(
+          primary: const Color(0xFF1E1E2C),
+          secondary: const Color(0xFFFF6584),
+          surface: const Color(0xFF2A2A40),
+          // Replaced background with surface
+          error: const Color(0xFFCF6679),
+          onPrimary: Colors.white,
+          onSecondary: Colors.white,
+          onSurface: Colors.white, // Deprecated
+          onError: Colors.black,
+        ),
+        scaffoldBackgroundColor: const Color(0xFF1E1E2C),
+        cardColor: const Color(0xFF2A2A40),
+        canvasColor: const Color(0xFF1E1E2C),
         elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ElevatedButton.styleFrom(
-          backgroundColor: const Color.fromRGBO(128, 109, 255, 1),
-        ).merge(
-          ButtonStyle(elevation: MaterialStateProperty.all(0)),
-        )),
-        canvasColor: const Color.fromRGBO(31, 29, 44, 1),
-        cardColor: const Color.fromRGBO(38, 40, 55, 1),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF6C63FF),
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+          ),
+        ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            foregroundColor: const Color(0xFF6C63FF),
+            textStyle: const TextStyle(fontSize: 16),
+          ),
+        ),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: OutlinedButton.styleFrom(
+            foregroundColor: const Color(0xFF6C63FF),
+            side: const BorderSide(color: Color(0xFF6C63FF)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+          ),
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: const Color(0xFF2A2A40),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none,
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: Color(0xFF6C63FF)),
+          ),
+        ),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFF1E1E2C),
+          elevation: 0,
+          titleTextStyle: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
+        textTheme: const TextTheme(
+          displayLarge: TextStyle(
+              fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white),
+          headlineMedium: TextStyle(
+              fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
+          headlineSmall: TextStyle(
+              fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+          titleLarge: TextStyle(
+              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+          titleMedium: TextStyle(
+              fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+          titleSmall: TextStyle(
+              fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+          bodyLarge: TextStyle(fontSize: 14, color: Colors.white70),
+          bodyMedium: TextStyle(fontSize: 12, color: Colors.white70),
+        ),
       );
-
-  // you can add other custom theme in this class like  light theme, dark theme ,etc.
-
-  // example :
-  // static ThemeData get light => ThemeData();
-
-  // static ThemeData get dark => ThemeData();
 }

@@ -4,10 +4,10 @@ class ReportsDailyController extends GetxController {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   // for handling authenticaion
-  final AuthService _authService = Get.find();
+  final AuthenticationServices _authService = Get.find();
+  final LocalSecureStorageServices _localSecureStorage = Get.find();
 
   final ScrollController scrollController = ScrollController();
-  final _localSecureStorage = Get.find<LocalSecureStorage>();
 
   Rx<User?> currentUser = Rx<User?>(null);
 

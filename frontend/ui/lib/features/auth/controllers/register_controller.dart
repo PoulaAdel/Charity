@@ -4,7 +4,7 @@ class RegisterController extends GetxController {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   // for handling authenticaion
-  final AuthService _authService = Get.find<AuthService>();
+  final AuthenticationServices _authService = Get.find();
 
   //fields needed for handling login form
   final signupFormKey = GlobalKey<FormState>();

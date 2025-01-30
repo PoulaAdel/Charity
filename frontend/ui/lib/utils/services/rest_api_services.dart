@@ -10,10 +10,10 @@ class RestApiServices extends GetxService {
 
   Future<Map<String, String>> _getHeaders(
       {Map<String, String>? headers}) async {
-    final token = await LocalSecureStorage.getToken();
+    final token = await LocalSecureStorageServices.getToken();
     final defaultHeaders = {
       'Content-Type': 'application/json',
-      if (token != null) 'Authorization': 'Bearer $token',
+      if (token != null) 'Authorization': 'Token $token',
     };
     if (headers != null) {
       defaultHeaders.addAll(headers);
@@ -30,6 +30,8 @@ class RestApiServices extends GetxService {
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
+      Get.snackbar('API Communication Error',
+          'Failed to load data: ${response.statusCode}');
       throw Exception('Failed to load data: ${response.statusCode}');
     }
   }
@@ -43,6 +45,8 @@ class RestApiServices extends GetxService {
     if (response.statusCode == 200 || response.statusCode == 201) {
       return jsonDecode(response.body);
     } else {
+      Get.snackbar('API Communication Error',
+          'Failed to load data: ${response.statusCode}');
       throw Exception('Failed to load data: ${response.statusCode}');
     }
   }
@@ -56,6 +60,8 @@ class RestApiServices extends GetxService {
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
+      Get.snackbar('API Communication Error',
+          'Failed to load data: ${response.statusCode}');
       throw Exception('Failed to load data: ${response.statusCode}');
     }
   }
@@ -66,6 +72,8 @@ class RestApiServices extends GetxService {
         await http.delete(url, headers: await _getHeaders(headers: headers));
 
     if (response.statusCode != 204) {
+      Get.snackbar('API Communication Error',
+          'Failed to delete data: ${response.statusCode}');
       throw Exception('Failed to delete data: ${response.statusCode}');
     }
   }
@@ -79,6 +87,8 @@ class RestApiServices extends GetxService {
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
+      Get.snackbar('API Communication Error',
+          'Failed to update data:  ${response.statusCode}');
       throw Exception('Failed to update data:  ${response.statusCode}');
     }
   }

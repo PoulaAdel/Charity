@@ -3,7 +3,7 @@ part of auth_login;
 class LoginController extends GetxController {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   // Access AuthService
-  final AuthService _authService = Get.find<AuthService>();
+  final AuthenticationServices _authService = Get.find();
   //fields needed for handling login form
   final loginFormKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
@@ -34,19 +34,16 @@ class LoginController extends GetxController {
   }
 
   Future<void> login() async {
+    _isLoading.value = true;
+
+    final username = _usernameController.text;
+    final password = _passwordController.text;
+
     try {
-      _isLoading.value = true;
-
-      final username = _usernameController.text;
-      final password = _passwordController.text;
-
-      final result =
-          await _authService.login(username, password); // Use AuthService
-
-      if (result) {
-        // Successfully logged in, save token or handle further processing
+      bool success = await _authService.login(username, password);
+      if (success) {
         _isLoading.value = false;
-        Get.snackbar("Successful!", "Signedin successfully!");
+        Get.snackbar("Success!", "Login successful");
         Get.offAll(() => DashboardScreen(), binding: DashboardBinding());
       } else {
         _isLoading.value = false;
@@ -56,8 +53,7 @@ class LoginController extends GetxController {
       }
     } catch (e) {
       _isLoading.value = false;
-      _errorMessage.value = 'An error occurred. Please try again later.';
-      Get.snackbar("Failed!", _errorMessage.value);
+      Get.snackbar("Error", e.toString());
       update();
     }
   }

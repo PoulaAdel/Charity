@@ -4,8 +4,8 @@ class ServiceController extends GetxController {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   // for handling services
-  final LocalSecureStorage _localSecureStorage = Get.find();
-  final AuthService _authService = Get.find();
+  final LocalSecureStorageServices _localSecureStorage = Get.find();
+  final AuthenticationServices _authService = Get.find();
   final RestApiServices _api = Get.find();
 
   // for ui
@@ -60,11 +60,12 @@ class ServiceController extends GetxController {
   void fetchServices() async {
     try {
       var fetchedServices = await _api.get('services');
-      services.value = (fetchedServices as List)
-          .map((json) => Service.fromJson(json))
-          .toList();
+      print(fetchedServices.toString());
+      services.value =
+          fetchedServices.map((service) => Service.fromJson(service)).toList();
     } catch (e) {
-      Get.snackbar('Error', 'Failed to load services');
+      print(e.toString());
+      Get.snackbar('Controller Error', 'Failed! ${e.toString()}');
     }
   }
 
@@ -73,7 +74,7 @@ class ServiceController extends GetxController {
       var newService = await _api.post('services', service.toJson());
       services.add(Service.fromJson(newService));
     } catch (e) {
-      Get.snackbar('Error', 'Failed to add service');
+      Get.snackbar('Controller Error', 'Failed to add service');
     }
   }
 
@@ -86,7 +87,7 @@ class ServiceController extends GetxController {
         services[index] = Service.fromJson(updatedService);
       }
     } catch (e) {
-      Get.snackbar('Error', 'Failed to update service');
+      Get.snackbar('Controller Error', 'Failed to update service');
     }
   }
 
@@ -95,7 +96,7 @@ class ServiceController extends GetxController {
       await _api.delete('services/$pk');
       services.removeWhere((service) => service.pk == pk);
     } catch (e) {
-      Get.snackbar('Error', 'Failed to delete service');
+      Get.snackbar('Controller Error', 'Failed to delete service');
     }
   }
 }

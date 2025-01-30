@@ -187,8 +187,7 @@ class Sidebar extends StatelessWidget {
               Text("MIT License 2022 - 2032"),
               Align(
                 alignment: Alignment.center,
-                child: Text("Copyright©. All Rights Reserved.",
-                    textScaleFactor: 0.8),
+                child: Text("Copyright©. All Rights Reserved."),
               ),
             ],
           ),

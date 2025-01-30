@@ -3,20 +3,17 @@ part of info_processing;
 class InfoProcessingController extends GetxController {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   // for handling authenticaion
-  final AuthService _authService = Get.find();
+  final AuthenticationServices _authService =
+      Get.find<AuthenticationServices>();
 
   final ScrollController scrollController = ScrollController();
-  final _localSecureStorage = Get.find<LocalSecureStorage>();
+  final LocalSecureStorageServices _localSecureStorage =
+      Get.find<LocalSecureStorageServices>();
 
   Rx<User?> currentUser = Rx<User?>(null);
 
   @override
   void onInit() {
-    // // get current user from secure storage
-    // Future.delayed(Duration.zero, () async {
-    //   //your async 'await' codes goes here
-    //   //..
-    // });
     assignCurrentUser();
     super.onInit();
   }

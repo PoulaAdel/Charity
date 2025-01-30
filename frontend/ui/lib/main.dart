@@ -29,9 +29,9 @@ Future<void> initialServices() async {
   // initial app prefrences
   await Get.putAsync(() => AppPrefrencesServices().init());
   // initial secure app prefrences (session)
-  Get.put(LocalSecureStorage());
+  Get.put(LocalSecureStorageServices());
   // intial auhentication
-  Get.put(AuthService(ApiPath.baseURL()));
+  Get.put(AuthenticationServices(ApiPath.baseURL()));
   // initial RestAPI connection
   Get.put(RestApiServices(ApiPath.baseURL()));
 }
