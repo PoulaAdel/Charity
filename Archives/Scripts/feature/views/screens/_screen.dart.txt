@@ -1,29 +1,32 @@
-library <name>_;
+library _<name>;
 
+import 'package:charity/utils/_<name>s/rest_api__<name>s.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../../../../config/routes/app_pages.dart';
 import '../../../../database/models/app_models.dart';
 import '../../../../shared/constants/app_constants.dart';
 import '../../../../shared/widgets/sidebar_header.dart';
-import '../../../../utils/services/authetication_services.dart';
-import '../../../../utils/services/local_secure_storage_services.dart';
+import '../../../../utils/seervices/authetication_seervices.dart';
+import '../../../../utils/seervices/local_secure_storage_seervices.dart';
 import '../../../../utils/ui/ui_utils.dart';
-
 
 // component
 import '../../../../shared/widgets/sidebar.dart';
+import '../components/header.dart';
 
 // binding
-part '../../bindings/<name>__binding.dart';
+part '../../bindings/_<name>_binding.dart';
 
 // controller
-part '../../controllers/<name>__controller.dart';
+part '../../controllers/_<name>_controller.dart';
 
-class <Name>_Screen extends StatelessWidget {
-  <Name>_Screen({Key? key}) : super(key: key);
+class _<Name>Screen extends StatelessWidget {
+  _<Name>Screen({Key? key}) : super(key: key);
 
-  final <Name>_Controller controller = Get.find();
+  final _<Name>Controller controller = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +45,12 @@ class <Name>_Screen extends StatelessWidget {
           return SingleChildScrollView(
             controller: controller.scrollController,
             scrollDirection: Axis.vertical,
-            child: const Column(children: []),
+            child: Column(children: [
+              const SizedBox(height: kSpacing * (kIsWeb ? 1 : 2)),
+              _buildHeader(onPressedMenu: () => controller.openDrawer()),
+              const SizedBox(height: kSpacing / 2),
+              _build_<Name>sSection(),
+            ]),
           );
         },
         tabletBuilder: (context, constraints) {
@@ -52,15 +60,18 @@ class <Name>_Screen extends StatelessWidget {
               children: [
                 Flexible(
                   flex: (constraints.maxWidth < 950) ? 6 : 9,
-                  child: const Column(
-                    children: [],
+                  child: Column(
+                    children: [
+                      const SizedBox(height: kSpacing * (kIsWeb ? 1 : 2)),
+                      _buildHeader(
+                          onPressedMenu: () => controller.openDrawer()),
+                      const SizedBox(height: kSpacing * 2),
+                    ],
                   ),
                 ),
-                const Flexible(
+                Flexible(
                   flex: 4,
-                  child: Column(
-                    children: [],
-                  ),
+                  child: _build_<Name>sSection(),
                 )
               ],
             ),
@@ -79,14 +90,17 @@ class <Name>_Screen extends StatelessWidget {
                     ),
                     child: Sidebar(data: controller.getSelectedProject())),
               ),
-              const Flexible(
+              Flexible(
                 flex: 9,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
                   primary: false,
                   child: Column(
                     children: [
-                      
+                      const SizedBox(height: kSpacing),
+                      _buildHeader(),
+                      const SizedBox(height: kSpacing * 2),
+                      _build_<Name>sSection(),
                     ],
                   ),
                 ),
@@ -119,4 +133,87 @@ class <Name>_Screen extends StatelessWidget {
     );
   }
 
+  Widget _buildHeader({Function()? onPressedMenu}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: kSpacing),
+      child: Row(
+        children: [
+          if (onPressedMenu != null)
+            Padding(
+              padding: const EdgeInsets.only(right: kSpacing),
+              child: IconButton(
+                onPressed: onPressedMenu,
+                icon: const Icon(Icons.menu),
+                tooltip: "menu",
+              ),
+            ),
+          const Expanded(child: Header()),
+        ],
+      ),
+    );
+  }
+
+  Widget _build_<Name>sSection() {
+    final _<Name>Controller controller = Get.put(_<Name>Controller());
+
+    return Column(
+      children: [
+        ElevatedButton(
+          onPressed: () {
+            // Add a new _<name>
+            controller.add_<Name>(_<Name>(
+                pk: 1,
+                name: 'New _<Name>',
+                description: 'Description',
+                createdAt: DateTime.now()));
+          },
+          child: const Text('Add _<Name>'),
+        ),
+        const SizedBox(height: 10),
+        Obx(() {
+          return ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: controller._<name>s.length,
+            itemBuilder: (context, index) {
+              final _<name> = controller._<name>s[index];
+              return ListTile(
+                key: _<name>.pk != null
+                    ? Key(_<name>.pk.toString())
+                    : UniqueKey(),
+                title: Text(_<name>.name),
+                subtitle: Text(_<name>.description),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () {
+                        // Edit _<name>
+                        controller.update_<Name>(_<Name>(
+                            pk: _<name>.pk,
+                            name: 'Updated _<Name>',
+                            description: 'Updated Description',
+                            createdAt: _<name>.createdAt,
+                            updatedAt: DateTime.now()));
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () {
+                        // Delete _<name>
+                        if (_<name>.pk != null) {
+                          controller.delete_<Name>(_<name>.pk!);
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        }),
+      ],
+    );
+  }
 }

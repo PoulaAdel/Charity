@@ -1,23 +1,24 @@
-part of <name>_;
+part of _<name>;
 
-class <Name>_Controller extends GetxController {
+class ServiceController extends GetxController {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  // for handling authenticaion
-  final AuthService _authService = Get.find();
 
+  // for handling services
+  final LocalSecureStorageServices _localSecureStorage = Get.find();
+  final AuthenticationServices _authService = Get.find();
+  final RestApiServices _api = Get.find();
+
+  // for ui
   final ScrollController scrollController = ScrollController();
-  final _localSecureStorage = Get.find<LocalSecureStorage>();
+  var services = <_<Name>>[].obs;
 
+  // for authintication
   Rx<User?> currentUser = Rx<User?>(null);
 
   @override
   void onInit() {
-    // // get current user from secure storage
-    // Future.delayed(Duration.zero, () async {
-    //   //your async 'await' codes goes here
-    //   //..
-    // });
     assignCurrentUser();
+    fetchServices();
     super.onInit();
   }
 
@@ -51,16 +52,50 @@ class <Name>_Controller extends GetxController {
   SidebarHeaderData getSelectedProject() {
     return SidebarHeaderData(
       projectImage: const AssetImage(ImageRasterPath.logo1),
-      projectName: "<Name>_",
+      projectName: "_<Name>",
       releaseTime: DateTime.now(),
     );
   }
 
-  // List<ImageProvider> getMember() {
-  //   return const [
-  //     AssetImage(ImageRasterPath.avatar1),
-  //   ];
-  // }
+  void fetchServices() async {
+    try {
+      var fetchedServices = await _api.get('services');
+      services.value = (fetchedServices as List)
+          .map((json) => _<Name>.fromJson(json as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      Get.snackbar('Controller Error', 'Failed! ${e.toString()}');
+    }
+  }
 
-  
+  void addService(_<Name> _<name>) async {
+    try {
+      var newService = await _api.post('services', _<name>.toJson());
+      services.add(_<Name>.fromJson(newService));
+    } catch (e) {
+      Get.snackbar('Controller Error', 'Failed to add _<name>');
+    }
+  }
+
+  void updateService(_<Name> _<name>) async {
+    try {
+      var updatedService =
+          await _api.put('services/${_<name>.pk}', _<name>.toJson());
+      int index = services.indexWhere((s) => s.pk == _<name>.pk);
+      if (index != -1) {
+        services[index] = _<Name>.fromJson(updatedService);
+      }
+    } catch (e) {
+      Get.snackbar('Controller Error', 'Failed to update _<name>');
+    }
+  }
+
+  void deleteService(int pk) async {
+    try {
+      await _api.delete('services/$pk');
+      services.removeWhere((_<name>) => _<name>.pk == pk);
+    } catch (e) {
+      Get.snackbar('Controller Error', 'Failed to delete _<name>');
+    }
+  }
 }

@@ -11,6 +11,7 @@ class ServiceController extends GetxController {
   // for ui
   final ScrollController scrollController = ScrollController();
   var services = <Service>[].obs;
+  var isLoading = false.obs;
 
   // for authintication
   Rx<User?> currentUser = Rx<User?>(null);
@@ -58,27 +59,33 @@ class ServiceController extends GetxController {
   }
 
   void fetchServices() async {
+    isLoading.value = true;
     try {
       var fetchedServices = await _api.get('services');
-      print(fetchedServices.toString());
-      services.value =
-          fetchedServices.map((service) => Service.fromJson(service)).toList();
+      services.value = (fetchedServices as List)
+          .map((json) => Service.fromJson(json as Map<String, dynamic>))
+          .toList();
     } catch (e) {
-      print(e.toString());
       Get.snackbar('Controller Error', 'Failed! ${e.toString()}');
+    } finally {
+      isLoading.value = false;
     }
   }
 
   void addService(Service service) async {
+    isLoading.value = true;
     try {
       var newService = await _api.post('services', service.toJson());
       services.add(Service.fromJson(newService));
     } catch (e) {
-      Get.snackbar('Controller Error', 'Failed to add service');
+      Get.snackbar('Controller Error', 'Failed: ${e.toString()}');
+    } finally {
+      isLoading.value = false;
     }
   }
 
   void updateService(Service service) async {
+    isLoading.value = true;
     try {
       var updatedService =
           await _api.put('services/${service.pk}', service.toJson());
@@ -87,16 +94,21 @@ class ServiceController extends GetxController {
         services[index] = Service.fromJson(updatedService);
       }
     } catch (e) {
-      Get.snackbar('Controller Error', 'Failed to update service');
+      Get.snackbar('Controller Error', 'Failed: ${e.toString()}');
+    } finally {
+      isLoading.value = false;
     }
   }
 
   void deleteService(int pk) async {
+    isLoading.value = true;
     try {
       await _api.delete('services/$pk');
       services.removeWhere((service) => service.pk == pk);
     } catch (e) {
       Get.snackbar('Controller Error', 'Failed to delete service');
+    } finally {
+      isLoading.value = false;
     }
   }
 }

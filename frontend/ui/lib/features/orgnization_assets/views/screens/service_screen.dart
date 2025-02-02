@@ -26,7 +26,7 @@ part '../../controllers/service_controller.dart';
 class ServiceScreen extends StatelessWidget {
   ServiceScreen({Key? key}) : super(key: key);
 
-  final ServiceController controller = Get.find();
+  final ServiceController controller = Get.put(ServiceController());
 
   @override
   Widget build(BuildContext context) {
@@ -154,8 +154,6 @@ class ServiceScreen extends StatelessWidget {
   }
 
   Widget _buildServicesSection() {
-    final ServiceController controller = Get.put(ServiceController());
-
     return Column(
       children: [
         ElevatedButton(
@@ -171,41 +169,53 @@ class ServiceScreen extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         Obx(() {
-          return ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: controller.services.length,
-            itemBuilder: (context, index) {
-              final service = controller.services[index];
-              return ListTile(
-                title: Text(service.name),
-                subtitle: Text(service.description),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.edit),
-                      onPressed: () {
-                        // Edit service
-                        controller.updateService(Service(
-                            pk: service.pk,
-                            name: 'Updated Service',
-                            description: 'Updated Description',
-                            createdAt: service.createdAt));
-                      },
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-                        // Delete service
-                        controller.deleteService(service.pk);
-                      },
-                    ),
-                  ],
-                ),
-              );
-            },
-          );
+          if (controller.isLoading.value) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (controller.services.isEmpty) {
+            return const Center(child: Text('No services found'));
+          } else {
+            return ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: controller.services.length,
+              itemBuilder: (context, index) {
+                final service = controller.services[index];
+                return ListTile(
+                  key: service.pk != null
+                      ? Key(service.pk.toString())
+                      : UniqueKey(),
+                  title: Text(service.name),
+                  subtitle: Text(service.description),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.edit),
+                        onPressed: () {
+                          // Edit service
+                          controller.updateService(Service(
+                              pk: service.pk,
+                              name: 'Updated Service',
+                              description: 'Updated Description',
+                              createdAt: service.createdAt,
+                              updatedAt: DateTime.now()));
+                        },
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () {
+                          // Delete service
+                          if (service.pk != null) {
+                            controller.deleteService(service.pk!);
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          }
         }),
       ],
     );

@@ -21,14 +21,22 @@ class RestApiServices extends GetxService {
     return defaultHeaders;
   }
 
-  Future<Map<String, dynamic>> get(String endpoint,
-      {Map<String, String>? headers}) async {
+  Future<dynamic> get(String endpoint, {Map<String, String>? headers}) async {
     final url = Uri.parse('$baseUrl/$endpoint');
     final response =
         await http.get(url, headers: await _getHeaders(headers: headers));
 
     if (response.statusCode == 200) {
-      return jsonDecode(response.body);
+      final decodedResponse = jsonDecode(response.body);
+      if (decodedResponse is List) {
+        return decodedResponse;
+      } else if (decodedResponse is Map<String, dynamic>) {
+        return [decodedResponse]; // Wrap the single object in a list
+      } else {
+        Get.snackbar('API Communication Error',
+            'Failed to load data: Unexpected response format');
+        throw Exception('Unexpected response format');
+      }
     } else {
       Get.snackbar('API Communication Error',
           'Failed to load data: ${response.statusCode}');
