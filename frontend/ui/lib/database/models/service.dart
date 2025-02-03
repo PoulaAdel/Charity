@@ -34,7 +34,7 @@ class Service {
 
   factory Service.fromJson(Map<String, dynamic> json) {
     return Service(
-      pk: json['pk'] as int?,
+      pk: json['id'] as int?,
       name: json['name'] as String,
       description: json['description'] as String,
       createdAt: json['created_at'] != null

@@ -212,7 +212,7 @@ Action Plan
 # Supplies
 class Supply(models.Model):
     family = models.ForeignKey(Family, on_delete=models.CASCADE)
-    service = models.ForeignKey(Service, on_delete=models.DO_NOTHING)
+    service = models.ForeignKey(Service, on_delete=models.SET_NULL, null=True)
     amount = models.DecimalField(_("Amount"), max_digits=10, decimal_places=2)
     note = models.TextField(_("Notes"))
 

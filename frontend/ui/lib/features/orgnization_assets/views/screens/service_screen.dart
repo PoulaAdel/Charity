@@ -58,21 +58,15 @@ class ServiceScreen extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                _buildHeader(onPressedMenu: () => controller.openDrawer()),
                 Flexible(
                   flex: (constraints.maxWidth < 950) ? 6 : 9,
-                  child: Column(
-                    children: [
-                      const SizedBox(height: kSpacing * (kIsWeb ? 1 : 2)),
-                      _buildHeader(
-                          onPressedMenu: () => controller.openDrawer()),
-                      const SizedBox(height: kSpacing * 2),
-                    ],
-                  ),
-                ),
-                Flexible(
-                  flex: 4,
                   child: _buildServicesSection(),
-                )
+                ),
+                const Flexible(
+                  flex: 4,
+                  child: Column(),
+                ),
               ],
             ),
           );
@@ -160,7 +154,6 @@ class ServiceScreen extends StatelessWidget {
           onPressed: () {
             // Add a new service
             controller.addService(Service(
-                pk: 1,
                 name: 'New Service',
                 description: 'Description',
                 createdAt: DateTime.now()));
@@ -170,7 +163,12 @@ class ServiceScreen extends StatelessWidget {
         const SizedBox(height: 10),
         Obx(() {
           if (controller.isLoading.value) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: CircularProgressIndicator(
+                color: Colors.white70,
+                semanticsLabel: "Loading",
+              ),
+            );
           } else if (controller.services.isEmpty) {
             return const Center(child: Text('No services found'));
           } else {
@@ -181,11 +179,10 @@ class ServiceScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 final service = controller.services[index];
                 return ListTile(
-                  key: service.pk != null
-                      ? Key(service.pk.toString())
-                      : UniqueKey(),
-                  title: Text(service.name),
-                  subtitle: Text(service.description),
+                  title: Text(service.pk != null
+                      ? 'Service ${service.pk}'
+                      : 'New Service'),
+                  subtitle: Text(service.name),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -212,6 +209,36 @@ class ServiceScreen extends StatelessWidget {
                       ),
                     ],
                   ),
+                  onTap: () {
+                    Get.bottomSheet(
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Service ${service.pk} Details',
+                                style: const TextStyle(
+                                    fontSize: 24, fontWeight: FontWeight.bold)),
+                            const SizedBox(height: 16),
+                            Text('Name: ${service.name}',
+                                style: const TextStyle(fontSize: 18)),
+                            const SizedBox(height: 8),
+                            Text('Description: ${service.description}',
+                                style: const TextStyle(fontSize: 18)),
+                            const SizedBox(height: 8),
+                            Text('Created At: ${service.createdAt}',
+                                style: const TextStyle(fontSize: 18)),
+                            const SizedBox(height: 8),
+                            Text('Updated At: ${service.updatedAt}',
+                                style: const TextStyle(fontSize: 18)),
+                          ],
+                        ),
+                      ),
+                      backgroundColor: Colors.black87,
+                      isScrollControlled: true,
+                    );
+                  },
                 );
               },
             );

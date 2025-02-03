@@ -51,6 +51,10 @@ class RestApiServices extends GetxService {
         headers: await _getHeaders(headers: headers), body: jsonEncode(data));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
+      Get.snackbar(
+        'Success',
+        'Data saved successfully',
+      );
       return jsonDecode(response.body);
     } else {
       Get.snackbar('API Communication Error',
@@ -61,11 +65,15 @@ class RestApiServices extends GetxService {
 
   Future<Map<String, dynamic>> put(String endpoint, Map<String, dynamic> data,
       {Map<String, String>? headers}) async {
-    final url = Uri.parse('$baseUrl/$endpoint');
+    final url = Uri.parse('$baseUrl/$endpoint/');
     final response = await http.put(url,
         headers: await _getHeaders(headers: headers), body: jsonEncode(data));
 
     if (response.statusCode == 200) {
+      Get.snackbar(
+        'Success',
+        'Data updated successfully',
+      );
       return jsonDecode(response.body);
     } else {
       Get.snackbar('API Communication Error',
@@ -75,11 +83,12 @@ class RestApiServices extends GetxService {
   }
 
   Future<void> delete(String endpoint, {Map<String, String>? headers}) async {
-    final url = Uri.parse('$baseUrl/$endpoint');
+    final url = Uri.parse('$baseUrl/$endpoint/');
     final response =
         await http.delete(url, headers: await _getHeaders(headers: headers));
-
-    if (response.statusCode != 204) {
+    if (response.statusCode == 204) {
+      Get.snackbar('Success', 'Data deleted successfully');
+    } else {
       Get.snackbar('API Communication Error',
           'Failed to delete data: ${response.statusCode}');
       throw Exception('Failed to delete data: ${response.statusCode}');
@@ -88,11 +97,15 @@ class RestApiServices extends GetxService {
 
   Future<Map<String, dynamic>> patch(String endpoint, Map<String, dynamic> data,
       {Map<String, String>? headers}) async {
-    final url = Uri.parse('$baseUrl/$endpoint');
+    final url = Uri.parse('$baseUrl/$endpoint/');
     final response = await http.patch(url,
         headers: await _getHeaders(headers: headers), body: jsonEncode(data));
 
     if (response.statusCode == 200) {
+      Get.snackbar(
+        'Success',
+        'Data updated successfully',
+      );
       return jsonDecode(response.body);
     } else {
       Get.snackbar('API Communication Error',

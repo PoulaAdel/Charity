@@ -1,16 +1,17 @@
 part of _<name>;
 
-class ServiceController extends GetxController {
+class _<Name>Controller extends GetxController {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  // for handling services
-  final LocalSecureStorageServices _localSecureStorage = Get.find();
-  final AuthenticationServices _authService = Get.find();
-  final RestApiServices _api = Get.find();
+  // for handling _<name>s
+  final LocalSecureStorage_<Name>s _localSecureStorage = Get.find();
+  final Authentication_<Name>s _auth_<Name> = Get.find();
+  final RestApi_<Name>s _api = Get.find();
 
   // for ui
   final ScrollController scrollController = ScrollController();
-  var services = <_<Name>>[].obs;
+  var _<name>s = <_<Name>>[].obs;
+  var isLoading = false.obs;
 
   // for authintication
   Rx<User?> currentUser = Rx<User?>(null);
@@ -18,7 +19,7 @@ class ServiceController extends GetxController {
   @override
   void onInit() {
     assignCurrentUser();
-    fetchServices();
+    fetch_<Name>s();
     super.onInit();
   }
 
@@ -29,7 +30,7 @@ class ServiceController extends GetxController {
   }
 
   void logoutUser() {
-    _authService.logout();
+    _auth_<Name>.logout();
     Get.offAllNamed(Routes.login);
   }
 
@@ -57,45 +58,57 @@ class ServiceController extends GetxController {
     );
   }
 
-  void fetchServices() async {
+  void fetch_<Name>s() async {
+    isLoading.value = true;
     try {
-      var fetchedServices = await _api.get('services');
-      services.value = (fetchedServices as List)
+      var fetched_<Name>s = await _api.get('_<name>s');
+      _<name>s.value = (fetched_<Name>s as List)
           .map((json) => _<Name>.fromJson(json as Map<String, dynamic>))
           .toList();
     } catch (e) {
       Get.snackbar('Controller Error', 'Failed! ${e.toString()}');
+    } finally {
+      isLoading.value = false;
     }
   }
 
-  void addService(_<Name> _<name>) async {
+  void add_<Name>(_<Name> _<name>) async {
+    isLoading.value = true;
     try {
-      var newService = await _api.post('services', _<name>.toJson());
-      services.add(_<Name>.fromJson(newService));
+      var new_<Name> = await _api.post('_<name>s', _<name>.toJson());
+      _<name>s.add(_<Name>.fromJson(new_<Name>));
     } catch (e) {
-      Get.snackbar('Controller Error', 'Failed to add _<name>');
+      Get.snackbar('Controller Error', 'Failed: ${e.toString()}');
+    } finally {
+      isLoading.value = false;
     }
   }
 
-  void updateService(_<Name> _<name>) async {
+  void update_<Name>(_<Name> _<name>) async {
+    isLoading.value = true;
     try {
-      var updatedService =
-          await _api.put('services/${_<name>.pk}', _<name>.toJson());
-      int index = services.indexWhere((s) => s.pk == _<name>.pk);
+      var updated_<Name> =
+          await _api.put('_<name>s/${_<name>.pk}', _<name>.toJson());
+      int index = _<name>s.indexWhere((s) => s.pk == _<name>.pk);
       if (index != -1) {
-        services[index] = _<Name>.fromJson(updatedService);
+        _<name>s[index] = _<Name>.fromJson(updated_<Name>);
       }
     } catch (e) {
-      Get.snackbar('Controller Error', 'Failed to update _<name>');
+      Get.snackbar('Controller Error', 'Failed: ${e.toString()}');
+    } finally {
+      isLoading.value = false;
     }
   }
 
-  void deleteService(int pk) async {
+  void delete_<Name>(int pk) async {
+    isLoading.value = true;
     try {
-      await _api.delete('services/$pk');
-      services.removeWhere((_<name>) => _<name>.pk == pk);
+      await _api.delete('_<name>s/$pk');
+      _<name>s.removeWhere((_<name>) => _<name>.pk == pk);
     } catch (e) {
       Get.snackbar('Controller Error', 'Failed to delete _<name>');
+    } finally {
+      isLoading.value = false;
     }
   }
 }
