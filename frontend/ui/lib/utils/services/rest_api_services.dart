@@ -46,7 +46,7 @@ class RestApiServices extends GetxService {
 
   Future<Map<String, dynamic>> post(String endpoint, Map<String, dynamic> data,
       {Map<String, String>? headers}) async {
-    final url = Uri.parse('$baseUrl/$endpoint');
+    final url = Uri.parse('$baseUrl/$endpoint/');
     final response = await http.post(url,
         headers: await _getHeaders(headers: headers), body: jsonEncode(data));
 

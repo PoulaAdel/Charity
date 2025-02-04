@@ -37,7 +37,7 @@ class Judgement {
   });
 
   factory Judgement.fromJson(Map<String, dynamic> json) => Judgement(
-        pk: json["pk"] as int,
+        pk: json["id"] as int,
         statement: json["statement"] as int,
         sponsor: json["sponsor"] as int,
         content: json["content"] as String,

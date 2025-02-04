@@ -29,7 +29,7 @@ class Donor {
   });
 
   factory Donor.fromJson(Map<String, dynamic> json) => Donor(
-        pk: json["pk"] as int,
+        pk: json["id"] as int,
         name: json["name"] as String,
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: (json["updated_at"] != null)

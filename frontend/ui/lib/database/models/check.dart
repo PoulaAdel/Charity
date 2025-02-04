@@ -37,7 +37,7 @@ class Check {
   });
 
   factory Check.fromJson(Map<String, dynamic> json) => Check(
-        pk: json["pk"] as int,
+        pk: json["id"] as int,
         supply: json["supply"] as int,
         sponsor: json["sponsor"] as int,
         receiver: json["receiver"] as int,

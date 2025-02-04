@@ -65,7 +65,7 @@ class Person {
   });
 
   factory Person.fromJson(Map<String, dynamic> json) => Person(
-        pk: json["pk"] as int,
+        pk: json["id"] as int,
         name: json["name"] as String,
         family: json["family"] as int,
         relation: json["relation"] as int,

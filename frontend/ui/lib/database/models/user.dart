@@ -41,7 +41,7 @@ class User {
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-        pk: json["pk"] as int,
+        pk: json["id"] as int,
         username: json["username"] as String,
         email: json["email"],
         phone: json["phone"] as String,

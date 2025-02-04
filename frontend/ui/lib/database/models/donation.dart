@@ -41,7 +41,7 @@ class Donation {
   });
 
   factory Donation.fromJson(Map<String, dynamic> json) => Donation(
-        pk: json["pk"] as int,
+        pk: json["id"] as int,
         donor: json["donor"] as int,
         type: json["type"] as int,
         notes: json["notes"] as String,

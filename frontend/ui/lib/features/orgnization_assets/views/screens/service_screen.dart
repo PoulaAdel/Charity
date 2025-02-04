@@ -8,14 +8,22 @@ import 'package:get/get.dart';
 import '../../../../config/routes/app_pages.dart';
 import '../../../../database/models/app_models.dart';
 import '../../../../shared/constants/app_constants.dart';
+import '../../../../shared/widgets/chatting_card.dart';
+import '../../../../shared/widgets/list_profil_image.dart';
+import '../../../../shared/widgets/search_field.dart';
 import '../../../../shared/widgets/sidebar_header.dart';
+import '../../../../shared/widgets/today_text.dart';
 import '../../../../utils/services/authetication_services.dart';
 import '../../../../utils/services/local_secure_storage_services.dart';
 import '../../../../utils/ui/ui_utils.dart';
 
 // component
 import '../../../../shared/widgets/sidebar.dart';
-import '../components/header.dart';
+import '../../models/profile.dart';
+part '../components/profile_tile.dart';
+part '../components/service_form.dart';
+part '../components/team_member.dart';
+part '../components/recent_messages.dart';
 
 // binding
 part '../../bindings/service_binding.dart';
@@ -99,12 +107,24 @@ class ServiceScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const Flexible(
+              Flexible(
                 flex: 4,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
                   primary: false,
-                  child: Column(),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: kSpacing * (kIsWeb ? 0.5 : 1.5)),
+                      Obx(() => _buildProfile(data: controller.getProfil())),
+                      const Divider(thickness: 1),
+                      const SizedBox(height: kSpacing),
+                      _buildTeamMember(data: controller.getMember()),
+                      const SizedBox(height: kSpacing),
+                      const Divider(thickness: 1),
+                      const SizedBox(height: kSpacing),
+                      _buildRecentMessages(data: controller.getChatting()),
+                    ],
+                  ),
                 ),
               )
             ],
@@ -141,7 +161,15 @@ class ServiceScreen extends StatelessWidget {
                 tooltip: "menu",
               ),
             ),
-          const Expanded(child: Header()),
+          Expanded(
+            child: Row(
+              children: [
+                const TodayText(),
+                const SizedBox(width: kSpacing),
+                Expanded(child: SearchField()),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -150,23 +178,54 @@ class ServiceScreen extends StatelessWidget {
   Widget _buildServicesSection() {
     return Column(
       children: [
-        ElevatedButton(
-          onPressed: () {
-            // Add a new service
-            controller.addService(Service(
-                name: 'New Service',
-                description: 'Description',
-                createdAt: DateTime.now()));
-          },
-          child: const Text('Add Service'),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: kSpacing),
+          child: Row(
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  Get.bottomSheet(
+                    ServiceForm(),
+                    backgroundColor: Colors.white,
+                    isScrollControlled: true,
+                  );
+                },
+                child: const Text('Add Service'),
+              ),
+              const SizedBox(width: kSpacing),
+              Expanded(
+                child: TextField(
+                  controller: controller.searchController,
+                  decoration: InputDecoration(
+                    hintText: 'Search services...',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  onChanged: (value) {
+                    controller.searchServices(value);
+                  },
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: () {
+                  controller.searchServices(controller.searchController.text);
+                },
+              ),
+            ],
+          ),
         ),
         const SizedBox(height: 10),
         Obx(() {
           if (controller.isLoading.value) {
             return const Center(
-              child: CircularProgressIndicator(
-                color: Colors.white70,
-                semanticsLabel: "Loading",
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: CircularProgressIndicator(
+                  color: Colors.white70,
+                  semanticsLabel: "Loading",
+                ),
               ),
             );
           } else if (controller.services.isEmpty) {
@@ -190,12 +249,11 @@ class ServiceScreen extends StatelessWidget {
                         icon: const Icon(Icons.edit),
                         onPressed: () {
                           // Edit service
-                          controller.updateService(Service(
-                              pk: service.pk,
-                              name: 'Updated Service',
-                              description: 'Updated Description',
-                              createdAt: service.createdAt,
-                              updatedAt: DateTime.now()));
+                          Get.bottomSheet(
+                            ServiceForm(service: service),
+                            backgroundColor: Colors.white,
+                            isScrollControlled: true,
+                          );
                         },
                       ),
                       IconButton(
@@ -203,7 +261,18 @@ class ServiceScreen extends StatelessWidget {
                         onPressed: () {
                           // Delete service
                           if (service.pk != null) {
-                            controller.deleteService(service.pk!);
+                            Get.defaultDialog(
+                              title: "Delete Service",
+                              middleText:
+                                  "Are you sure you want to delete this service?",
+                              textCancel: "Cancel",
+                              textConfirm: "Delete",
+                              confirmTextColor: Colors.white,
+                              onConfirm: () {
+                                controller.deleteService(service.pk!);
+                                Get.back();
+                              },
+                            );
                           }
                         },
                       ),
@@ -246,5 +315,49 @@ class ServiceScreen extends StatelessWidget {
         }),
       ],
     );
+  }
+
+  Widget _buildProfile({required Profile data}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: kSpacing),
+      child: _ProfilTile(
+        data: data,
+        onPressedLogOut: () {
+          controller.logoutUser();
+        },
+      ),
+    );
+  }
+
+  Widget _buildTeamMember({required List<ImageProvider> data}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: kSpacing),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _TeamMember(
+            totalMember: data.length,
+            onPressedAdd: () {},
+          ),
+          const SizedBox(height: kSpacing / 2),
+          ListProfilImage(maxImages: 6, images: data),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRecentMessages({required List<ChattingCardData> data}) {
+    return Column(children: [
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: kSpacing),
+        child: _RecentMessages(onPressedMore: () {}),
+      ),
+      const SizedBox(height: kSpacing / 2),
+      ...data
+          .map(
+            (e) => ChattingCard(data: e, onPressed: () {}),
+          )
+          .toList(),
+    ]);
   }
 }

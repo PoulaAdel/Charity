@@ -33,7 +33,7 @@ class Social {
   });
 
   factory Social.fromJson(Map<String, dynamic> json) => Social(
-        pk: json["pk"] as int,
+        pk: json["id"] as int,
         statement: json["statement"] as int,
         content: json["content"] as String,
         createdAt: DateTime.parse(json["created_at"]),

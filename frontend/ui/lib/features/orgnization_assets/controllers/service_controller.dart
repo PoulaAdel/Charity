@@ -13,6 +13,8 @@ class ServiceController extends GetxController {
   var services = <Service>[].obs;
   var isLoading = false.obs;
 
+  final TextEditingController searchController = TextEditingController();
+
   // for authintication
   Rx<User?> currentUser = Rx<User?>(null);
 
@@ -32,6 +34,58 @@ class ServiceController extends GetxController {
   void logoutUser() {
     _authService.logout();
     Get.offAllNamed(Routes.login);
+  }
+
+  Profile getProfil() {
+    return Profile(
+      photo: const AssetImage(ImageRasterPath.avatar1),
+      name: currentUser.value != null
+          ? currentUser.value!.username.toString()
+          : "Loading..",
+      email: currentUser.value != null
+          ? currentUser.value!.email.toString()
+          : "Loading..",
+    );
+  }
+
+  List<ImageProvider> getMember() {
+    return const [
+      AssetImage(ImageRasterPath.avatar1),
+      AssetImage(ImageRasterPath.avatar2),
+      AssetImage(ImageRasterPath.avatar3),
+      AssetImage(ImageRasterPath.avatar4),
+      AssetImage(ImageRasterPath.avatar5),
+      AssetImage(ImageRasterPath.avatar6),
+    ];
+  }
+
+  List<ChattingCardData> getChatting() {
+    return const [
+      ChattingCardData(
+        image: AssetImage(ImageRasterPath.avatar6),
+        isOnline: true,
+        name: "Samantha",
+        lastMessage: "i added my new tasks",
+        isRead: false,
+        totalUnread: 100,
+      ),
+      ChattingCardData(
+        image: AssetImage(ImageRasterPath.avatar3),
+        isOnline: false,
+        name: "John",
+        lastMessage: "well done john",
+        isRead: true,
+        totalUnread: 0,
+      ),
+      ChattingCardData(
+        image: AssetImage(ImageRasterPath.avatar4),
+        isOnline: true,
+        name: "Alexander Purwoto",
+        lastMessage: "we'll have a meeting at 9AM",
+        isRead: false,
+        totalUnread: 1,
+      ),
+    ];
   }
 
   void openDrawer() {
@@ -56,6 +110,18 @@ class ServiceController extends GetxController {
       projectName: "Service",
       releaseTime: DateTime.now(),
     );
+  }
+
+  void searchServices(String query) {
+    if (query.isEmpty) {
+      fetchServices();
+    } else {
+      var filteredServices = services.where((service) {
+        return service.name.toLowerCase().contains(query.toLowerCase()) ||
+            service.pk.toString().contains(query);
+      }).toList();
+      services.value = filteredServices;
+    }
   }
 
   void fetchServices() async {

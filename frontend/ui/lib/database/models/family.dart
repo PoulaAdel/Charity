@@ -33,7 +33,7 @@ class Family {
   });
 
   factory Family.fromJson(Map<String, dynamic> json) => Family(
-        pk: json["pk"] as int,
+        pk: json["id"] as int,
         name: json["name"] as String,
         count: json["count"] as int,
         createdAt: DateTime.parse(json["created_at"]),

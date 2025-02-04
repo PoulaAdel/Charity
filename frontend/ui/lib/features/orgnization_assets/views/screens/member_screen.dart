@@ -7,7 +7,9 @@ import '../../../../config/routes/app_pages.dart';
 import '../../../../database/models/app_models.dart';
 import '../../../../shared/widgets/active_project_card.dart';
 import '../../../../shared/widgets/overview_header.dart';
+import '../../../../shared/widgets/search_field.dart';
 import '../../../../shared/widgets/sidebar_header.dart';
+import '../../../../shared/widgets/today_text.dart';
 import '../../../../utils/services/authetication_services.dart';
 import '../../../../utils/services/local_secure_storage_services.dart';
 import '../../../../shared/constants/app_constants.dart';
@@ -22,7 +24,6 @@ import '../../../../utils/ui/ui_utils.dart';
 
 // component
 import '../../../../shared/widgets/sidebar.dart';
-import '../components/header.dart';
 
 // binding
 part '../../bindings/member_binding.dart';
@@ -207,7 +208,15 @@ class MemberScreen extends StatelessWidget {
                 tooltip: "menu",
               ),
             ),
-          const Expanded(child: Header()),
+          Expanded(
+            child: Row(
+              children: [
+                const TodayText(),
+                const SizedBox(width: kSpacing),
+                Expanded(child: SearchField()),
+              ],
+            ),
+          ),
         ],
       ),
     );

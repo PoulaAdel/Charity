@@ -34,7 +34,7 @@ class _<Name> {
 
   factory _<Name>.fromJson(Map<String, dynamic> json) {
     return _<Name>(
-      pk: json['pk'] as int?,
+      pk: json['id'] as int?,
       name: json['name'] as String,
       description: json['description'] as String,
       createdAt: json['created_at'] != null

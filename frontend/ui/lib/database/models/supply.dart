@@ -37,7 +37,7 @@ class Supply {
   });
 
   factory Supply.fromJson(Map<String, dynamic> json) => Supply(
-        pk: json["pk"] as int,
+        pk: json["id"] as int,
         family: json["family"] as int,
         service: json["service"] as int,
         amount: json["amount"] as double,

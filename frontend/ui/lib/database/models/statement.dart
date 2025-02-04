@@ -29,7 +29,7 @@ class Statement {
   });
 
   factory Statement.fromJson(Map<String, dynamic> json) => Statement(
-        pk: json["pk"] as int,
+        pk: json["id"] as int,
         family: json["family"] as String,
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: (json["updated_at"] != null)
