@@ -1,7 +1,7 @@
-part of service;
+import 'package:flutter/material.dart';
 
-class _RecentMessages extends StatelessWidget {
-  const _RecentMessages({
+class RecentMessages extends StatelessWidget {
+  const RecentMessages({
     required this.onPressedMore,
     Key? key,
   }) : super(key: key);

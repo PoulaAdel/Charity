@@ -19,11 +19,12 @@ import '../../../../utils/ui/ui_utils.dart';
 
 // component
 import '../../../../shared/widgets/sidebar.dart';
-import '../../models/profile.dart';
-part '../components/profile_tile.dart';
+import '../../../../shared/widgets/profile.dart';
+import '../../../../shared/widgets/profile_tile.dart';
+import '../../../../shared/widgets/team_member.dart';
+import '../../../../shared/widgets/recent_messages.dart';
+
 part '../components/service_form.dart';
-part '../components/team_member.dart';
-part '../components/recent_messages.dart';
 
 // binding
 part '../../bindings/service_binding.dart';
@@ -185,7 +186,9 @@ class ServiceScreen extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   Get.bottomSheet(
-                    ServiceForm(),
+                    ServiceForm(
+                      key: UniqueKey(),
+                    ),
                     backgroundColor: Colors.white,
                     isScrollControlled: true,
                   );
@@ -250,7 +253,10 @@ class ServiceScreen extends StatelessWidget {
                         onPressed: () {
                           // Edit service
                           Get.bottomSheet(
-                            ServiceForm(service: service),
+                            ServiceForm(
+                              key: UniqueKey(),
+                              service: service,
+                            ),
                             backgroundColor: Colors.white,
                             isScrollControlled: true,
                           );
@@ -320,7 +326,7 @@ class ServiceScreen extends StatelessWidget {
   Widget _buildProfile({required Profile data}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: kSpacing),
-      child: _ProfilTile(
+      child: ProfilTile(
         data: data,
         onPressedLogOut: () {
           controller.logoutUser();
@@ -335,7 +341,7 @@ class ServiceScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _TeamMember(
+          TeamMember(
             totalMember: data.length,
             onPressedAdd: () {},
           ),
@@ -350,7 +356,7 @@ class ServiceScreen extends StatelessWidget {
     return Column(children: [
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: kSpacing),
-        child: _RecentMessages(onPressedMore: () {}),
+        child: RecentMessages(onPressedMore: () {}),
       ),
       const SizedBox(height: kSpacing / 2),
       ...data

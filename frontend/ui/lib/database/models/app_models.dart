@@ -7,7 +7,7 @@ part 'donor.dart';
 part 'service.dart';
 part 'donation.dart';
 part 'family.dart';
-part 'person.dart';
+part 'member.dart';
 //Statement info Gathering
 part 'statement.dart';
 part 'social.dart';

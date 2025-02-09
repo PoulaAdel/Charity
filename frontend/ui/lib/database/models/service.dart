@@ -48,7 +48,7 @@ class Service {
 
   Map<String, dynamic> toJson() {
     return {
-      'pk': pk,
+      'id': pk,
       'name': name,
       'description': description,
       'created_at': createdAt?.toIso8601String(),

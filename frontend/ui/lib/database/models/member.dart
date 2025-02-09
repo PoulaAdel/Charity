@@ -1,8 +1,8 @@
 part of app_models;
 
-const String personTable = "person";
+const String memberTable = "member";
 
-class PersonFields {
+class MemberFields {
   static const String pk = "pk";
   static const String name = "name";
   static const String family = "family";
@@ -33,8 +33,8 @@ class PersonFields {
   ];
 }
 
-class Person {
-  int pk;
+class Member {
+  final int? pk;
   final String name;
   final int family;
   final int relation;
@@ -45,11 +45,11 @@ class Person {
   final String? education;
   final double? income;
   final String? health;
-  final DateTime createdAt;
+  final DateTime? createdAt;
   final DateTime? updatedAt;
 
-  Person({
-    this.pk = 0,
+  Member({
+    this.pk,
     required this.name,
     required this.family,
     required this.relation,
@@ -60,30 +60,32 @@ class Person {
     this.education,
     this.health,
     this.income,
-    required this.createdAt,
+    this.createdAt,
     this.updatedAt,
   });
 
-  factory Person.fromJson(Map<String, dynamic> json) => Person(
-        pk: json["id"] as int,
+  factory Member.fromJson(Map<String, dynamic> json) => Member(
+        pk: json["id"] as int?,
         name: json["name"] as String,
         family: json["family"] as int,
         relation: json["relation"] as int,
-        contact: json["contact"] as String,
+        contact: json["contact"] as String?,
         nid: json["nid"] as String,
-        img: json["img"] as String,
+        img: json["img"] as String?,
         age: json["age"] as int,
-        education: json["education"] as String,
-        health: json["health"] as String,
-        income: json["income"] as double,
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: (json["updated_at"] != null)
-            ? DateTime.parse(json["updated_at"])
+        education: json["education"] as String?,
+        health: json["health"] as String?,
+        income: (json["income"] != null) ? json["income"] as double : null,
+        createdAt: json['created_at'] != null
+            ? DateTime.parse(json['created_at'])
+            : null,
+        updatedAt: json['updated_at'] != null
+            ? DateTime.parse(json['updated_at'])
             : null,
       );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-        "pk": pk,
+        "id": pk,
         "name": name,
         "family": family,
         "relation": relation,
@@ -94,7 +96,7 @@ class Person {
         "education": education,
         "health": health,
         "income": income,
-        "created_at": createdAt.toIso8601String(),
+        "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
       };
 }

@@ -1,7 +1,8 @@
-part of service;
+import 'package:flutter/material.dart';
+import '../constants/app_constants.dart';
 
-class _TeamMember extends StatelessWidget {
-  const _TeamMember({
+class TeamMember extends StatelessWidget {
+  const TeamMember({
     required this.totalMember,
     required this.onPressedAdd,
     Key? key,

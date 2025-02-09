@@ -1,7 +1,9 @@
-part of service;
+import 'package:flutter/material.dart';
+import '../constants/app_constants.dart';
+import 'profile.dart';
 
-class _ProfilTile extends StatelessWidget {
-  const _ProfilTile(
+class ProfilTile extends StatelessWidget {
+  const ProfilTile(
       {required this.data, required this.onPressedLogOut, Key? key})
       : super(key: key);
 

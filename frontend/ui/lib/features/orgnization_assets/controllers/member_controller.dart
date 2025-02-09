@@ -2,22 +2,26 @@ part of member;
 
 class MemberController extends GetxController {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  // for handling authenticaion
-  final AuthenticationServices _authService = Get.find();
+
+  // for handling members
   final LocalSecureStorageServices _localSecureStorage = Get.find();
+  final AuthenticationServices _authService = Get.find();
+  final RestApiServices _api = Get.find();
 
+  // for ui
   final ScrollController scrollController = ScrollController();
+  var members = <Member>[].obs;
+  var isLoading = false.obs;
 
+  final TextEditingController searchController = TextEditingController();
+
+  // for authintication
   Rx<User?> currentUser = Rx<User?>(null);
 
   @override
   void onInit() {
-    // // get current user from secure storage
-    // Future.delayed(Duration.zero, () async {
-    //   //your async 'await' codes goes here
-    //   //..
-    // });
     assignCurrentUser();
+    fetchMembers();
     super.onInit();
   }
 
@@ -32,95 +36,16 @@ class MemberController extends GetxController {
     Get.offAllNamed(Routes.login);
   }
 
-  void openDrawer() {
-    if (scaffoldKey.currentState != null) {
-      scaffoldKey.currentState!.openDrawer();
-    }
-  }
-
-  void scrollToTop() {
-    double start = 0;
-    // scrollController.jumpTo(start);
-    scrollController.animateTo(
-      start,
-      duration: const Duration(milliseconds: 100),
-      curve: Curves.easeIn,
+  Profile getProfil() {
+    return Profile(
+      photo: const AssetImage(ImageRasterPath.avatar1),
+      name: currentUser.value != null
+          ? currentUser.value!.username.toString()
+          : "Loading..",
+      email: currentUser.value != null
+          ? currentUser.value!.email.toString()
+          : "Loading..",
     );
-  }
-
-  List<TaskCardData> getAllTask() {
-    return [
-      const TaskCardData(
-        title: "Landing page UI Design",
-        dueDay: 2,
-        totalComments: 50,
-        type: TaskType.todo,
-        totalContributors: 30,
-        profilContributors: [
-          AssetImage(ImageRasterPath.avatar1),
-          AssetImage(ImageRasterPath.avatar2),
-          AssetImage(ImageRasterPath.avatar3),
-          AssetImage(ImageRasterPath.avatar4),
-        ],
-      ),
-      const TaskCardData(
-        title: "Landing page UI Design",
-        dueDay: -1,
-        totalComments: 50,
-        totalContributors: 34,
-        type: TaskType.inProgress,
-        profilContributors: [
-          AssetImage(ImageRasterPath.avatar5),
-          AssetImage(ImageRasterPath.avatar6),
-          AssetImage(ImageRasterPath.avatar7),
-          AssetImage(ImageRasterPath.avatar8),
-        ],
-      ),
-      const TaskCardData(
-        title: "Landing page UI Design",
-        dueDay: 1,
-        totalComments: 50,
-        totalContributors: 34,
-        type: TaskType.done,
-        profilContributors: [
-          AssetImage(ImageRasterPath.avatar5),
-          AssetImage(ImageRasterPath.avatar3),
-          AssetImage(ImageRasterPath.avatar4),
-          AssetImage(ImageRasterPath.avatar2),
-        ],
-      ),
-    ];
-  }
-
-  SidebarHeaderData getSelectedProject() {
-    return SidebarHeaderData(
-      projectImage: const AssetImage(ImageRasterPath.logo1),
-      projectName: "Member",
-      releaseTime: DateTime.now(),
-    );
-  }
-
-  List<ProjectCardData> getActiveProject() {
-    return [
-      ProjectCardData(
-        percent: .3,
-        projectImage: const AssetImage(ImageRasterPath.logo2),
-        projectName: "Taxi Online",
-        releaseTime: DateTime.now().add(const Duration(days: 130)),
-      ),
-      ProjectCardData(
-        percent: .5,
-        projectImage: const AssetImage(ImageRasterPath.logo3),
-        projectName: "E-Movies Mobile",
-        releaseTime: DateTime.now().add(const Duration(days: 140)),
-      ),
-      ProjectCardData(
-        percent: .8,
-        projectImage: const AssetImage(ImageRasterPath.logo4),
-        projectName: "Video Converter App",
-        releaseTime: DateTime.now().add(const Duration(days: 100)),
-      ),
-    ];
   }
 
   List<ImageProvider> getMember() {
@@ -161,5 +86,95 @@ class MemberController extends GetxController {
         totalUnread: 1,
       ),
     ];
+  }
+
+  void openDrawer() {
+    if (scaffoldKey.currentState != null) {
+      scaffoldKey.currentState!.openDrawer();
+    }
+  }
+
+  void scrollToTop() {
+    double start = 0;
+    // scrollController.jumpTo(start);
+    scrollController.animateTo(
+      start,
+      duration: const Duration(milliseconds: 100),
+      curve: Curves.easeIn,
+    );
+  }
+
+  SidebarHeaderData getSelectedProject() {
+    return SidebarHeaderData(
+      projectImage: const AssetImage(ImageRasterPath.logo1),
+      projectName: "Member",
+      releaseTime: DateTime.now(),
+    );
+  }
+
+  void searchMembers(String query) {
+    if (query.isEmpty) {
+      fetchMembers();
+    } else {
+      var filteredMembers = members.where((member) {
+        return member.name.toLowerCase().contains(query.toLowerCase()) ||
+            member.pk.toString().contains(query);
+      }).toList();
+      members.value = filteredMembers;
+    }
+  }
+
+  void fetchMembers() async {
+    isLoading.value = true;
+    try {
+      var fetchedMembers = await _api.get('members');
+      members.value = (fetchedMembers as List)
+          .map((json) => Member.fromJson(json as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      Get.snackbar('Controller Error', 'Failed! ${e.toString()}');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void addMember(Member member) async {
+    isLoading.value = true;
+    try {
+      var newMember = await _api.post('members', member.toJson());
+      members.add(Member.fromJson(newMember));
+    } catch (e) {
+      Get.snackbar('Controller Error', 'Failed: ${e.toString()}');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void updateMember(Member member) async {
+    isLoading.value = true;
+    try {
+      var updatedMember =
+          await _api.put('members/${member.pk}', member.toJson());
+      int index = members.indexWhere((s) => s.pk == member.pk);
+      if (index != -1) {
+        members[index] = Member.fromJson(updatedMember);
+      }
+    } catch (e) {
+      Get.snackbar('Controller Error', 'Failed: ${e.toString()}');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void deleteMember(int pk) async {
+    isLoading.value = true;
+    try {
+      await _api.delete('members/$pk');
+      members.removeWhere((member) => member.pk == pk);
+    } catch (e) {
+      Get.snackbar('Controller Error', 'Failed to delete member');
+    } finally {
+      isLoading.value = false;
+    }
   }
 }

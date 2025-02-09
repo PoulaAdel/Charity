@@ -4,9 +4,9 @@ class _<Name>Controller extends GetxController {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   // for handling _<name>s
-  final LocalSecureStorage_<Name>s _localSecureStorage = Get.find();
-  final Authentication_<Name>s _auth_<Name> = Get.find();
-  final RestApi_<Name>s _api = Get.find();
+  final LocalSecureStorageServices _localSecureStorage = Get.find();
+  final AuthenticationServices _authService = Get.find();
+  final RestApiServices _api = Get.find();
 
   // for ui
   final ScrollController scrollController = ScrollController();
@@ -32,7 +32,7 @@ class _<Name>Controller extends GetxController {
   }
 
   void logoutUser() {
-    _auth_<Name>.logout();
+    _authService.logout();
     Get.offAllNamed(Routes.login);
   }
 
