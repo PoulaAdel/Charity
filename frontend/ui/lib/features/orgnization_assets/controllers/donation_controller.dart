@@ -2,22 +2,26 @@ part of donation;
 
 class DonationController extends GetxController {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  // for handling authenticaion
-  final AuthenticationServices _authService = Get.find();
+
+  // for handling donations
   final LocalSecureStorageServices _localSecureStorage = Get.find();
+  final AuthenticationServices _authService = Get.find();
+  final RestApiServices _api = Get.find();
 
+  // for ui
   final ScrollController scrollController = ScrollController();
+  var donations = <Donation>[].obs;
+  var isLoading = false.obs;
 
+  final TextEditingController searchController = TextEditingController();
+
+  // for authintication
   Rx<User?> currentUser = Rx<User?>(null);
 
   @override
   void onInit() {
-    // // get current user from secure storage
-    // Future.delayed(Duration.zero, () async {
-    //   //your async 'await' codes goes here
-    //   //..
-    // });
     assignCurrentUser();
+    fetchDonations();
     super.onInit();
   }
 
@@ -32,95 +36,16 @@ class DonationController extends GetxController {
     Get.offAllNamed(Routes.login);
   }
 
-  void openDrawer() {
-    if (scaffoldKey.currentState != null) {
-      scaffoldKey.currentState!.openDrawer();
-    }
-  }
-
-  void scrollToTop() {
-    double start = 0;
-    // scrollController.jumpTo(start);
-    scrollController.animateTo(
-      start,
-      duration: const Duration(milliseconds: 100),
-      curve: Curves.easeIn,
+  Profile getProfil() {
+    return Profile(
+      photo: const AssetImage(ImageRasterPath.avatar1),
+      name: currentUser.value != null
+          ? currentUser.value!.username.toString()
+          : "Loading..",
+      email: currentUser.value != null
+          ? currentUser.value!.email.toString()
+          : "Loading..",
     );
-  }
-
-  List<TaskCardData> getAllTask() {
-    return [
-      const TaskCardData(
-        title: "Landing page UI Design",
-        dueDay: 2,
-        totalComments: 50,
-        type: TaskType.todo,
-        totalContributors: 30,
-        profilContributors: [
-          AssetImage(ImageRasterPath.avatar1),
-          AssetImage(ImageRasterPath.avatar2),
-          AssetImage(ImageRasterPath.avatar3),
-          AssetImage(ImageRasterPath.avatar4),
-        ],
-      ),
-      const TaskCardData(
-        title: "Landing page UI Design",
-        dueDay: -1,
-        totalComments: 50,
-        totalContributors: 34,
-        type: TaskType.inProgress,
-        profilContributors: [
-          AssetImage(ImageRasterPath.avatar5),
-          AssetImage(ImageRasterPath.avatar6),
-          AssetImage(ImageRasterPath.avatar7),
-          AssetImage(ImageRasterPath.avatar8),
-        ],
-      ),
-      const TaskCardData(
-        title: "Landing page UI Design",
-        dueDay: 1,
-        totalComments: 50,
-        totalContributors: 34,
-        type: TaskType.done,
-        profilContributors: [
-          AssetImage(ImageRasterPath.avatar5),
-          AssetImage(ImageRasterPath.avatar3),
-          AssetImage(ImageRasterPath.avatar4),
-          AssetImage(ImageRasterPath.avatar2),
-        ],
-      ),
-    ];
-  }
-
-  SidebarHeaderData getSelectedProject() {
-    return SidebarHeaderData(
-      projectImage: const AssetImage(ImageRasterPath.logo1),
-      projectName: "Donation",
-      releaseTime: DateTime.now(),
-    );
-  }
-
-  List<ProjectCardData> getActiveProject() {
-    return [
-      ProjectCardData(
-        percent: .3,
-        projectImage: const AssetImage(ImageRasterPath.logo2),
-        projectName: "Taxi Online",
-        releaseTime: DateTime.now().add(const Duration(days: 130)),
-      ),
-      ProjectCardData(
-        percent: .5,
-        projectImage: const AssetImage(ImageRasterPath.logo3),
-        projectName: "E-Movies Mobile",
-        releaseTime: DateTime.now().add(const Duration(days: 140)),
-      ),
-      ProjectCardData(
-        percent: .8,
-        projectImage: const AssetImage(ImageRasterPath.logo4),
-        projectName: "Video Converter App",
-        releaseTime: DateTime.now().add(const Duration(days: 100)),
-      ),
-    ];
   }
 
   List<ImageProvider> getMember() {
@@ -161,5 +86,98 @@ class DonationController extends GetxController {
         totalUnread: 1,
       ),
     ];
+  }
+
+  void openDrawer() {
+    if (scaffoldKey.currentState != null) {
+      scaffoldKey.currentState!.openDrawer();
+    }
+  }
+
+  void scrollToTop() {
+    double start = 0;
+    // scrollController.jumpTo(start);
+    scrollController.animateTo(
+      start,
+      duration: const Duration(milliseconds: 100),
+      curve: Curves.easeIn,
+    );
+  }
+
+  SidebarHeaderData getSelectedProject() {
+    return SidebarHeaderData(
+      projectImage: const AssetImage(ImageRasterPath.logo1),
+      projectName: "Donation",
+      releaseTime: DateTime.now(),
+    );
+  }
+
+  void searchDonations(String query) {
+    if (query.isEmpty) {
+      fetchDonations();
+    } else {
+      var filteredDonations = donations.where((donation) {
+        return donation.donor
+                .toString()
+                .toLowerCase()
+                .contains(query.toLowerCase()) ||
+            donation.pk.toString().contains(query);
+      }).toList();
+      donations.value = filteredDonations;
+    }
+  }
+
+  void fetchDonations() async {
+    isLoading.value = true;
+    try {
+      var fetchedDonations = await _api.get('donations');
+      donations.value = (fetchedDonations as List)
+          .map((json) => Donation.fromJson(json as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      Get.snackbar('Controller Error', 'Failed! ${e.toString()}');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void addDonation(Donation donation) async {
+    isLoading.value = true;
+    try {
+      var newDonation = await _api.post('donations', donation.toJson());
+      donations.add(Donation.fromJson(newDonation));
+    } catch (e) {
+      Get.snackbar('Controller Error', 'Failed: ${e.toString()}');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void updateDonation(Donation donation) async {
+    isLoading.value = true;
+    try {
+      var updatedDonation =
+          await _api.put('donations/${donation.pk}', donation.toJson());
+      int index = donations.indexWhere((s) => s.pk == donation.pk);
+      if (index != -1) {
+        donations[index] = Donation.fromJson(updatedDonation);
+      }
+    } catch (e) {
+      Get.snackbar('Controller Error', 'Failed: ${e.toString()}');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void deleteDonation(int pk) async {
+    isLoading.value = true;
+    try {
+      await _api.delete('donations/$pk');
+      donations.removeWhere((donation) => donation.pk == pk);
+    } catch (e) {
+      Get.snackbar('Controller Error', 'Failed to delete donation');
+    } finally {
+      isLoading.value = false;
+    }
   }
 }

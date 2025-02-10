@@ -44,8 +44,10 @@ class Donation {
         pk: json["id"] as int,
         donor: json["donor"] as int,
         type: json["type"] as int,
-        notes: json["notes"] as String,
-        amount: json["amount"] as double,
+        notes: json["notes"] as String? ?? '',
+        amount: (json["amount"] is String)
+            ? double.tryParse(json["amount"]) ?? 0.0
+            : json["amount"] as double,
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: (json["updated_at"] != null)
             ? DateTime.parse(json["updated_at"])

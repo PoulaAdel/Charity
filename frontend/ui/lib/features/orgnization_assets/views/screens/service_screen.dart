@@ -226,7 +226,6 @@ class ServiceScreen extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.all(8.0),
                 child: CircularProgressIndicator(
-                  color: Colors.white70,
                   semanticsLabel: "Loading",
                 ),
               ),

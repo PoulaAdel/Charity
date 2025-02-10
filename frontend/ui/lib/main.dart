@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
       locale: trController.language,
       title: 'Charity',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.basic,
+      theme: AppTheme.dark,
       initialRoute: AppPages.initial,
       getPages: AppPages.routes,
       defaultTransition: Transition.fadeIn,

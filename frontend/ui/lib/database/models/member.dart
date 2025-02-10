@@ -69,13 +69,17 @@ class Member {
         name: json["name"] as String,
         family: json["family"] as int,
         relation: json["relation"] as int,
-        contact: json["contact"] as String?,
+        contact: json["contact"] as String? ?? '',
         nid: json["nid"] as String,
-        img: json["img"] as String?,
+        img: json["img"] as String? ?? '',
         age: json["age"] as int,
-        education: json["education"] as String?,
-        health: json["health"] as String?,
-        income: (json["income"] != null) ? json["income"] as double : null,
+        education: json["education"] as String? ?? '',
+        health: json["health"] as String? ?? '',
+        income: json["income"] != null
+            ? (json["income"] is String)
+                ? double.tryParse(json["income"]) ?? 0.0
+                : (json["income"] as num).toDouble()
+            : 0.0,
         createdAt: json['created_at'] != null
             ? DateTime.parse(json['created_at'])
             : null,
@@ -95,7 +99,7 @@ class Member {
         "age": age,
         "education": education,
         "health": health,
-        "income": income,
+        "income": income?.toString() ?? '0.0',
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
       };
