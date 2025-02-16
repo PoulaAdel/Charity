@@ -44,16 +44,14 @@ class ChattingCard extends StatelessWidget {
           ),
           title: Text(
             data.name,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 13,
-              color: kFontColorPallets[0],
             ),
           ),
           subtitle: Text(
             data.lastMessage,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 11,
-              color: kFontColorPallets[2],
             ),
           ),
           onTap: onPressed,
@@ -85,7 +83,6 @@ class ChattingCard extends StatelessWidget {
       child: Text(
         (total >= 100) ? "99+" : "$total",
         style: const TextStyle(
-          color: Colors.white,
           fontSize: 10,
           fontWeight: FontWeight.w600,
         ),

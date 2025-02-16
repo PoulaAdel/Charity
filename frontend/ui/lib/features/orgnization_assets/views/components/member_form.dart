@@ -31,6 +31,20 @@ class MemberForm extends StatelessWidget {
   }
 
   @override
+  void dispose() {
+    _nameController.dispose();
+    _familyController.dispose();
+    _relationController.dispose();
+    _contactController.dispose();
+    _nidController.dispose();
+    _imgController.dispose();
+    _ageController.dispose();
+    _educationController.dispose();
+    _incomeController.dispose();
+    _healthController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

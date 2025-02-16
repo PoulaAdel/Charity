@@ -106,7 +106,7 @@ class ServiceController extends GetxController {
 
   SidebarHeaderData getSelectedProject() {
     return SidebarHeaderData(
-      projectImage: const AssetImage(ImageRasterPath.logo1),
+      projectImage: const AssetImage(ImageRasterPath.logo3),
       projectName: "Service",
       releaseTime: DateTime.now(),
     );

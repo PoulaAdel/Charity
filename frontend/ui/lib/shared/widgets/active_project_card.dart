@@ -56,7 +56,6 @@ class ActiveProjectCard extends StatelessWidget {
   Widget _seeAllButton({required Function() onPressed}) {
     return TextButton(
       onPressed: onPressed,
-      style: TextButton.styleFrom(foregroundColor: kFontColorPallets[1]),
       child: const Text("See All"),
     );
   }

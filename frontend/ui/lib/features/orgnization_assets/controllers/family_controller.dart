@@ -2,22 +2,26 @@ part of family;
 
 class FamilyController extends GetxController {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  // for handling authenticaion
-  final AuthenticationServices _authService = Get.find();
+
+  // for handling families
   final LocalSecureStorageServices _localSecureStorage = Get.find();
+  final AuthenticationServices _authService = Get.find();
+  final RestApiServices _api = Get.find();
 
+  // for ui
   final ScrollController scrollController = ScrollController();
+  var families = <Family>[].obs;
+  var isLoading = false.obs;
 
+  final TextEditingController searchController = TextEditingController();
+
+  // for authintication
   Rx<User?> currentUser = Rx<User?>(null);
 
   @override
   void onInit() {
-    // // get current user from secure storage
-    // Future.delayed(Duration.zero, () async {
-    //   //your async 'await' codes goes here
-    //   //..
-    // });
     assignCurrentUser();
+    fetchFamilies();
     super.onInit();
   }
 
@@ -32,98 +36,19 @@ class FamilyController extends GetxController {
     Get.offAllNamed(Routes.login);
   }
 
-  void openDrawer() {
-    if (scaffoldKey.currentState != null) {
-      scaffoldKey.currentState!.openDrawer();
-    }
-  }
-
-  void scrollToTop() {
-    double start = 0;
-    // scrollController.jumpTo(start);
-    scrollController.animateTo(
-      start,
-      duration: const Duration(milliseconds: 100),
-      curve: Curves.easeIn,
+  Profile getProfil() {
+    return Profile(
+      photo: const AssetImage(ImageRasterPath.avatar1),
+      name: currentUser.value != null
+          ? currentUser.value!.username.toString()
+          : "Loading..",
+      email: currentUser.value != null
+          ? currentUser.value!.email.toString()
+          : "Loading..",
     );
   }
 
-  List<TaskCardData> getAllTask() {
-    return [
-      const TaskCardData(
-        title: "Landing page UI Design",
-        dueDay: 2,
-        totalComments: 50,
-        type: TaskType.todo,
-        totalContributors: 30,
-        profilContributors: [
-          AssetImage(ImageRasterPath.avatar1),
-          AssetImage(ImageRasterPath.avatar2),
-          AssetImage(ImageRasterPath.avatar3),
-          AssetImage(ImageRasterPath.avatar4),
-        ],
-      ),
-      const TaskCardData(
-        title: "Landing page UI Design",
-        dueDay: -1,
-        totalComments: 50,
-        totalContributors: 34,
-        type: TaskType.inProgress,
-        profilContributors: [
-          AssetImage(ImageRasterPath.avatar5),
-          AssetImage(ImageRasterPath.avatar6),
-          AssetImage(ImageRasterPath.avatar7),
-          AssetImage(ImageRasterPath.avatar8),
-        ],
-      ),
-      const TaskCardData(
-        title: "Landing page UI Design",
-        dueDay: 1,
-        totalComments: 50,
-        totalContributors: 34,
-        type: TaskType.done,
-        profilContributors: [
-          AssetImage(ImageRasterPath.avatar5),
-          AssetImage(ImageRasterPath.avatar3),
-          AssetImage(ImageRasterPath.avatar4),
-          AssetImage(ImageRasterPath.avatar2),
-        ],
-      ),
-    ];
-  }
-
-  SidebarHeaderData getSelectedProject() {
-    return SidebarHeaderData(
-      projectImage: const AssetImage(ImageRasterPath.logo1),
-      projectName: "Family",
-      releaseTime: DateTime.now(),
-    );
-  }
-
-  List<ProjectCardData> getActiveProject() {
-    return [
-      ProjectCardData(
-        percent: .3,
-        projectImage: const AssetImage(ImageRasterPath.logo2),
-        projectName: "Taxi Online",
-        releaseTime: DateTime.now().add(const Duration(days: 130)),
-      ),
-      ProjectCardData(
-        percent: .5,
-        projectImage: const AssetImage(ImageRasterPath.logo3),
-        projectName: "E-Movies Mobile",
-        releaseTime: DateTime.now().add(const Duration(days: 140)),
-      ),
-      ProjectCardData(
-        percent: .8,
-        projectImage: const AssetImage(ImageRasterPath.logo4),
-        projectName: "Video Converter App",
-        releaseTime: DateTime.now().add(const Duration(days: 100)),
-      ),
-    ];
-  }
-
-  List<ImageProvider> getMember() {
+  List<ImageProvider> getFamily() {
     return const [
       AssetImage(ImageRasterPath.avatar1),
       AssetImage(ImageRasterPath.avatar2),
@@ -161,5 +86,95 @@ class FamilyController extends GetxController {
         totalUnread: 1,
       ),
     ];
+  }
+
+  void openDrawer() {
+    if (scaffoldKey.currentState != null) {
+      scaffoldKey.currentState!.openDrawer();
+    }
+  }
+
+  void scrollToTop() {
+    double start = 0;
+    // scrollController.jumpTo(start);
+    scrollController.animateTo(
+      start,
+      duration: const Duration(milliseconds: 100),
+      curve: Curves.easeIn,
+    );
+  }
+
+  SidebarHeaderData getSelectedProject() {
+    return SidebarHeaderData(
+      projectImage: const AssetImage(ImageRasterPath.logo3),
+      projectName: "Family",
+      releaseTime: DateTime.now(),
+    );
+  }
+
+  void searchFamilies(String query) {
+    if (query.isEmpty) {
+      fetchFamilies();
+    } else {
+      var filteredFamilies = families.where((family) {
+        return family.name.toLowerCase().contains(query.toLowerCase()) ||
+            family.pk.toString().contains(query);
+      }).toList();
+      families.value = filteredFamilies;
+    }
+  }
+
+  void fetchFamilies() async {
+    isLoading.value = true;
+    try {
+      var fetchedFamilies = await _api.get('families');
+      families.value = (fetchedFamilies as List)
+          .map((json) => Family.fromJson(json as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      Get.snackbar('Controller Error', 'Failed! ${e.toString()}');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void addFamily(Family family) async {
+    isLoading.value = true;
+    try {
+      var newFamily = await _api.post('families', family.toJson());
+      families.add(Family.fromJson(newFamily));
+    } catch (e) {
+      Get.snackbar('Controller Error', 'Failed: ${e.toString()}');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void updateFamily(Family family) async {
+    isLoading.value = true;
+    try {
+      var updatedFamily =
+          await _api.put('families/${family.pk}', family.toJson());
+      int index = families.indexWhere((s) => s.pk == family.pk);
+      if (index != -1) {
+        families[index] = Family.fromJson(updatedFamily);
+      }
+    } catch (e) {
+      Get.snackbar('Controller Error', 'Failed: ${e.toString()}');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void deleteFamily(int pk) async {
+    isLoading.value = true;
+    try {
+      await _api.delete('families/$pk');
+      families.removeWhere((family) => family.pk == pk);
+    } catch (e) {
+      Get.snackbar('Controller Error', 'Failed to delete family');
+    } finally {
+      isLoading.value = false;
+    }
   }
 }

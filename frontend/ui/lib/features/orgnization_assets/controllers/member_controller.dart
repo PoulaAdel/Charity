@@ -106,7 +106,7 @@ class MemberController extends GetxController {
 
   SidebarHeaderData getSelectedProject() {
     return SidebarHeaderData(
-      projectImage: const AssetImage(ImageRasterPath.logo1),
+      projectImage: const AssetImage(ImageRasterPath.logo3),
       projectName: "Member",
       releaseTime: DateTime.now(),
     );
@@ -132,6 +132,7 @@ class MemberController extends GetxController {
           .map((json) => Member.fromJson(json as Map<String, dynamic>))
           .toList();
     } catch (e) {
+      print(e.toString());
       Get.snackbar('Controller Error', 'Failed! ${e.toString()}');
     } finally {
       isLoading.value = false;

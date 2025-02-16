@@ -15,6 +15,12 @@ class ServiceForm extends StatelessWidget {
   }
 
   @override
+  void dispose() {
+    _nameController.dispose();
+    _descriptionController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -36,7 +42,7 @@ class ServiceForm extends StatelessWidget {
                   return null;
                 },
               ),
-              const SizedBox(height: kSpacing),
+              const SizedBox(height: 20),
               TextFormField(
                 controller: _descriptionController,
                 decoration: const InputDecoration(labelText: 'Description'),
@@ -55,12 +61,15 @@ class ServiceForm extends StatelessWidget {
                       controller.addService(Service(
                         name: _nameController.text,
                         description: _descriptionController.text,
+                        createdAt: DateTime.now(),
                       ));
                     } else {
                       controller.updateService(Service(
                         pk: service!.pk,
                         name: _nameController.text,
                         description: _descriptionController.text,
+                        createdAt: service!.createdAt,
+                        updatedAt: DateTime.now(),
                       ));
                     }
                     Get.back();

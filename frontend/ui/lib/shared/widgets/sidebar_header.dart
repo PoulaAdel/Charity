@@ -70,8 +70,6 @@ class _ProgressIndicator extends StatelessWidget {
       lineWidth: 2.0,
       center: center,
       circularStrokeCap: CircularStrokeCap.round,
-      backgroundColor: Colors.blueGrey,
-      progressColor: Theme.of(Get.context!).primaryColor,
     );
   }
 }
@@ -86,7 +84,6 @@ class _ProfilImage extends StatelessWidget {
     return CircleAvatar(
       backgroundImage: image,
       radius: 52,
-      backgroundColor: Colors.white,
     );
   }
 }
@@ -100,10 +97,9 @@ class _TitleText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       data.capitalize!,
-      style: TextStyle(
+      style: const TextStyle(
         fontSize: 13,
         fontWeight: FontWeight.w600,
-        color: kFontColorPallets[0],
         letterSpacing: 0.8,
       ),
       maxLines: 1,
@@ -120,7 +116,7 @@ class _SubtitleText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       data,
-      style: TextStyle(fontSize: 11, color: kFontColorPallets[2]),
+      style: const TextStyle(fontSize: 11),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );
@@ -142,7 +138,7 @@ class _ReleaseTimeText extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2.5),
       child: Text(
         DateFormat.yMMMd().format(date),
-        style: const TextStyle(fontSize: 9, color: Colors.white),
+        style: const TextStyle(fontSize: 9),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),

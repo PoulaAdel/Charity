@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../utils/ui/ui_utils.dart';
-import '../constants/app_constants.dart';
 import 'profile.dart';
 
 class ProfilTile extends StatelessWidget {
@@ -27,13 +26,13 @@ class ProfilTile extends StatelessWidget {
       leading: CircleAvatar(backgroundImage: data.photo),
       title: Text(
         data.name,
-        style: TextStyle(fontSize: 14, color: kFontColorPallets[0]),
+        style: const TextStyle(fontSize: 14),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
       subtitle: Text(
         data.email,
-        style: TextStyle(fontSize: 12, color: kFontColorPallets[2]),
+        style: const TextStyle(fontSize: 12),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),

@@ -106,7 +106,8 @@ class _<Name>Controller extends GetxController {
 
   SidebarHeaderData getSelectedProject() {
     return SidebarHeaderData(
-      projectImage: const AssetImage(ImageRasterPath.logo1),
+      projectImage: const AssetImage(ImageRasterPath.logo3),
+
       projectName: "_<Name>",
       releaseTime: DateTime.now(),
     );

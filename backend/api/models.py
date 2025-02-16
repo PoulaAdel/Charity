@@ -124,7 +124,7 @@ class Member(models.Model):
     age = models.PositiveIntegerField(_("Age"))
     education = models.TextField(_("Education"), blank=True, null=True)
     health = models.TextField(_("Health"), blank=True, null=True)
-    income = models.DecimalField(_("Income"), max_digits=10, decimal_places=2, default=0.00, blank=True)
+    income = models.DecimalField(_("Income"), max_digits=10, decimal_places=2, default=0.00)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

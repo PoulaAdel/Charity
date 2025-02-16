@@ -244,6 +244,7 @@ class DonationScreen extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       IconButton(
+                        color: Colors.green,
                         icon: const Icon(Icons.edit),
                         onPressed: () {
                           // Edit donation
@@ -255,6 +256,7 @@ class DonationScreen extends StatelessWidget {
                         },
                       ),
                       IconButton(
+                        color: Colors.red,
                         icon: const Icon(Icons.delete),
                         onPressed: () {
                           // Delete donation

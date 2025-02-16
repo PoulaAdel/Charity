@@ -71,11 +71,11 @@ class OverviewHeader extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: selected
-              ? Theme.of(Get.context!).cardColor
-              : Theme.of(Get.context!).canvasColor,
-          foregroundColor:
-              selected ? kFontColorPallets[0] : kFontColorPallets[2],
+          // backgroundColor: selected
+          //     ? Theme.of(Get.context!).cardColor
+          //     : Theme.of(Get.context!).canvasColor,
+          // foregroundColor:
+          //     selected ? kFontColorPallets[0] : kFontColorPallets[2],
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),

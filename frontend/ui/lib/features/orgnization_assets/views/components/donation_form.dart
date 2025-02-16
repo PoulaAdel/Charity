@@ -7,8 +7,6 @@ class DonationForm extends StatelessWidget {
   final _typeController = TextEditingController();
   final _notesController = TextEditingController();
   final _amountController = TextEditingController();
-  final _createdAtController = TextEditingController();
-  final _updatedAtController = TextEditingController();
   final DonationController controller = Get.find<DonationController>();
 
   DonationForm({Key? key, this.donation}) : super(key: key) {
@@ -17,9 +15,15 @@ class DonationForm extends StatelessWidget {
       _typeController.text = donation!.type.toString();
       _notesController.text = donation!.notes ?? '';
       _amountController.text = donation!.amount.toString();
-      _createdAtController.text = donation!.createdAt.toIso8601String();
-      _updatedAtController.text = donation!.updatedAt?.toIso8601String() ?? '';
     }
+  }
+
+  @override
+  void dispose() {
+    _donorController.dispose();
+    _typeController.dispose();
+    _notesController.dispose();
+    _amountController.dispose();
   }
 
   @override
@@ -76,24 +80,6 @@ class DonationForm extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 20),
-                TextFormField(
-                  controller: _createdAtController,
-                  decoration: const InputDecoration(labelText: 'Created At'),
-                  keyboardType: TextInputType.datetime,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a creation date';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  controller: _updatedAtController,
-                  decoration: const InputDecoration(labelText: 'Updated At'),
-                  keyboardType: TextInputType.datetime,
-                ),
-                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
@@ -103,10 +89,7 @@ class DonationForm extends StatelessWidget {
                           type: int.parse(_typeController.text),
                           notes: _notesController.text,
                           amount: double.parse(_amountController.text),
-                          createdAt: DateTime.parse(_createdAtController.text),
-                          updatedAt: _updatedAtController.text.isNotEmpty
-                              ? DateTime.parse(_updatedAtController.text)
-                              : null,
+                          createdAt: DateTime.now(),
                         ));
                       } else {
                         controller.updateDonation(Donation(
@@ -115,10 +98,8 @@ class DonationForm extends StatelessWidget {
                           type: int.parse(_typeController.text),
                           notes: _notesController.text,
                           amount: double.parse(_amountController.text),
-                          createdAt: DateTime.parse(_createdAtController.text),
-                          updatedAt: _updatedAtController.text.isNotEmpty
-                              ? DateTime.parse(_updatedAtController.text)
-                              : null,
+                          createdAt: donation!.createdAt,
+                          updatedAt: DateTime.now(),
                         ));
                       }
                       Get.back();

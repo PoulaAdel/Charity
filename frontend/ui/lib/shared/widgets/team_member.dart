@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../constants/app_constants.dart';
 
 class TeamMember extends StatelessWidget {
   const TeamMember({
@@ -17,17 +16,15 @@ class TeamMember extends StatelessWidget {
       children: [
         RichText(
           text: TextSpan(
-            style: TextStyle(
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
-              color: kFontColorPallets[0],
             ),
             children: [
               const TextSpan(text: "Team Member "),
               TextSpan(
                 text: "($totalMember)",
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.w400,
-                  color: kFontColorPallets[2],
                 ),
               ),
             ],
