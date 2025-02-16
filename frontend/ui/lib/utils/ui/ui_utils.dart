@@ -1,11 +1,13 @@
 library ui_utils;
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 part 'app_bottomshet.dart';
 part 'app_dialog.dart';
 part 'app_snackbar.dart';
 part 'app_responsive_builder.dart';
+part 'app_theme.dart';
 
 
 // in this file focused on adding extension for some widget

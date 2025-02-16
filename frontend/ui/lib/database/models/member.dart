@@ -75,10 +75,8 @@ class Member {
         age: json["age"] as int,
         education: json["education"] as String? ?? '',
         health: json["health"] as String? ?? '',
-        income: json["income"] != null
-            ? (json["income"] is String)
-                ? double.tryParse(json["income"]) ?? 0.0
-                : (json["income"] as num).toDouble()
+        income: json["income"] != null && json["income"] != ""
+            ? double.parse(json["income"])
             : 0.0,
         createdAt: json['created_at'] != null
             ? DateTime.parse(json['created_at'])

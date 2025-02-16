@@ -12,6 +12,7 @@ import 'utils/localization/translation.dart';
 import 'utils/services/app_prefrences_services.dart';
 import 'utils/services/local_secure_storage_services.dart';
 import 'utils/services/authetication_services.dart';
+import 'utils/ui/ui_utils.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,6 +35,8 @@ Future<void> initialServices() async {
   Get.put(AuthenticationServices(ApiPath.baseURL()));
   // initial RestAPI connection
   Get.put(RestApiServices(ApiPath.baseURL()));
+  // initial AppThemeService
+  Get.put(AppThemeService());
 }
 
 class MyApp extends StatelessWidget {
@@ -41,21 +44,26 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TrasnlationController trController = Get.put(TrasnlationController());
-    return GetMaterialApp(
-      scrollBehavior: const MaterialScrollBehavior().copyWith(
-        dragDevices: {
-          PointerDeviceKind.mouse,
-          PointerDeviceKind.touch,
-        },
-      ),
-      translations: EnArTranslation(),
-      locale: trController.language,
-      title: 'Charity',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.dark,
-      initialRoute: AppPages.initial,
-      getPages: AppPages.routes,
-      defaultTransition: Transition.fadeIn,
-    );
+    final AppThemeService themeService = Get.find<AppThemeService>();
+    return Obx(() {
+      return GetMaterialApp(
+        scrollBehavior: const MaterialScrollBehavior().copyWith(
+          dragDevices: {
+            PointerDeviceKind.mouse,
+            PointerDeviceKind.touch,
+          },
+        ),
+        translations: EnArTranslation(),
+        locale: trController.language,
+        title: 'Charity',
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.basic,
+        darkTheme: AppTheme.dark,
+        themeMode: themeService.themeMode,
+        initialRoute: AppPages.initial,
+        getPages: AppPages.routes,
+        defaultTransition: Transition.fadeIn,
+      );
+    });
   }
 }

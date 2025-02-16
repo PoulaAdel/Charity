@@ -7,6 +7,8 @@ import '../../../../config/routes/app_pages.dart';
 import '../../../../database/models/app_models.dart';
 import '../../../../shared/widgets/active_project_card.dart';
 import '../../../../shared/widgets/overview_header.dart';
+import '../../../../shared/widgets/profile.dart';
+import '../../../../shared/widgets/profile_tile.dart';
 import '../../../../shared/widgets/sidebar_header.dart';
 import '../../../../utils/services/authetication_services.dart';
 import '../../../../utils/services/local_secure_storage_services.dart';
@@ -28,7 +30,6 @@ import '../../../../shared/widgets/sidebar.dart';
 part '../components/active_project_card.dart';
 part '../components/header.dart';
 part '../components/overview_header.dart';
-part '../components/profile_tile.dart';
 part '../components/recent_messages.dart';
 part '../components/team_member.dart';
 
@@ -39,7 +40,6 @@ part '../../bindings/dashboard_binding.dart';
 part '../../controllers/dashboard_controller.dart';
 
 // models
-part '../../models/profile.dart';
 
 class DashboardScreen extends StatelessWidget {
   DashboardScreen({Key? key}) : super(key: key);
@@ -317,7 +317,7 @@ class DashboardScreen extends StatelessWidget {
   Widget _buildProfile({required Profile data}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: kSpacing),
-      child: _ProfilTile(
+      child: ProfilTile(
         data: data,
         onPressedLogOut: () {
           controller.logoutUser();

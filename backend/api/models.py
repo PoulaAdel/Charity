@@ -28,6 +28,8 @@ class User(AbstractUser):
     role = models.PositiveSmallIntegerField(
         _("Role"), choices=USER_ROLE_CHOICES, default=NEW_USER
     )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     @property
     def get_level(self):
@@ -83,7 +85,7 @@ class Donation(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.donor
+        return str(self.donor.name)
 
 
 # ==Families
@@ -120,9 +122,9 @@ class Member(models.Model):
     nid = models.FileField(_("National ID"), upload_to="ids/")  # adjust path
     face_img = models.FileField(_("Face Image"), upload_to="faces/")  # adjust path
     age = models.PositiveIntegerField(_("Age"))
-    education = models.TextField(_("Education"), blank=True)
-    income = models.TextField(_("Income"), blank=True)
-    health = models.TextField(_("Health"), blank=True)
+    education = models.TextField(_("Education"), blank=True, null=True)
+    health = models.TextField(_("Health"), blank=True, null=True)
+    income = models.DecimalField(_("Income"), max_digits=10, decimal_places=2, default=0.00, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -144,28 +146,36 @@ class Statement(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.family + self.created_at
+        return f"{self.family} - {self.created_at}"
 
 
 # Statement Leaves
 class Social(models.Model):
     statement = models.ForeignKey(Statement, on_delete=models.CASCADE)
     content = models.TextField(_("Content"))
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 class Spiritual(models.Model):
     statement = models.ForeignKey(Statement, on_delete=models.CASCADE)
     content = models.TextField(_("Content"))
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 class Residential(models.Model):
     statement = models.ForeignKey(Statement, on_delete=models.CASCADE)
     content = models.TextField(_("Content"))
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 class Economical(models.Model):
     statement = models.ForeignKey(Statement, on_delete=models.CASCADE)
     content = models.TextField(_("Content"))
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 # Opinion
@@ -176,7 +186,7 @@ class Opinion(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.statement
+        return f"Opinion on {self.statement}"
 
 
 # Suggestion
@@ -187,7 +197,7 @@ class Suggestion(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.statement
+        return f"Suggestion on {self.statement}"
 
 
 # Judgement
@@ -199,7 +209,7 @@ class Judgement(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.statement
+        return f"Judgement on {self.statement}"
 
 
 """
@@ -215,9 +225,11 @@ class Supply(models.Model):
     service = models.ForeignKey(Service, on_delete=models.SET_NULL, null=True)
     amount = models.DecimalField(_("Amount"), max_digits=10, decimal_places=2)
     note = models.TextField(_("Notes"))
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.family
+        return f"Supply for {self.family}"
 
 
 # Check
