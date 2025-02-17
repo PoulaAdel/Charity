@@ -43,7 +43,7 @@ class Member {
   final String? img;
   final int age;
   final String? education;
-  final double? income;
+  final double income;
   final String? health;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -59,7 +59,7 @@ class Member {
     required this.age,
     this.education,
     this.health,
-    this.income,
+    required this.income,
     this.createdAt,
     this.updatedAt,
   });
@@ -75,9 +75,7 @@ class Member {
         age: json["age"] as int,
         education: json["education"] as String? ?? '',
         health: json["health"] as String? ?? '',
-        income: json["income"] != null && json["income"] != ""
-            ? double.parse(json["income"])
-            : 0.0,
+        income: double.parse(json["income"]),
         createdAt: json['created_at'] != null
             ? DateTime.parse(json['created_at'])
             : null,
@@ -97,7 +95,7 @@ class Member {
         "age": age,
         "education": education,
         "health": health,
-        "income": income?.toString() ?? '0.0',
+        "income": income.toString(),
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
       };

@@ -273,9 +273,7 @@ class FamilyScreen extends StatelessWidget {
                             textConfirm: "Delete",
                             confirmTextColor: Colors.white,
                             onConfirm: () {
-                              if (family.pk != null) {
-                                controller.deleteFamily(family.pk!);
-                              }
+                              controller.deleteFamily(family.pk);
                               Get.back();
                             },
                           );

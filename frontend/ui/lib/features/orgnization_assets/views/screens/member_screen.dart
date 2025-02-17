@@ -319,8 +319,7 @@ class MemberScreen extends StatelessWidget {
                             Text('Education: ${member.education ?? 'N/A'}',
                                 style: const TextStyle(fontSize: 18)),
                             const SizedBox(height: 8),
-                            Text(
-                                'Income: ${member.income?.toString() ?? 'N/A'}',
+                            Text('Income: ${member.income.toString()}',
                                 style: const TextStyle(fontSize: 18)),
                             const SizedBox(height: 8),
                             Text('Health: ${member.health ?? 'N/A'}',

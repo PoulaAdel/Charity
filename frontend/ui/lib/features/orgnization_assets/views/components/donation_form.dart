@@ -18,7 +18,6 @@ class DonationForm extends StatelessWidget {
     }
   }
 
-  @override
   void dispose() {
     _donorController.dispose();
     _typeController.dispose();

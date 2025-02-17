@@ -25,12 +25,11 @@ class MemberForm extends StatelessWidget {
       _imgController.text = member!.img ?? '';
       _ageController.text = member!.age.toString();
       _educationController.text = member!.education ?? '';
-      _incomeController.text = member!.income?.toString() ?? '';
+      _incomeController.text = member!.income.toString();
       _healthController.text = member!.health ?? '';
     }
   }
 
-  @override
   void dispose() {
     _nameController.dispose();
     _familyController.dispose();
@@ -154,9 +153,7 @@ class MemberForm extends StatelessWidget {
                           img: _imgController.text,
                           age: int.parse(_ageController.text),
                           education: _educationController.text,
-                          income: _incomeController.text.isNotEmpty
-                              ? double.parse(_incomeController.text)
-                              : null,
+                          income: double.parse(_incomeController.text),
                           health: _healthController.text,
                           createdAt: DateTime.now(),
                         ));
@@ -171,9 +168,7 @@ class MemberForm extends StatelessWidget {
                           img: _imgController.text,
                           age: int.parse(_ageController.text),
                           education: _educationController.text,
-                          income: _incomeController.text.isNotEmpty
-                              ? double.parse(_incomeController.text)
-                              : null,
+                          income: double.parse(_incomeController.text),
                           health: _healthController.text,
                           createdAt: member!.createdAt,
                           updatedAt: DateTime.now(),
