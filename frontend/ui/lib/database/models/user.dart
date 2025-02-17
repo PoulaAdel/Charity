@@ -24,19 +24,19 @@ class UserFields {
 class User {
   int pk;
   final String username;
-  final String phone;
+  final String? phone;
   final String? email;
   final String password;
-  final DateTime createdAt;
+  final DateTime? createdAt;
   final DateTime? updatedAt;
 
   User({
     this.pk = 0,
     required this.username,
-    required this.phone,
+    this.phone,
     this.email,
     required this.password,
-    required this.createdAt,
+    this.createdAt,
     this.updatedAt,
   });
 
@@ -46,9 +46,11 @@ class User {
         email: json["email"],
         phone: json["phone"] as String,
         password: json["password"] as String,
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: (json["updated_at"] != null)
-            ? DateTime.parse(json["updated_at"])
+        createdAt: json['created_at'] != null
+            ? DateTime.parse(json['created_at'])
+            : null,
+        updatedAt: json['updated_at'] != null
+            ? DateTime.parse(json['updated_at'])
             : null,
       );
 
@@ -58,7 +60,7 @@ class User {
         "email": email,
         "phone": phone,
         "password": password,
-        "created_at": createdAt.toIso8601String(),
+        "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
       };
 }

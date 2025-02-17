@@ -9,6 +9,7 @@ import 'local_secure_storage_services.dart';
 
 class AuthenticationServices extends GetxService {
   final String baseUrl;
+  final LocalSecureStorageServices _localSecureStorage = Get.find();
 
   AuthenticationServices(this.baseUrl);
 
@@ -23,6 +24,14 @@ class AuthenticationServices extends GetxService {
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       final token = data['token'];
+      //** Get user from backend */
+      // await _localSecureStorage.secureStorage.write(
+      //   key: 'USER',
+      //   value: User(
+      //     username: username,
+      //     password: password,
+      //   ).toJson().toString(),
+      // );
       await LocalSecureStorageServices.setToken(token);
       return true;
     } else {
@@ -57,6 +66,7 @@ class AuthenticationServices extends GetxService {
   }
 
   Future<void> logout() async {
+    // await _localSecureStorage.secureStorage.delete(key: 'USER');
     await LocalSecureStorageServices.deleteToken();
   }
 

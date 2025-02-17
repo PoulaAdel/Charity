@@ -13,7 +13,7 @@ class LocalSecureStorageServices extends GetxService {
 
   Future<User?> get getUser async {
     User? currentUser;
-    String? data = await _secureStorage.read(key: 'KEY_USER');
+    String? data = await _secureStorage.read(key: 'USER');
     if (data != null && data.isNotEmpty) {
       currentUser = User.fromJson(jsonDecode(data));
     }
