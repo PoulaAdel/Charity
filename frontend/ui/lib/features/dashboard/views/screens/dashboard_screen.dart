@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../config/routes/app_pages.dart';
-import '../../../../database/models/app_models.dart';
 import '../../../../shared/widgets/active_project_card.dart';
 import '../../../../shared/widgets/overview_header.dart';
 import '../../../../shared/widgets/profile.dart';

@@ -3,7 +3,6 @@ library info_gathering;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../config/routes/app_pages.dart';
-import '../../../../database/models/app_models.dart';
 import '../../../../shared/constants/app_constants.dart';
 import '../../../../shared/widgets/sidebar_header.dart';
 import '../../../../utils/services/authetication_services.dart';
@@ -12,6 +11,7 @@ import '../../../../utils/ui/ui_utils.dart';
 
 // component
 import '../../../../shared/widgets/sidebar.dart';
+import '../../../../shared/widgets/profile.dart';
 
 // binding
 part '../../bindings/info_gathering_binding.dart';

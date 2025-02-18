@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 
-import '../../database/models/app_models.dart';
+import '../../shared/widgets/profile.dart';
 
 class LocalSecureStorageServices extends GetxService {
   static const _secureStorage = FlutterSecureStorage();
@@ -11,13 +11,20 @@ class LocalSecureStorageServices extends GetxService {
 
   FlutterSecureStorage get secureStorage => _secureStorage;
 
-  Future<User?> get getUser async {
-    User? currentUser;
+  Future<Profile?> get getProfile async {
+    Profile? currentProfile;
     String? data = await _secureStorage.read(key: 'USER');
     if (data != null && data.isNotEmpty) {
-      currentUser = User.fromJson(jsonDecode(data));
+      currentProfile = Profile.fromJson(jsonDecode(data));
     }
-    return currentUser;
+    return currentProfile;
+  }
+
+  static setProfile(Profile profile) async {
+    await _secureStorage.write(
+      key: 'USER',
+      value: jsonEncode(profile.toJson()),
+    );
   }
 
   static Future<String?> getToken() async {

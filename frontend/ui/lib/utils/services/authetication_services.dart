@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:charity/features/auth/views/screens/login_screen.dart';
+import '../../features/auth/views/screens/login_screen.dart';
+import '../../shared/widgets/profile.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -9,7 +10,6 @@ import 'local_secure_storage_services.dart';
 
 class AuthenticationServices extends GetxService {
   final String baseUrl;
-  final LocalSecureStorageServices _localSecureStorage = Get.find();
 
   AuthenticationServices(this.baseUrl);
 
@@ -22,17 +22,13 @@ class AuthenticationServices extends GetxService {
     );
 
     if (response.statusCode == 200) {
+      // Save token to secure storage
       final data = jsonDecode(response.body);
       final token = data['token'];
-      //** Get user from backend */
-      // await _localSecureStorage.secureStorage.write(
-      //   key: 'USER',
-      //   value: User(
-      //     username: username,
-      //     password: password,
-      //   ).toJson().toString(),
-      // );
       await LocalSecureStorageServices.setToken(token);
+      // Get user profile data
+      await updateProfileData();
+      // Redirect to dashboard
       return true;
     } else {
       final message = response.body.isNotEmpty
@@ -73,5 +69,24 @@ class AuthenticationServices extends GetxService {
   Future<bool> isAuthenticated() async {
     final token = await LocalSecureStorageServices.getToken();
     return token != null && token.isNotEmpty;
+  }
+
+  Future<void> updateProfileData() async {
+    final url = Uri.parse('$baseUrl/api/authenticated_user_info/');
+    final response = await http.post(url, headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Token ${await LocalSecureStorageServices.getToken()}',
+    });
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final profile = Profile.fromJson(data);
+      await LocalSecureStorageServices.setProfile(profile);
+    } else {
+      final message = response.body.isNotEmpty
+          ? jsonDecode(response.body).toString()
+          : 'Failed to get profile data.';
+      Get.snackbar("${response.statusCode}", message);
+    }
   }
 }

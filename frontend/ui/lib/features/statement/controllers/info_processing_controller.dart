@@ -10,17 +10,17 @@ class InfoProcessingController extends GetxController {
   final LocalSecureStorageServices _localSecureStorage =
       Get.find<LocalSecureStorageServices>();
 
-  Rx<User?> currentUser = Rx<User?>(null);
+  Rx<Profile?> currentProfile = Rx<Profile?>(null);
 
   @override
   void onInit() {
-    assignCurrentUser();
+    assignCurrentProfile();
     super.onInit();
   }
 
-  void assignCurrentUser() async {
-    User? secureData = await _localSecureStorage.getUser;
-    currentUser.value = secureData;
+  void assignCurrentProfile() async {
+    Profile? secureData = await _localSecureStorage.getProfile;
+    currentProfile.value = secureData;
     update();
   }
 

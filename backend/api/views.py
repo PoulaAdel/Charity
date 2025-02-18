@@ -7,8 +7,10 @@ Copyright ©,All rights reserved
 
 from django.shortcuts import render
 
+from requests import Response
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import permissions,viewsets
-from rest_framework.generics import RetrieveUpdateDestroyAPIView
+from rest_framework.generics import RetrieveUpdateDestroyAPIView,RetrieveAPIView
 from api.serializers import *
 from api.models import *
 
@@ -35,6 +37,19 @@ class UserViewDetail(RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
     lookup_field = 'pk'
     permission_classes = [permissions.IsAuthenticated]
+    
+"""
+:User authenticated details
+"""
+class AuthenticatedUserInfoView(RetrieveAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = AuthenticatedUserSerializer
+
+    def get_object(self): 
+        return self.request.user
+    
+    def post(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
     
 """
 :List View for Service

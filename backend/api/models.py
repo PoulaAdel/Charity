@@ -28,6 +28,7 @@ class User(AbstractUser):
     role = models.PositiveSmallIntegerField(
         _("Role"), choices=USER_ROLE_CHOICES, default=NEW_USER
     )
+    profile_image = models.ImageField(upload_to='profile_images/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../config/routes/app_pages.dart';
-import '../../../../database/models/app_models.dart';
 import '../../../../shared/widgets/overview_header.dart';
 import '../../../../shared/widgets/progress_card.dart';
 import '../../../../shared/widgets/progress_report_card.dart';
@@ -18,19 +17,19 @@ import '../../../../shared/widgets/get_premium_card.dart';
 import '../../../../shared/widgets/list_profil_image.dart';
 import '../../../../shared/widgets/project_card.dart';
 import '../../../../shared/widgets/task_card.dart';
+import '../../../../shared/widgets/profile.dart';
 import '../../../../utils/helpers/app_helpers.dart';
 import '../../../../utils/ui/ui_utils.dart';
 
 // models
-import '../../models/profile.dart';
 
 // component
 import '../../../../shared/widgets/sidebar.dart';
 import '../../../../shared/widgets/active_project_card.dart';
 import '../components/header.dart';
-import '../components/profile_tile.dart';
-import '../components/recent_messages.dart';
-import '../components/team_member.dart';
+import '../../../../shared/widgets/profile_tile.dart';
+import '../../../../shared/widgets/recent_messages.dart';
+import '../../../../shared/widgets/team_member.dart';
 
 // binding
 part '../../bindings/reports_daily_binding.dart';

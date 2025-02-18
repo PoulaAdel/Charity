@@ -8,7 +8,7 @@ class DashboardController extends GetxController {
 
   final ScrollController scrollController = ScrollController();
 
-  Rx<User?> currentUser = Rx<User?>(null);
+  Rx<Profile?> currentProfile = Rx<Profile?>(null);
 
   @override
   void onInit() {
@@ -17,13 +17,13 @@ class DashboardController extends GetxController {
     //   //your async 'await' codes goes here
     //   //..
     // });
-    assignCurrentUser();
+    assignCurrentProfile();
     super.onInit();
   }
 
-  void assignCurrentUser() async {
-    User? secureData = await _localSecureStorage.getUser;
-    currentUser.value = secureData;
+  void assignCurrentProfile() async {
+    Profile? secureData = await _localSecureStorage.getProfile;
+    currentProfile.value = secureData;
     update();
   }
 
@@ -48,16 +48,17 @@ class DashboardController extends GetxController {
     );
   }
 
-  // Data
   Profile getProfil() {
     return Profile(
+      id: currentProfile.value != null ? currentProfile.value!.id : 0,
       photo: const AssetImage(ImageRasterPath.avatar1),
-      name: currentUser.value != null
-          ? currentUser.value!.username.toString()
+      username: currentProfile.value != null
+          ? currentProfile.value!.username.toString()
           : "Loading..",
-      email: currentUser.value != null
-          ? currentUser.value!.email.toString()
+      email: currentProfile.value != null
+          ? currentProfile.value!.email.toString()
           : "Loading..",
+      role: currentProfile.value != null ? currentProfile.value!.role : 0,
     );
   }
 

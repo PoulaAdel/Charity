@@ -25,7 +25,7 @@ class ProfilTile extends StatelessWidget {
       contentPadding: const EdgeInsets.all(0),
       leading: CircleAvatar(backgroundImage: data.photo),
       title: Text(
-        data.name,
+        data.username,
         style: const TextStyle(fontSize: 14),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,

@@ -8,7 +8,7 @@ class FinalDecisionController extends GetxController {
 
   final ScrollController scrollController = ScrollController();
 
-  Rx<User?> currentUser = Rx<User?>(null);
+  Rx<Profile?> currentProfile = Rx<Profile?>(null);
 
   @override
   void onInit() {
@@ -17,13 +17,13 @@ class FinalDecisionController extends GetxController {
     //   //your async 'await' codes goes here
     //   //..
     // });
-    assignCurrentUser();
+    assignCurrentProfile();
     super.onInit();
   }
 
-  void assignCurrentUser() async {
-    User? secureData = await _localSecureStorage.getUser;
-    currentUser.value = secureData;
+  void assignCurrentProfile() async {
+    Profile? secureData = await _localSecureStorage.getProfile;
+    currentProfile.value = secureData;
     update();
   }
 

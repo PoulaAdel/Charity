@@ -8,7 +8,7 @@ class DonorController extends GetxController {
 
   final ScrollController scrollController = ScrollController();
 
-  Rx<User?> currentUser = Rx<User?>(null);
+  Rx<Profile?> currentProfile = Rx<Profile?>(null);
 
   @override
   void onInit() {
@@ -22,8 +22,8 @@ class DonorController extends GetxController {
   }
 
   void assignCurrentUser() async {
-    User? secureData = await _localSecureStorage.getUser;
-    currentUser.value = secureData;
+    Profile? secureData = await _localSecureStorage.getProfile;
+    currentProfile.value = secureData;
     update();
   }
 
