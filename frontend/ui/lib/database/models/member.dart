@@ -9,7 +9,7 @@ class MemberFields {
   static const String relation = "relation";
   static const String contact = "contact";
   static const String nid = "nid";
-  static const String img = "face_img";
+  static const String faceImg = "face_img";
   static const String age = "age";
   static const String education = "education";
   static const String income = "income";
@@ -23,7 +23,7 @@ class MemberFields {
     relation,
     contact,
     nid,
-    img,
+    faceImg,
     age,
     education,
     income,
@@ -39,8 +39,8 @@ class Member {
   final int family;
   final int relation;
   final String? contact;
-  final String nid;
-  final String? img;
+  final File nid;
+  final NetworkImage? faceImg;
   final int age;
   final String? education;
   final double income;
@@ -55,7 +55,7 @@ class Member {
     required this.relation,
     this.contact,
     required this.nid,
-    this.img,
+    this.faceImg,
     required this.age,
     this.education,
     this.health,
@@ -70,12 +70,14 @@ class Member {
         family: json["family"] as int,
         relation: json["relation"] as int,
         contact: json["contact"] as String? ?? '',
-        nid: json["nid"] as String,
-        img: json["img"] as String? ?? '',
+        nid: json["nid"] as File,
+        faceImg: (json['face_img'] != null)
+            ? NetworkImage('${json['face_img']}')
+            : const NetworkImage(ImageRasterPath.avatar2),
         age: json["age"] as int,
         education: json["education"] as String? ?? '',
         health: json["health"] as String? ?? '',
-        income: double.parse(json["income"]),
+        income: json["income"] as double? ?? 0.0,
         createdAt: json['created_at'] != null
             ? DateTime.parse(json['created_at'])
             : null,
@@ -91,7 +93,7 @@ class Member {
         "relation": relation,
         "contact": contact,
         "nid": nid,
-        "img": img,
+        "face_img": faceImg,
         "age": age,
         "education": education,
         "health": health,

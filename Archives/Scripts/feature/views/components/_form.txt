@@ -1,0 +1,117 @@
+part of _<name>;
+
+class _<Name>Form extends StatelessWidget {
+  final _<Name>? _<name>;
+  final _formKey = GlobalKey<FormState>();
+  // final __<name>Controller = TextEditingController();
+  // final _typeController = TextEditingController();
+  // final _notesController = TextEditingController();
+  // final _amountController = TextEditingController();
+  final _<Name>Controller controller = Get.find<_<Name>Controller>();
+
+  _<Name>Form({Key? key, this._<name>}) : super(key: key) {
+    if (_<name> != null) {
+      // __<name>Controller.text = _<name>!._<name>.toString();
+      // _typeController.text = _<name>!.type.toString();
+      // _notesController.text = _<name>!.notes ?? '';
+      // _amountController.text = _<name>!.amount.toString();
+    }
+  }
+
+  
+  void dispose() {
+    // __<name>Controller.dispose();
+    // _typeController.dispose();
+    // _notesController.dispose();
+    // _amountController.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(_<name> == null ? 'Add _<Name>' : 'Edit _<Name>'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                // TextFormField(
+                //   controller: __<name>Controller,
+                //   decoration: const InputDecoration(labelText: '_<Name>'),
+                //   keyboardType: TextInputType.number,
+                //   validator: (value) {
+                //     if (value == null || value.isEmpty) {
+                //       return 'Please enter a _<name> ID';
+                //     }
+                //     return null;
+                //   },
+                // ),
+                // const SizedBox(height: 20),
+                // TextFormField(
+                //   controller: _typeController,
+                //   decoration: const InputDecoration(labelText: 'Type'),
+                //   keyboardType: TextInputType.number,
+                //   validator: (value) {
+                //     if (value == null || value.isEmpty) {
+                //       return 'Please enter a type';
+                //     }
+                //     return null;
+                //   },
+                // ),
+                // const SizedBox(height: 20),
+                // TextFormField(
+                //   controller: _notesController,
+                //   decoration: const InputDecoration(labelText: 'Notes'),
+                // ),
+                // const SizedBox(height: 20),
+                // TextFormField(
+                //   controller: _amountController,
+                //   decoration: const InputDecoration(labelText: 'Amount'),
+                //   keyboardType: TextInputType.number,
+                //   validator: (value) {
+                //     if (value == null || value.isEmpty) {
+                //       return 'Please enter an amount';
+                //     }
+                //     return null;
+                //   },
+                // ),
+                // const SizedBox(height: 20),
+                // ElevatedButton(
+                //   onPressed: () {
+                //     if (_formKey.currentState!.validate()) {
+                //       if (_<name> == null) {
+                //         controller.add_<Name>(_<Name>(
+                //           _<name>: int.parse(__<name>Controller.text),
+                //           type: int.parse(_typeController.text),
+                //           notes: _notesController.text,
+                //           amount: double.parse(_amountController.text),
+                //           createdAt: DateTime.now(),
+                //         ));
+                //       } else {
+                //         controller.update_<Name>(_<Name>(
+                //           pk: _<name>!.pk,
+                //           _<name>: int.parse(__<name>Controller.text),
+                //           type: int.parse(_typeController.text),
+                //           notes: _notesController.text,
+                //           amount: double.parse(_amountController.text),
+                //           createdAt: _<name>!.createdAt,
+                //           updatedAt: DateTime.now(),
+                //         ));
+                //       }
+                //       Get.back();
+                //     }
+                //   },
+                //   child: Text(_<name> == null ? 'Add' : 'Update'),
+                // ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

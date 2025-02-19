@@ -1,5 +1,11 @@
 library app_models;
 
+import 'dart:io';
+
+import 'package:flutter/widgets.dart';
+
+import '../../shared/constants/app_constants.dart';
+
 // Users
 part 'user.dart';
 part 'donor.dart';

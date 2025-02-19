@@ -120,9 +120,9 @@ class Member(models.Model):
         _("Role"), choices=FAMILY_MEMBER, default=FATHER
     )
     contact = models.CharField(_("Contact"), max_length=12)
-    nid = models.FileField(_("National ID"), upload_to="ids/")  # adjust path
-    face_img = models.FileField(_("Face Image"), upload_to="faces/")  # adjust path
-    age = models.PositiveIntegerField(_("Age"))
+    nid = models.FileField(_("National ID"), upload_to="ids/")  # PDF
+    face_img = models.ImageField(_("Face Image"), upload_to="faces/")  # Image
+    age = models.PositiveIntegerField(_("Age"), default = 0)
     education = models.TextField(_("Education"), blank=True, null=True)
     health = models.TextField(_("Health"), blank=True, null=True)
     income = models.DecimalField(_("Income"), max_digits=10, decimal_places=2, default=0.00)

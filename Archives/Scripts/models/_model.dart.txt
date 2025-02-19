@@ -25,7 +25,7 @@ class _<Name> {
   final DateTime? updatedAt;
 
   _<Name>({
-    this.pk,
+    this.pk = 0,
     required this.name,
     required this.description,
     this.createdAt,

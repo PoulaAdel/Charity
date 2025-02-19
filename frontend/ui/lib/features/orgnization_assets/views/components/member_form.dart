@@ -21,8 +21,8 @@ class MemberForm extends StatelessWidget {
       _familyController.text = member!.family.toString();
       _relationController.text = member!.relation.toString();
       _contactController.text = member!.contact ?? '';
-      _nidController.text = member!.nid;
-      _imgController.text = member!.img ?? '';
+      _nidController.text = member!.nid.path;
+      _imgController.text = member!.faceImg != null ? member!.faceImg!.url : '';
       _ageController.text = member!.age.toString();
       _educationController.text = member!.education ?? '';
       _incomeController.text = member!.income.toString();
@@ -149,8 +149,8 @@ class MemberForm extends StatelessWidget {
                           family: int.parse(_familyController.text),
                           relation: int.parse(_relationController.text),
                           contact: _contactController.text,
-                          nid: _nidController.text,
-                          img: _imgController.text,
+                          nid: File(ImageRasterPath.avatar5),
+                          faceImg: const NetworkImage(ImageRasterPath.avatar5),
                           age: int.parse(_ageController.text),
                           education: _educationController.text,
                           income: double.parse(_incomeController.text),
@@ -164,8 +164,8 @@ class MemberForm extends StatelessWidget {
                           family: int.parse(_familyController.text),
                           relation: int.parse(_relationController.text),
                           contact: _contactController.text,
-                          nid: _nidController.text,
-                          img: _imgController.text,
+                          nid: File(ImageRasterPath.avatar5),
+                          faceImg: const NetworkImage(ImageRasterPath.avatar5),
                           age: int.parse(_ageController.text),
                           education: _educationController.text,
                           income: double.parse(_incomeController.text),

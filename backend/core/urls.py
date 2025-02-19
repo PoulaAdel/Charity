@@ -13,6 +13,7 @@ from api import views
 router = routers.DefaultRouter()
 
 router.register(r"users", views.UserViewSet)
+router.register(r"donors", views.DonorViewSet)
 router.register(r"services", views.ServiceViewSet)
 router.register(r"donations", views.DonationViewSet)
 router.register(r"families", views.FamilyViewSet)

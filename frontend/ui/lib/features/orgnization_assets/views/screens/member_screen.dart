@@ -1,5 +1,7 @@
 library member;
 
+import 'dart:io';
+
 import 'package:charity/utils/services/rest_api_services.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
@@ -310,7 +312,7 @@ class MemberScreen extends StatelessWidget {
                             Text('NID: ${member.nid}',
                                 style: const TextStyle(fontSize: 18)),
                             const SizedBox(height: 8),
-                            Text('Image URL: ${member.img ?? 'N/A'}',
+                            Text('Image URL: ${member.faceImg ?? 'N/A'}',
                                 style: const TextStyle(fontSize: 18)),
                             const SizedBox(height: 8),
                             Text('Age: ${member.age}',

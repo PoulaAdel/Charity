@@ -52,6 +52,29 @@ class AuthenticatedUserInfoView(RetrieveAPIView):
         return self.retrieve(request, *args, **kwargs)
     
 """
+:List View for Donation
+"""
+class DonorViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows Donors to be viewed or edited.
+    """
+    queryset = Donor.objects.all()
+    serializer_class = DonorSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    
+"""
+:Donor Item Control
+"""
+class DonorViewDetail(RetrieveUpdateDestroyAPIView):
+    """
+    API endpoint that allows Donors to be viewed or edited.
+    """
+    queryset = Donor.objects.all()
+    serializer_class = DonorSerializer
+    lookup_field = 'pk'
+    permission_classes = [permissions.IsAuthenticated]
+    
+"""
 :List View for Service
 """
 class ServiceViewSet(viewsets.ModelViewSet):
