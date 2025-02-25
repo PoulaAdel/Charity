@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:charity/utils/services/local_secure_storage_services.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
 
 class RestApiServices extends GetxService {
   final String baseUrl;
@@ -22,7 +24,7 @@ class RestApiServices extends GetxService {
   }
 
   Future<dynamic> get(String endpoint, {Map<String, String>? headers}) async {
-    final url = Uri.parse('$baseUrl/$endpoint');
+    final url = Uri.parse('$baseUrl/$endpoint/');
     final response =
         await http.get(url, headers: await _getHeaders(headers: headers));
 
@@ -61,6 +63,56 @@ class RestApiServices extends GetxService {
           'Failed to load data: ${response.statusCode}');
       throw Exception('Failed to load data: ${response.statusCode}');
     }
+  }
+
+  Future<http.Response> postMultipart(String endpoint,
+      {required Map<String, String> fields,
+      required Map<String, File?> files}) async {
+    final url = Uri.parse('$baseUrl/$endpoint/');
+    var request = http.MultipartRequest('POST', url);
+
+    fields.forEach((key, value) {
+      request.fields[key] = value;
+    });
+
+    files.forEach((key, file) {
+      if (file != null) {
+        request.files.add(http.MultipartFile(
+          key,
+          file.readAsBytes().asStream(),
+          file.lengthSync(),
+          filename: basename(file.path),
+        ));
+      }
+    });
+
+    var response = await request.send();
+    return await http.Response.fromStream(response);
+  }
+
+  Future<http.Response> putMultipart(String endpoint,
+      {required Map<String, String> fields,
+      required Map<String, File?> files}) async {
+    final url = Uri.parse('$baseUrl/$endpoint/');
+    var request = http.MultipartRequest('PUT', url);
+
+    fields.forEach((key, value) {
+      request.fields[key] = value;
+    });
+
+    files.forEach((key, file) {
+      if (file != null) {
+        request.files.add(http.MultipartFile(
+          key,
+          file.readAsBytes().asStream(),
+          file.lengthSync(),
+          filename: basename(file.path),
+        ));
+      }
+    });
+
+    var response = await request.send();
+    return await http.Response.fromStream(response);
   }
 
   Future<Map<String, dynamic>> put(String endpoint, Map<String, dynamic> data,

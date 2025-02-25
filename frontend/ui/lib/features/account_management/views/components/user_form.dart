@@ -35,7 +35,7 @@ class UserForm extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          child: SingleChildScrollView(
+          child: const SingleChildScrollView(
             child: Column(
               children: [
                 // TextFormField(

@@ -30,13 +30,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  http: 
-  intl:
   get:
+  http:
+  path:
+  intl:
   flutter_secure_storage:
-  shared_preferences: 
-  email_validator: 
-  percent_indicator: 
+  shared_preferences:
+  percent_indicator:
+  email_validator:
+  image_picker:
 
 
   # The following adds the Cupertino Icons font to your application.

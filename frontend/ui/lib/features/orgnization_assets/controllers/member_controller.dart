@@ -15,8 +15,21 @@ class MemberController extends GetxController {
 
   final TextEditingController searchController = TextEditingController();
 
-  // for authintication
+  // for authentication
   Rx<Profile?> currentProfile = Rx<Profile?>(null);
+
+  // for handling form
+  final Rxn<File> nidFile = Rxn<File>();
+  final Rxn<File> faceImgFile = Rxn<File>();
+
+  final RxString name = ''.obs;
+  final RxInt family = 0.obs;
+  final RxInt relation = 0.obs;
+  final RxString contact = ''.obs;
+  final RxInt age = 0.obs;
+  final RxString education = ''.obs;
+  final RxDouble income = 0.0.obs;
+  final RxString health = ''.obs;
 
   @override
   void onInit() {
@@ -35,6 +48,8 @@ class MemberController extends GetxController {
     _authService.logout();
     Get.offAllNamed(Routes.login);
   }
+
+  // for UI
 
   Profile getProfil() {
     return Profile(
@@ -114,6 +129,7 @@ class MemberController extends GetxController {
     );
   }
 
+  // for handling data CRUD
   void searchMembers(String query) {
     if (query.isEmpty) {
       fetchMembers();
@@ -140,29 +156,55 @@ class MemberController extends GetxController {
     }
   }
 
-  void addMember(Member member) async {
+  Future<void> addMember(
+      Member member, File? nidFile, File? faceImgFile) async {
     isLoading.value = true;
     try {
-      var newMember = await _api.post('members', member.toJson());
-      members.add(Member.fromJson(newMember));
+      var response = await _api.postMultipart(
+        'members/',
+        fields: member
+            .toJson()
+            .map((key, value) => MapEntry(key, value.toString())),
+        files: {
+          'nid': nidFile,
+          'face_img': faceImgFile,
+        },
+      );
+      if (response.statusCode == 201) {
+        fetchMembers();
+        Get.snackbar('Success', 'Member added successfully');
+      } else {
+        Get.snackbar('Error', 'Failed to add member');
+      }
     } catch (e) {
-      Get.snackbar('Controller Error', 'Failed: ${e.toString()}');
+      Get.snackbar('Controller Error', 'Failed! ${e.toString()}');
     } finally {
       isLoading.value = false;
     }
   }
 
-  void updateMember(Member member) async {
+  Future<void> updateMember(
+      Member member, File? nidFile, File? faceImgFile) async {
     isLoading.value = true;
     try {
-      var updatedMember =
-          await _api.put('members/${member.pk}', member.toJson());
-      int index = members.indexWhere((s) => s.pk == member.pk);
-      if (index != -1) {
-        members[index] = Member.fromJson(updatedMember);
+      var response = await _api.putMultipart(
+        'members/${member.pk}/',
+        fields: member
+            .toJson()
+            .map((key, value) => MapEntry(key, value.toString())),
+        files: {
+          'nid': nidFile,
+          'face_img': faceImgFile,
+        },
+      );
+      if (response.statusCode == 200) {
+        fetchMembers();
+        Get.snackbar('Success', 'Member updated successfully');
+      } else {
+        Get.snackbar('Error', 'Failed to update member');
       }
     } catch (e) {
-      Get.snackbar('Controller Error', 'Failed: ${e.toString()}');
+      Get.snackbar('Controller Error', 'Failed! ${e.toString()}');
     } finally {
       isLoading.value = false;
     }
@@ -177,6 +219,85 @@ class MemberController extends GetxController {
       Get.snackbar('Controller Error', 'Failed to delete member');
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  // for handling form
+  void setMember(Member? member) {
+    if (member != null) {
+      name.value = member.name;
+      family.value = member.family;
+      relation.value = member.relation;
+      contact.value = member.contact ?? '';
+      age.value = member.age;
+      education.value = member.education ?? '';
+      income.value = member.income;
+      health.value = member.health ?? '';
+      nidFile.value = null; // Reset file fields
+      faceImgFile.value = null; // Reset file fields
+    } else {
+      name.value = '';
+      family.value = 0;
+      relation.value = 0;
+      contact.value = '';
+      age.value = 0;
+      education.value = '';
+      income.value = 0.0;
+      health.value = '';
+      nidFile.value = null;
+      faceImgFile.value = null;
+    }
+  }
+
+  Future<void> pickNidFile() async {
+    try {
+      final pickedFile =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        nidFile.value = File(pickedFile.path);
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Error picking NID file: $e');
+    }
+  }
+
+  Future<void> pickFaceImgFile() async {
+    try {
+      final pickedFile =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        faceImgFile.value = File(pickedFile.path);
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Error picking face image: $e');
+    }
+  }
+
+  Future<void> submitForm(Member? existingMember) async {
+    try {
+      final memberData = Member(
+        name: name.value,
+        family: family.value,
+        relation: relation.value,
+        contact: contact.value,
+        nid: nidFile.value ?? File(''),
+        faceImg: faceImgFile.value as NetworkImage?,
+        age: age.value,
+        education: education.value,
+        income: income.value,
+        health: health.value,
+      );
+
+      if (existingMember == null) {
+        await addMember(memberData, nidFile.value, faceImgFile.value);
+        Get.snackbar('Success', 'Member added successfully');
+      } else {
+        await updateMember(memberData, nidFile.value, faceImgFile.value);
+        Get.snackbar('Success', 'Member updated successfully');
+      }
+      Get.back(); // Return to previous screen after submission
+    } catch (e) {
+      Get.snackbar('Error', 'An error occurred: $e');
     }
   }
 }

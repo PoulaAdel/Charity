@@ -278,8 +278,8 @@ class DonorScreen extends StatelessWidget {
                   ),
                   onTap: () {
                     Get.bottomSheet(
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
+                      const Padding(
+                        padding: EdgeInsets.all(16.0),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,

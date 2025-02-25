@@ -2,45 +2,11 @@ part of member;
 
 class MemberForm extends StatelessWidget {
   final Member? member;
+  final MemberController controller = Get.put(MemberController());
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _familyController = TextEditingController();
-  final TextEditingController _relationController = TextEditingController();
-  final TextEditingController _contactController = TextEditingController();
-  final TextEditingController _nidController = TextEditingController();
-  final TextEditingController _imgController = TextEditingController();
-  final TextEditingController _ageController = TextEditingController();
-  final TextEditingController _educationController = TextEditingController();
-  final TextEditingController _incomeController = TextEditingController();
-  final TextEditingController _healthController = TextEditingController();
-  final MemberController controller = Get.find<MemberController>();
 
   MemberForm({Key? key, this.member}) : super(key: key) {
-    if (member != null) {
-      _nameController.text = member!.name;
-      _familyController.text = member!.family.toString();
-      _relationController.text = member!.relation.toString();
-      _contactController.text = member!.contact ?? '';
-      _nidController.text = member!.nid.path;
-      _imgController.text = member!.faceImg != null ? member!.faceImg!.url : '';
-      _ageController.text = member!.age.toString();
-      _educationController.text = member!.education ?? '';
-      _incomeController.text = member!.income.toString();
-      _healthController.text = member!.health ?? '';
-    }
-  }
-
-  void dispose() {
-    _nameController.dispose();
-    _familyController.dispose();
-    _relationController.dispose();
-    _contactController.dispose();
-    _nidController.dispose();
-    _imgController.dispose();
-    _ageController.dispose();
-    _educationController.dispose();
-    _incomeController.dispose();
-    _healthController.dispose();
+    controller.setMember(member);
   }
 
   @override
@@ -56,125 +22,108 @@ class MemberForm extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                TextFormField(
-                  controller: _nameController,
-                  decoration: const InputDecoration(labelText: 'Name'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a name';
-                    }
-                    return null;
-                  },
+                Obx(() => TextFormField(
+                      initialValue: controller.name.value,
+                      decoration: const InputDecoration(labelText: 'Name'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter a name';
+                        }
+                        return null;
+                      },
+                      onChanged: (value) => controller.name.value = value,
+                    )),
+                const SizedBox(height: 20),
+                Obx(() => TextFormField(
+                      initialValue: controller.family.value == 0
+                          ? ''
+                          : controller.family.value.toString(),
+                      decoration: const InputDecoration(labelText: 'Family'),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter a family ID';
+                        }
+                        return null;
+                      },
+                      onChanged: (value) =>
+                          controller.family.value = int.tryParse(value) ?? 0,
+                    )),
+                const SizedBox(height: 20),
+                Obx(() => TextFormField(
+                      initialValue: controller.relation.value == 0
+                          ? ''
+                          : controller.relation.value.toString(),
+                      decoration: const InputDecoration(labelText: 'Relation'),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter a relation ID';
+                        }
+                        return null;
+                      },
+                      onChanged: (value) =>
+                          controller.relation.value = int.tryParse(value) ?? 0,
+                    )),
+                const SizedBox(height: 20),
+                Obx(() => TextFormField(
+                      initialValue: controller.contact.value,
+                      decoration: const InputDecoration(labelText: 'Contact'),
+                      onChanged: (value) => controller.contact.value = value,
+                    )),
+                const SizedBox(height: 20),
+                Obx(() => TextFormField(
+                      initialValue: controller.age.value == 0
+                          ? ''
+                          : controller.age.value.toString(),
+                      decoration: const InputDecoration(labelText: 'Age'),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter an age';
+                        }
+                        return null;
+                      },
+                      onChanged: (value) =>
+                          controller.age.value = int.tryParse(value) ?? 0,
+                    )),
+                const SizedBox(height: 20),
+                Obx(() => TextFormField(
+                      initialValue: controller.education.value,
+                      decoration: const InputDecoration(labelText: 'Education'),
+                      onChanged: (value) => controller.education.value = value,
+                    )),
+                const SizedBox(height: 20),
+                Obx(() => TextFormField(
+                      initialValue: controller.income.value == 0.0
+                          ? ''
+                          : controller.income.value.toString(),
+                      decoration: const InputDecoration(labelText: 'Income'),
+                      keyboardType: TextInputType.number,
+                      onChanged: (value) => controller.income.value =
+                          double.tryParse(value) ?? 0.0,
+                    )),
+                const SizedBox(height: 20),
+                Obx(() => TextFormField(
+                      initialValue: controller.health.value,
+                      decoration: const InputDecoration(labelText: 'Health'),
+                      onChanged: (value) => controller.health.value = value,
+                    )),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: controller.pickNidFile,
+                  child: const Text('Pick NID File'),
                 ),
                 const SizedBox(height: 20),
-                TextFormField(
-                  controller: _familyController,
-                  decoration: const InputDecoration(labelText: 'Family'),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a family ID';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  controller: _relationController,
-                  decoration: const InputDecoration(labelText: 'Relation'),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a relation ID';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  controller: _contactController,
-                  decoration: const InputDecoration(labelText: 'Contact'),
-                ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  controller: _nidController,
-                  decoration: const InputDecoration(labelText: 'NID'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a NID';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  controller: _imgController,
-                  decoration: const InputDecoration(labelText: 'Image URL'),
-                ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  controller: _ageController,
-                  decoration: const InputDecoration(labelText: 'Age'),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter an age';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  controller: _educationController,
-                  decoration: const InputDecoration(labelText: 'Education'),
-                ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  controller: _incomeController,
-                  decoration: const InputDecoration(labelText: 'Income'),
-                  keyboardType: TextInputType.number,
-                ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  controller: _healthController,
-                  decoration: const InputDecoration(labelText: 'Health'),
+                ElevatedButton(
+                  onPressed: controller.pickFaceImgFile,
+                  child: const Text('Pick Face Image'),
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      if (member == null) {
-                        controller.addMember(Member(
-                          name: _nameController.text,
-                          family: int.parse(_familyController.text),
-                          relation: int.parse(_relationController.text),
-                          contact: _contactController.text,
-                          nid: File(ImageRasterPath.avatar5),
-                          faceImg: const NetworkImage(ImageRasterPath.avatar5),
-                          age: int.parse(_ageController.text),
-                          education: _educationController.text,
-                          income: double.parse(_incomeController.text),
-                          health: _healthController.text,
-                          createdAt: DateTime.now(),
-                        ));
-                      } else {
-                        controller.updateMember(Member(
-                          pk: member!.pk,
-                          name: _nameController.text,
-                          family: int.parse(_familyController.text),
-                          relation: int.parse(_relationController.text),
-                          contact: _contactController.text,
-                          nid: File(ImageRasterPath.avatar5),
-                          faceImg: const NetworkImage(ImageRasterPath.avatar5),
-                          age: int.parse(_ageController.text),
-                          education: _educationController.text,
-                          income: double.parse(_incomeController.text),
-                          health: _healthController.text,
-                          createdAt: member!.createdAt,
-                          updatedAt: DateTime.now(),
-                        ));
-                      }
-                      Get.back();
+                      controller.submitForm(member);
                     }
                   },
                   child: Text(member == null ? 'Add' : 'Update'),
