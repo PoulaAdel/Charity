@@ -243,6 +243,13 @@ class MemberScreen extends StatelessWidget {
                 return ListTile(
                   title: Text('Member ${member.pk}'),
                   subtitle: Text(member.name),
+                  leading: member.faceImg != null
+                      ? CircleAvatar(
+                          backgroundImage: NetworkImage(member.faceImg!),
+                        )
+                      : const CircleAvatar(
+                          child: Icon(Icons.person),
+                        ),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [

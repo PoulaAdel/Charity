@@ -21,7 +21,7 @@ class MemberController extends GetxController {
   // for handling form
   final Rxn<File> nidFile = Rxn<File>();
   final Rxn<File> faceImgFile = Rxn<File>();
-
+  final RxInt id = 0.obs;
   final RxString name = ''.obs;
   final RxInt family = 0.obs;
   final RxInt relation = 0.obs;
@@ -50,7 +50,6 @@ class MemberController extends GetxController {
   }
 
   // for UI
-
   Profile getProfil() {
     return Profile(
       id: currentProfile.value != null ? currentProfile.value!.id : 0,
@@ -150,6 +149,7 @@ class MemberController extends GetxController {
           .map((json) => Member.fromJson(json as Map<String, dynamic>))
           .toList();
     } catch (e) {
+      print(e);
       Get.snackbar('Controller Error', 'Failed! ${e.toString()}');
     } finally {
       isLoading.value = false;
@@ -225,6 +225,7 @@ class MemberController extends GetxController {
   // for handling form
   void setMember(Member? member) {
     if (member != null) {
+      id.value = member.pk!;
       name.value = member.name;
       family.value = member.family;
       relation.value = member.relation;
@@ -275,23 +276,35 @@ class MemberController extends GetxController {
 
   Future<void> submitForm(Member? existingMember) async {
     try {
-      final memberData = Member(
-        name: name.value,
-        family: family.value,
-        relation: relation.value,
-        contact: contact.value,
-        nid: nidFile.value ?? File(''),
-        faceImg: faceImgFile.value as NetworkImage?,
-        age: age.value,
-        education: education.value,
-        income: income.value,
-        health: health.value,
-      );
-
       if (existingMember == null) {
+        final memberData = Member(
+          name: name.value,
+          family: family.value,
+          relation: relation.value,
+          contact: contact.value,
+          nid: nidFile.value?.path ?? '',
+          faceImg: faceImgFile.value?.path,
+          age: age.value,
+          education: education.value,
+          income: income.value,
+          health: health.value,
+        );
         await addMember(memberData, nidFile.value, faceImgFile.value);
         Get.snackbar('Success', 'Member added successfully');
       } else {
+        final memberData = Member(
+          pk: id.value,
+          name: name.value,
+          family: family.value,
+          relation: relation.value,
+          contact: contact.value,
+          nid: nidFile.value?.path ?? '',
+          faceImg: faceImgFile.value?.path,
+          age: age.value,
+          education: education.value,
+          income: income.value,
+          health: health.value,
+        );
         await updateMember(memberData, nidFile.value, faceImgFile.value);
         Get.snackbar('Success', 'Member updated successfully');
       }

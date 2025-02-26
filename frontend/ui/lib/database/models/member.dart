@@ -39,8 +39,8 @@ class Member {
   final int family;
   final int relation;
   final String? contact;
-  final File nid;
-  final NetworkImage? faceImg;
+  final String nid;
+  final String? faceImg;
   final int age;
   final String? education;
   final double income;
@@ -70,14 +70,12 @@ class Member {
         family: json["family"] as int,
         relation: json["relation"] as int,
         contact: json["contact"] as String? ?? '',
-        nid: json["nid"] as File,
-        faceImg: (json['face_img'] != null)
-            ? NetworkImage('${json['face_img']}')
-            : const NetworkImage(ImageRasterPath.avatar2),
+        nid: json["nid"] != null ? json['nid'] as String : '',
+        faceImg: json["face_img"] as String?,
         age: json["age"] as int,
         education: json["education"] as String? ?? '',
         health: json["health"] as String? ?? '',
-        income: json["income"] as double? ?? 0.0,
+        income: json["income"] != null ? double.parse(json['income']) : 0.0,
         createdAt: json['created_at'] != null
             ? DateTime.parse(json['created_at'])
             : null,
