@@ -149,7 +149,6 @@ class MemberController extends GetxController {
           .map((json) => Member.fromJson(json as Map<String, dynamic>))
           .toList();
     } catch (e) {
-      print(e);
       Get.snackbar('Controller Error', 'Failed! ${e.toString()}');
     } finally {
       isLoading.value = false;

@@ -1,10 +1,14 @@
 library user;
 
-import 'package:charity/utils/services/rest_api_services.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:image_picker/image_picker.dart';
+import '../../../../utils/services/rest_api_services.dart';
+import '../../../../utils/services/authetication_services.dart';
+import '../../../../utils/services/local_secure_storage_services.dart';
+import '../../../../utils/ui/ui_utils.dart';
 import '../../../../config/routes/app_pages.dart';
 import '../../../../database/models/app_models.dart';
 import '../../../../shared/constants/app_constants.dart';
@@ -13,9 +17,6 @@ import '../../../../shared/widgets/list_profil_image.dart';
 import '../../../../shared/widgets/search_field.dart';
 import '../../../../shared/widgets/sidebar_header.dart';
 import '../../../../shared/widgets/today_text.dart';
-import '../../../../utils/services/authetication_services.dart';
-import '../../../../utils/services/local_secure_storage_services.dart';
-import '../../../../utils/ui/ui_utils.dart';
 
 // component
 import '../../../../shared/widgets/sidebar.dart';
@@ -119,7 +120,7 @@ class UserScreen extends StatelessWidget {
                       Obx(() => _buildProfile(data: controller.getProfil())),
                       const Divider(thickness: 1),
                       const SizedBox(height: kSpacing),
-                      _buildTeamMember(data: controller.getMember()),
+                      _buildTeamUser(data: controller.getMember()),
                       const SizedBox(height: kSpacing),
                       const Divider(thickness: 1),
                       const SizedBox(height: kSpacing),
@@ -186,7 +187,9 @@ class UserScreen extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   Get.bottomSheet(
-                    UserForm(),
+                    UserForm(
+                      key: UniqueKey(),
+                    ),
                     backgroundColor: Colors.white,
                     isScrollControlled: true,
                   );
@@ -239,7 +242,14 @@ class UserScreen extends StatelessWidget {
                 final user = controller.users[index];
                 return ListTile(
                   title: Text('User ${user.pk}'),
-                  subtitle: Text(user.username.toString()),
+                  subtitle: Text(user.username),
+                  leading: user.profileImage != null
+                      ? CircleAvatar(
+                          backgroundImage: NetworkImage(user.profileImage!),
+                        )
+                      : const CircleAvatar(
+                          child: Icon(Icons.person),
+                        ),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -249,7 +259,10 @@ class UserScreen extends StatelessWidget {
                         onPressed: () {
                           // Edit user
                           Get.bottomSheet(
-                            UserForm(user: user),
+                            UserForm(
+                              key: UniqueKey(),
+                              user: user,
+                            ),
                             backgroundColor: Colors.white,
                             isScrollControlled: true,
                           );
@@ -278,33 +291,24 @@ class UserScreen extends StatelessWidget {
                   ),
                   onTap: () {
                     Get.bottomSheet(
-                      const Padding(
-                        padding: EdgeInsets.all(16.0),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Text('User ${user.pk} Details',
-                            //     style: const TextStyle(
-                            //         fontSize: 24, fontWeight: FontWeight.bold)),
-                            // const SizedBox(height: 16),
-                            // Text('Donor: ${user.donor}',
-                            //     style: const TextStyle(fontSize: 18)),
-                            // const SizedBox(height: 8),
-                            // Text('Type: ${user.type}',
-                            //     style: const TextStyle(fontSize: 18)),
-                            // const SizedBox(height: 8),
-                            // Text('Notes: ${user.notes ?? 'N/A'}',
-                            //     style: const TextStyle(fontSize: 18)),
-                            // const SizedBox(height: 8),
-                            // Text('Amount: ${user.amount}',
-                            //     style: const TextStyle(fontSize: 18)),
-                            // const SizedBox(height: 8),
-                            // Text('Created At: ${user.createdAt}',
-                            //     style: const TextStyle(fontSize: 18)),
-                            // const SizedBox(height: 8),
-                            // Text('Updated At: ${user.updatedAt ?? 'N/A'}',
-                            //     style: const TextStyle(fontSize: 18)),
+                            Text('User ${user.pk} Details',
+                                style: const TextStyle(
+                                    fontSize: 24, fontWeight: FontWeight.bold)),
+                            const SizedBox(height: 16),
+                            Text('Name: ${user.username}',
+                                style: const TextStyle(fontSize: 18)),
+                            const SizedBox(height: 8),
+                            Text('Created At: ${user.createdAt}',
+                                style: const TextStyle(fontSize: 18)),
+                            const SizedBox(height: 8),
+                            Text('Updated At: ${user.updatedAt ?? 'N/A'}',
+                                style: const TextStyle(fontSize: 18)),
                           ],
                         ),
                       ),
@@ -333,7 +337,7 @@ class UserScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTeamMember({required List<ImageProvider> data}) {
+  Widget _buildTeamUser({required List<ImageProvider> data}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: kSpacing),
       child: Column(

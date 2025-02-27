@@ -58,6 +58,7 @@ class RegisterController extends GetxController {
       // Create a User object with the provided data
       final user = User(
         username: username,
+        role: 0,
         email: email,
         phone: phone,
         password: password,

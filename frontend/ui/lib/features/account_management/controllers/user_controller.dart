@@ -15,8 +15,19 @@ class UserController extends GetxController {
 
   final TextEditingController searchController = TextEditingController();
 
-  // for authintication
+  // for authentication
   Rx<Profile?> currentProfile = Rx<Profile?>(null);
+
+  // for handling form
+
+  final RxInt id = 0.obs;
+  final RxString username = ''.obs;
+  final RxString phone = ''.obs;
+  final RxString email = ''.obs;
+  final RxInt role = 0.obs;
+  final RxString password = ''.obs;
+  final RxString password2 = ''.obs;
+  final Rxn<File> profileImage = Rxn<File>();
 
   @override
   void onInit() {
@@ -36,6 +47,7 @@ class UserController extends GetxController {
     Get.offAllNamed(Routes.login);
   }
 
+  // for UI
   Profile getProfil() {
     return Profile(
       id: currentProfile.value != null ? currentProfile.value!.id : 0,
@@ -114,15 +126,13 @@ class UserController extends GetxController {
     );
   }
 
+  // for handling data CRUD
   void searchUsers(String query) {
     if (query.isEmpty) {
       fetchUsers();
     } else {
       var filteredUsers = users.where((user) {
-        return user.username
-                .toString()
-                .toLowerCase()
-                .contains(query.toLowerCase()) ||
+        return user.username.toLowerCase().contains(query.toLowerCase()) ||
             user.pk.toString().contains(query);
       }).toList();
       users.value = filteredUsers;
@@ -143,28 +153,49 @@ class UserController extends GetxController {
     }
   }
 
-  void addUser(User user) async {
+  Future<void> addUser(User user, File? profileImage) async {
     isLoading.value = true;
     try {
-      var newUser = await _api.post('users', user.toJson());
-      users.add(User.fromJson(newUser));
+      var response = await _api.postMultipart(
+        'users/',
+        fields:
+            user.toJson().map((key, value) => MapEntry(key, value.toString())),
+        files: {
+          'face_img': profileImage,
+        },
+      );
+      if (response.statusCode == 201) {
+        fetchUsers();
+        Get.snackbar('Success', 'User added successfully');
+      } else {
+        Get.snackbar('Error', 'Failed to add user');
+      }
     } catch (e) {
-      Get.snackbar('Controller Error', 'Failed: ${e.toString()}');
+      Get.snackbar('Controller Error', 'Failed! ${e.toString()}');
     } finally {
       isLoading.value = false;
     }
   }
 
-  void updateUser(User user) async {
+  Future<void> updateUser(User user, File? profileImage) async {
     isLoading.value = true;
     try {
-      var updatedUser = await _api.put('users/${user.pk}', user.toJson());
-      int index = users.indexWhere((s) => s.pk == user.pk);
-      if (index != -1) {
-        users[index] = User.fromJson(updatedUser);
+      var response = await _api.putMultipart(
+        'users/${user.pk}',
+        fields:
+            user.toJson().map((key, value) => MapEntry(key, value.toString())),
+        files: {
+          'face_img': profileImage,
+        },
+      );
+      if (response.statusCode == 200) {
+        fetchUsers();
+        Get.snackbar('Success', 'User updated successfully');
+      } else {
+        Get.snackbar('Error', 'Failed to update user');
       }
     } catch (e) {
-      Get.snackbar('Controller Error', 'Failed: ${e.toString()}');
+      Get.snackbar('Controller Error', 'Failed! ${e.toString()}');
     } finally {
       isLoading.value = false;
     }
@@ -179,6 +210,74 @@ class UserController extends GetxController {
       Get.snackbar('Controller Error', 'Failed to delete user');
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  // for handling form
+  void setUser(User? user) {
+    if (user != null) {
+      id.value = user.pk;
+      username.value = user.username;
+      phone.value = user.phone ?? '';
+      email.value = user.email ?? '';
+      role.value = user.role;
+      password.value = '';
+      password2.value = '';
+      profileImage.value =
+          user.profileImage != null ? File(user.profileImage!) : null;
+    } else {
+      id.value = 0;
+      username.value = '';
+      phone.value = '';
+      email.value = '';
+      role.value = 0;
+      password.value = '';
+      password2.value = '';
+      profileImage.value = null;
+    }
+  }
+
+  Future<void> pickFaceImgFile() async {
+    try {
+      final pickedFile =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        profileImage.value = File(pickedFile.path);
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Error picking face image: $e');
+    }
+  }
+
+  Future<void> submitForm(User? existingUser) async {
+    try {
+      if (existingUser == null) {
+        final userData = User(
+          username: username.value,
+          phone: phone.value,
+          email: email.value,
+          role: role.value,
+          password: password.value,
+          profileImage: profileImage.value?.path,
+        );
+        await addUser(userData, profileImage.value);
+        Get.snackbar('Success', 'User added successfully');
+      } else {
+        final userData = User(
+          pk: id.value,
+          username: username.value,
+          phone: phone.value,
+          email: email.value,
+          role: role.value,
+          password: password.value,
+          profileImage: profileImage.value?.path,
+        );
+        await updateUser(userData, profileImage.value);
+        Get.snackbar('Success', 'User updated successfully');
+      }
+      Get.back(); // Return to previous screen after submission
+    } catch (e) {
+      Get.snackbar('Error', 'An error occurred: $e');
     }
   }
 }

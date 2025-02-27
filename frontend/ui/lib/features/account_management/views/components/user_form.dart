@@ -2,27 +2,11 @@ part of user;
 
 class UserForm extends StatelessWidget {
   final User? user;
-  final _formKey = GlobalKey<FormState>();
-  // final _userController = TextEditingController();
-  // final _typeController = TextEditingController();
-  // final _notesController = TextEditingController();
-  // final _amountController = TextEditingController();
-  final UserController controller = Get.find<UserController>();
+  final UserController controller = Get.put(UserController());
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   UserForm({Key? key, this.user}) : super(key: key) {
-    if (user != null) {
-      // _userController.text = user!.user.toString();
-      // _typeController.text = user!.type.toString();
-      // _notesController.text = user!.notes ?? '';
-      // _amountController.text = user!.amount.toString();
-    }
-  }
-
-  void dispose() {
-    // _userController.dispose();
-    // _typeController.dispose();
-    // _notesController.dispose();
-    // _amountController.dispose();
+    controller.setUser(user);
   }
 
   @override
@@ -35,77 +19,62 @@ class UserForm extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          child: const SingleChildScrollView(
+          child: SingleChildScrollView(
             child: Column(
               children: [
-                // TextFormField(
-                //   controller: _userController,
-                //   decoration: const InputDecoration(labelText: 'User'),
-                //   keyboardType: TextInputType.number,
-                //   validator: (value) {
-                //     if (value == null || value.isEmpty) {
-                //       return 'Please enter a user ID';
-                //     }
-                //     return null;
-                //   },
-                // ),
-                // const SizedBox(height: 20),
-                // TextFormField(
-                //   controller: _typeController,
-                //   decoration: const InputDecoration(labelText: 'Type'),
-                //   keyboardType: TextInputType.number,
-                //   validator: (value) {
-                //     if (value == null || value.isEmpty) {
-                //       return 'Please enter a type';
-                //     }
-                //     return null;
-                //   },
-                // ),
-                // const SizedBox(height: 20),
-                // TextFormField(
-                //   controller: _notesController,
-                //   decoration: const InputDecoration(labelText: 'Notes'),
-                // ),
-                // const SizedBox(height: 20),
-                // TextFormField(
-                //   controller: _amountController,
-                //   decoration: const InputDecoration(labelText: 'Amount'),
-                //   keyboardType: TextInputType.number,
-                //   validator: (value) {
-                //     if (value == null || value.isEmpty) {
-                //       return 'Please enter an amount';
-                //     }
-                //     return null;
-                //   },
-                // ),
-                // const SizedBox(height: 20),
-                // ElevatedButton(
-                //   onPressed: () {
-                //     if (_formKey.currentState!.validate()) {
-                //       if (user == null) {
-                //         controller.addUser(User(
-                //           user: int.parse(_userController.text),
-                //           type: int.parse(_typeController.text),
-                //           notes: _notesController.text,
-                //           amount: double.parse(_amountController.text),
-                //           createdAt: DateTime.now(),
-                //         ));
-                //       } else {
-                //         controller.updateUser(User(
-                //           pk: user!.pk,
-                //           user: int.parse(_userController.text),
-                //           type: int.parse(_typeController.text),
-                //           notes: _notesController.text,
-                //           amount: double.parse(_amountController.text),
-                //           createdAt: user!.createdAt,
-                //           updatedAt: DateTime.now(),
-                //         ));
-                //       }
-                //       Get.back();
-                //     }
-                //   },
-                //   child: Text(user == null ? 'Add' : 'Update'),
-                // ),
+                Obx(() => TextFormField(
+                      initialValue: controller.username.value,
+                      decoration: const InputDecoration(labelText: 'Name'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter a name';
+                        }
+                        return null;
+                      },
+                      onChanged: (value) => controller.username.value = value,
+                    )),
+                const SizedBox(height: 20),
+                Obx(() => TextFormField(
+                      initialValue: controller.role.value == 0
+                          ? ''
+                          : controller.role.value.toString(),
+                      decoration: const InputDecoration(labelText: 'Family'),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter a role ID';
+                        }
+                        return null;
+                      },
+                      onChanged: (value) =>
+                          controller.role.value = int.tryParse(value) ?? 0,
+                    )),
+                const SizedBox(height: 20),
+                Obx(() => TextFormField(
+                      initialValue: controller.phone.value,
+                      decoration: const InputDecoration(labelText: 'Contact'),
+                      onChanged: (value) => controller.phone.value = value,
+                    )),
+                const SizedBox(height: 20),
+                Obx(() => TextFormField(
+                      initialValue: controller.email.value,
+                      decoration: const InputDecoration(labelText: 'Education'),
+                      onChanged: (value) => controller.email.value = value,
+                    )),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: controller.pickFaceImgFile,
+                  child: const Text('Pick Face Image'),
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      controller.submitForm(user);
+                    }
+                  },
+                  child: Text(user == null ? 'Add' : 'Update'),
+                ),
               ],
             ),
           ),
