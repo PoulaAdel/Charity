@@ -26,7 +26,7 @@ class UserFields {
 }
 
 class User {
-  int pk;
+  int? pk;
   final String username;
   final String? phone;
   final String? email;
@@ -65,7 +65,7 @@ class User {
       );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-        "pk": pk,
+        "id": pk,
         "username": username,
         "email": email,
         "phone": phone,

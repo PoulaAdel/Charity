@@ -20,11 +20,11 @@ class SupplyFields {
 }
 
 class Supply {
-  int pk;
+  int? pk;
   final int family;
   final int service;
   final double amount;
-  final DateTime createdAt;
+  final DateTime? createdAt;
   final DateTime? updatedAt;
 
   Supply({
@@ -32,7 +32,7 @@ class Supply {
     required this.family,
     required this.service,
     required this.amount,
-    required this.createdAt,
+    this.createdAt,
     this.updatedAt,
   });
 
@@ -41,18 +41,20 @@ class Supply {
         family: json["family"] as int,
         service: json["service"] as int,
         amount: json["amount"] as double,
-        createdAt: DateTime.parse(json["created_at"]),
+        createdAt: (json['created_at'] != null)
+            ? DateTime.parse(json['created_at'])
+            : null,
         updatedAt: (json["updated_at"] != null)
             ? DateTime.parse(json["updated_at"])
             : null,
       );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-        "pk": pk,
+        "id": pk,
         "family": family,
         "service": service,
         "amount": amount,
-        "created_at": createdAt.toIso8601String(),
+        "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
       };
 }

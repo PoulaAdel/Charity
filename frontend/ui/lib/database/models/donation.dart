@@ -22,12 +22,12 @@ class DonationFields {
 }
 
 class Donation {
-  int pk;
+  int? pk;
   final int donor;
   final String? notes;
   final int type;
   final double amount;
-  final DateTime createdAt;
+  final DateTime? createdAt;
   final DateTime? updatedAt;
 
   Donation({
@@ -36,7 +36,7 @@ class Donation {
     this.notes,
     required this.type,
     required this.amount,
-    required this.createdAt,
+    this.createdAt,
     this.updatedAt,
   });
 
@@ -48,19 +48,21 @@ class Donation {
         amount: (json["amount"] is String)
             ? double.tryParse(json["amount"]) ?? 0.0
             : json["amount"] as double,
-        createdAt: DateTime.parse(json["created_at"]),
+        createdAt: (json['created_at'] != null)
+            ? DateTime.parse(json['created_at'])
+            : null,
         updatedAt: (json["updated_at"] != null)
             ? DateTime.parse(json["updated_at"])
             : null,
       );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-        "pk": pk,
+        "id": pk,
         "donor": donor,
         "type": type,
         "notes": notes,
         "amount": amount,
-        "created_at": createdAt.toIso8601String(),
+        "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
       };
 }

@@ -281,7 +281,7 @@ class UserScreen extends StatelessWidget {
                             textConfirm: "Delete",
                             confirmTextColor: Colors.white,
                             onConfirm: () {
-                              controller.deleteUser(user.pk);
+                              controller.deleteUser(user.pk!);
                               Get.back();
                             },
                           );

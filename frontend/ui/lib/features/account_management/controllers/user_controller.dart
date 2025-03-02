@@ -216,7 +216,7 @@ class UserController extends GetxController {
   // for handling form
   void setUser(User? user) {
     if (user != null) {
-      id.value = user.pk;
+      id.value = user.pk!;
       username.value = user.username;
       phone.value = user.phone ?? '';
       email.value = user.email ?? '';

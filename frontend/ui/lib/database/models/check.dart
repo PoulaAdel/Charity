@@ -20,11 +20,11 @@ class CheckFields {
 }
 
 class Check {
-  int pk;
+  int? pk;
   final int supply;
   final int sponsor;
   final int receiver; //person table
-  final DateTime createdAt;
+  final DateTime? createdAt;
   final DateTime? updatedAt;
 
   Check({
@@ -32,7 +32,7 @@ class Check {
     required this.supply,
     required this.sponsor,
     required this.receiver,
-    required this.createdAt,
+    this.createdAt,
     this.updatedAt,
   });
 
@@ -41,18 +41,20 @@ class Check {
         supply: json["supply"] as int,
         sponsor: json["sponsor"] as int,
         receiver: json["receiver"] as int,
-        createdAt: DateTime.parse(json["created_at"]),
+        createdAt: (json['created_at'] != null)
+            ? DateTime.parse(json['created_at'])
+            : null,
         updatedAt: (json["updated_at"] != null)
             ? DateTime.parse(json["updated_at"])
             : null,
       );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-        "pk": pk,
+        "id": pk,
         "supply": supply,
         "sponsor": sponsor,
         "receiver": receiver,
-        "created_at": createdAt.toIso8601String(),
+        "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
       };
 }

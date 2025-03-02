@@ -1,10 +1,12 @@
 library donor;
 
-import 'package:charity/utils/services/rest_api_services.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import '../../../../utils/services/rest_api_services.dart';
+import '../../../../utils/services/authetication_services.dart';
+import '../../../../utils/services/local_secure_storage_services.dart';
+import '../../../../utils/ui/ui_utils.dart';
 import '../../../../config/routes/app_pages.dart';
 import '../../../../database/models/app_models.dart';
 import '../../../../shared/constants/app_constants.dart';
@@ -13,9 +15,6 @@ import '../../../../shared/widgets/list_profil_image.dart';
 import '../../../../shared/widgets/search_field.dart';
 import '../../../../shared/widgets/sidebar_header.dart';
 import '../../../../shared/widgets/today_text.dart';
-import '../../../../utils/services/authetication_services.dart';
-import '../../../../utils/services/local_secure_storage_services.dart';
-import '../../../../utils/ui/ui_utils.dart';
 
 // component
 import '../../../../shared/widgets/sidebar.dart';
@@ -119,7 +118,7 @@ class DonorScreen extends StatelessWidget {
                       Obx(() => _buildProfile(data: controller.getProfil())),
                       const Divider(thickness: 1),
                       const SizedBox(height: kSpacing),
-                      _buildTeamMember(data: controller.getMember()),
+                      _buildTeamDonor(data: controller.getMember()),
                       const SizedBox(height: kSpacing),
                       const Divider(thickness: 1),
                       const SizedBox(height: kSpacing),
@@ -186,7 +185,9 @@ class DonorScreen extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   Get.bottomSheet(
-                    DonorForm(),
+                    DonorForm(
+                      key: UniqueKey(),
+                    ),
                     backgroundColor: Colors.white,
                     isScrollControlled: true,
                   );
@@ -239,7 +240,10 @@ class DonorScreen extends StatelessWidget {
                 final donor = controller.donors[index];
                 return ListTile(
                   title: Text('Donor ${donor.pk}'),
-                  subtitle: Text(donor.name.toString()),
+                  subtitle: Text(donor.name),
+                  leading: const CircleAvatar(
+                    child: Icon(Icons.person),
+                  ),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -249,7 +253,10 @@ class DonorScreen extends StatelessWidget {
                         onPressed: () {
                           // Edit donor
                           Get.bottomSheet(
-                            DonorForm(donor: donor),
+                            DonorForm(
+                              key: UniqueKey(),
+                              donor: donor,
+                            ),
                             backgroundColor: Colors.white,
                             isScrollControlled: true,
                           );
@@ -268,7 +275,7 @@ class DonorScreen extends StatelessWidget {
                             textConfirm: "Delete",
                             confirmTextColor: Colors.white,
                             onConfirm: () {
-                              controller.deleteDonor(donor.pk);
+                              controller.deleteDonor(donor.pk!);
                               Get.back();
                             },
                           );
@@ -278,33 +285,24 @@ class DonorScreen extends StatelessWidget {
                   ),
                   onTap: () {
                     Get.bottomSheet(
-                      const Padding(
-                        padding: EdgeInsets.all(16.0),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Text('Donor ${donor.pk} Details',
-                            //     style: const TextStyle(
-                            //         fontSize: 24, fontWeight: FontWeight.bold)),
-                            // const SizedBox(height: 16),
-                            // Text('Donor: ${donor.donor}',
-                            //     style: const TextStyle(fontSize: 18)),
-                            // const SizedBox(height: 8),
-                            // Text('Type: ${donor.type}',
-                            //     style: const TextStyle(fontSize: 18)),
-                            // const SizedBox(height: 8),
-                            // Text('Notes: ${donor.notes ?? 'N/A'}',
-                            //     style: const TextStyle(fontSize: 18)),
-                            // const SizedBox(height: 8),
-                            // Text('Amount: ${donor.amount}',
-                            //     style: const TextStyle(fontSize: 18)),
-                            // const SizedBox(height: 8),
-                            // Text('Created At: ${donor.createdAt}',
-                            //     style: const TextStyle(fontSize: 18)),
-                            // const SizedBox(height: 8),
-                            // Text('Updated At: ${donor.updatedAt ?? 'N/A'}',
-                            //     style: const TextStyle(fontSize: 18)),
+                            Text('Donor ${donor.pk} Details',
+                                style: const TextStyle(
+                                    fontSize: 24, fontWeight: FontWeight.bold)),
+                            const SizedBox(height: 16),
+                            Text('Name: ${donor.name}',
+                                style: const TextStyle(fontSize: 18)),
+                            const SizedBox(height: 8),
+                            Text('Created At: ${donor.createdAt}',
+                                style: const TextStyle(fontSize: 18)),
+                            const SizedBox(height: 8),
+                            Text('Updated At: ${donor.updatedAt ?? 'N/A'}',
+                                style: const TextStyle(fontSize: 18)),
                           ],
                         ),
                       ),
@@ -327,13 +325,13 @@ class DonorScreen extends StatelessWidget {
       child: ProfilTile(
         data: data,
         onPressedLogOut: () {
-          controller.logoutUser();
+          controller.logoutDonor();
         },
       ),
     );
   }
 
-  Widget _buildTeamMember({required List<ImageProvider> data}) {
+  Widget _buildTeamDonor({required List<ImageProvider> data}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: kSpacing),
       child: Column(

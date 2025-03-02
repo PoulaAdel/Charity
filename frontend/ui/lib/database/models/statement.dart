@@ -16,31 +16,33 @@ class StatementFields {
 }
 
 class Statement {
-  int pk;
+  int? pk;
   final String family;
-  final DateTime createdAt;
+  final DateTime? createdAt;
   final DateTime? updatedAt;
 
   Statement({
     this.pk = 0,
     required this.family,
-    required this.createdAt,
+    this.createdAt,
     this.updatedAt,
   });
 
   factory Statement.fromJson(Map<String, dynamic> json) => Statement(
         pk: json["id"] as int,
         family: json["family"] as String,
-        createdAt: DateTime.parse(json["created_at"]),
+        createdAt: (json['created_at'] != null)
+            ? DateTime.parse(json['created_at'])
+            : null,
         updatedAt: (json["updated_at"] != null)
             ? DateTime.parse(json["updated_at"])
             : null,
       );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-        "pk": pk,
+        "id": pk,
         "family": family,
-        "created_at": createdAt.toIso8601String(),
+        "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
       };
 }

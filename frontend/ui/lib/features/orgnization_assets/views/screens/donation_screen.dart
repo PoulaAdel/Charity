@@ -268,7 +268,7 @@ class DonationScreen extends StatelessWidget {
                             textConfirm: "Delete",
                             confirmTextColor: Colors.white,
                             onConfirm: () {
-                              controller.deleteDonation(donation.pk);
+                              controller.deleteDonation(donation.pk!);
                               Get.back();
                             },
                           );

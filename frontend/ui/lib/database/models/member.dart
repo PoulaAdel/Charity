@@ -49,7 +49,7 @@ class Member {
   final DateTime? updatedAt;
 
   Member({
-    this.pk,
+    this.pk = 0,
     required this.name,
     required this.family,
     required this.relation,

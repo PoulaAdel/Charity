@@ -25,7 +25,7 @@ class Service {
   final DateTime? updatedAt;
 
   Service({
-    this.pk,
+    this.pk = 0,
     required this.name,
     required this.description,
     this.createdAt,

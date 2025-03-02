@@ -15,8 +15,13 @@ class DonorController extends GetxController {
 
   final TextEditingController searchController = TextEditingController();
 
-  // for authintication
+  // for authentication
   Rx<Profile?> currentProfile = Rx<Profile?>(null);
+
+  // for handling form
+
+  final RxInt id = 0.obs;
+  final RxString name = ''.obs;
 
   @override
   void onInit() {
@@ -31,11 +36,12 @@ class DonorController extends GetxController {
     update();
   }
 
-  void logoutUser() {
+  void logoutDonor() {
     _authService.logout();
     Get.offAllNamed(Routes.login);
   }
 
+  // for UI
   Profile getProfil() {
     return Profile(
       id: currentProfile.value != null ? currentProfile.value!.id : 0,
@@ -114,15 +120,13 @@ class DonorController extends GetxController {
     );
   }
 
+  // for handling data CRUD
   void searchDonors(String query) {
     if (query.isEmpty) {
       fetchDonors();
     } else {
       var filteredDonors = donors.where((donor) {
-        return donor.name
-                .toString()
-                .toLowerCase()
-                .contains(query.toLowerCase()) ||
+        return donor.name.toLowerCase().contains(query.toLowerCase()) ||
             donor.pk.toString().contains(query);
       }).toList();
       donors.value = filteredDonors;
@@ -179,6 +183,39 @@ class DonorController extends GetxController {
       Get.snackbar('Controller Error', 'Failed to delete donor');
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  // for handling form
+  void setDonor(Donor? donor) {
+    if (donor != null) {
+      id.value = donor.pk!;
+      name.value = donor.name;
+    } else {
+      id.value = 0;
+      name.value = '';
+    }
+  }
+
+  Future<void> submitForm(Donor? existingDonor) async {
+    try {
+      if (existingDonor == null) {
+        final donorData = Donor(
+          name: name.value,
+        );
+        addDonor(donorData);
+        Get.snackbar('Success', 'Donor added successfully');
+      } else {
+        final donorData = Donor(
+          pk: id.value,
+          name: name.value,
+        );
+        updateDonor(donorData);
+        Get.snackbar('Success', 'Donor updated successfully');
+      }
+      Get.back(); // Return to previous screen after submission
+    } catch (e) {
+      Get.snackbar('Error', 'An error occurred: $e');
     }
   }
 }
