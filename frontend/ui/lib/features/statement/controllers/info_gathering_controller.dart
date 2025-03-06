@@ -9,6 +9,8 @@ class InfoGatheringController extends GetxController {
   final ScrollController scrollController = ScrollController();
 
   Rx<Profile?> currentProfile = Rx<Profile?>(null);
+  RxString selectedFamily = ''.obs;
+  RxString selectedStatement = ''.obs;
 
   @override
   void onInit() {
@@ -106,23 +108,26 @@ class InfoGatheringController extends GetxController {
   }
 
   void onNewStatementPressed(BuildContext context) async {
-    final family = await _chooseFamily(context);
+    final family = await chooseFamily(context);
     if (family != null) {
+      selectedFamily.value = family;
       _showStatementOptions(context, family, null);
     }
   }
 
   void onExistingStatementPressed(BuildContext context) async {
-    final family = await _chooseFamily(context);
+    final family = await chooseFamily(context);
     if (family != null) {
-      final statement = await _chooseStatement(context, family);
+      selectedFamily.value = family;
+      final statement = await chooseStatement(context, family);
       if (statement != null) {
+        selectedStatement.value = statement;
         _showStatementOptions(context, family, statement);
       }
     }
   }
 
-  Future<String?> _chooseFamily(BuildContext context) async {
+  Future<String?> chooseFamily(BuildContext context) async {
     // Replace with your logic to choose a family
     return await Get.dialog<String>(
       AlertDialog(
@@ -142,7 +147,7 @@ class InfoGatheringController extends GetxController {
     );
   }
 
-  Future<String?> _chooseStatement(BuildContext context, String family) async {
+  Future<String?> chooseStatement(BuildContext context, String family) async {
     // Replace with your logic to choose a statement
     return await Get.dialog<String>(
       AlertDialog(
@@ -200,10 +205,5 @@ class InfoGatheringController extends GetxController {
       BuildContext context, String family, String? statement, String type) {
     // Replace with your logic to edit the statement
     Get.back(); // Close the dialog
-    Get.snackbar(
-      'Edit Statement',
-      'Editing $type statement for $family',
-      snackPosition: SnackPosition.BOTTOM,
-    );
   }
 }

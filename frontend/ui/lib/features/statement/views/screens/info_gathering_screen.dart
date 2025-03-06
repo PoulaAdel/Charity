@@ -54,6 +54,8 @@ class InfoGatheringScreen extends StatelessWidget {
               const SizedBox(height: kSpacing * (kIsWeb ? 1 : 2)),
               _buildHeader(onPressedMenu: () => controller.openDrawer()),
               const SizedBox(height: kSpacing / 2),
+              _buildStickySection(context),
+              const SizedBox(height: kSpacing),
               _buildInfoGatheringSection(context),
             ]),
           );
@@ -66,7 +68,13 @@ class InfoGatheringScreen extends StatelessWidget {
                 _buildHeader(onPressedMenu: () => controller.openDrawer()),
                 Flexible(
                   flex: (constraints.maxWidth < 950) ? 6 : 9,
-                  child: _buildInfoGatheringSection(context),
+                  child: Column(
+                    children: [
+                      _buildStickySection(context),
+                      const SizedBox(height: kSpacing),
+                      _buildInfoGatheringSection(context),
+                    ],
+                  ),
                 ),
                 const Flexible(
                   flex: 4,
@@ -99,6 +107,8 @@ class InfoGatheringScreen extends StatelessWidget {
                       const SizedBox(height: kSpacing),
                       _buildHeader(),
                       const SizedBox(height: kSpacing * 2),
+                      _buildStickySection(context),
+                      const SizedBox(height: kSpacing),
                       _buildInfoGatheringSection(context),
                     ],
                   ),
@@ -172,27 +182,87 @@ class InfoGatheringScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoGatheringSection(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: kSpacing),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ElevatedButton(
-                onPressed: () => controller.onNewStatementPressed(context),
-                child: const Text('New Statement'),
-              ),
-              ElevatedButton(
-                onPressed: () => controller.onExistingStatementPressed(context),
-                child: const Text('Existing Statement'),
-              ),
-            ],
-          ),
+  Widget _buildStickySection(BuildContext context) {
+    return Card(
+      elevation: 4,
+      margin: const EdgeInsets.all(8.0),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Column(
+              children: [
+                const Text('Family ID',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 8),
+                Obx(() => Text(controller.selectedFamily.value)),
+                const SizedBox(height: 8),
+                ElevatedButton(
+                  onPressed: () async {
+                    final family = await controller.chooseFamily(context);
+                    if (family != null) {
+                      controller.selectedFamily.value = family;
+                    }
+                  },
+                  child: const Text('Change Family'),
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                const Text('Statement ID',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 8),
+                Obx(() => Text(controller.selectedStatement.value)),
+                const SizedBox(height: 8),
+                ElevatedButton(
+                  onPressed: () async {
+                    final statement = await controller.chooseStatement(
+                        context, controller.selectedFamily.value);
+                    if (statement != null) {
+                      controller.selectedStatement.value = statement;
+                    }
+                  },
+                  child: const Text('Change Statement'),
+                ),
+              ],
+            ),
+          ],
         ),
-        const SizedBox(height: 10),
-      ],
+      ),
+    );
+  }
+
+  Widget _buildInfoGatheringSection(BuildContext context) {
+    return Card(
+      elevation: 4,
+      margin: const EdgeInsets.all(8.0),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: kSpacing),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () => controller.onNewStatementPressed(context),
+                    child: const Text('New Statement'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () =>
+                        controller.onExistingStatementPressed(context),
+                    child: const Text('Existing Statement'),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10),
+          ],
+        ),
+      ),
     );
   }
 
