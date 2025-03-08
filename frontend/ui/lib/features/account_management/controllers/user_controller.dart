@@ -110,7 +110,6 @@ class UserController extends GetxController {
 
   void scrollToTop() {
     double start = 0;
-    // scrollController.jumpTo(start);
     scrollController.animateTo(
       start,
       duration: const Duration(milliseconds: 100),
@@ -180,6 +179,12 @@ class UserController extends GetxController {
   Future<void> updateUser(User user, File? profileImage) async {
     isLoading.value = true;
     try {
+      // Log the data being sent
+      print('Updating user with data: ${user.toJson()}');
+      if (profileImage != null) {
+        print('Profile image path: ${profileImage.path}');
+      }
+
       var response = await _api.putMultipart(
         'users/${user.pk}',
         fields:
@@ -188,16 +193,22 @@ class UserController extends GetxController {
           'face_img': profileImage,
         },
       );
+
+      // Log the response
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
       if (response.statusCode == 200) {
         fetchUsers();
         Get.snackbar('Success', 'User updated successfully');
       } else {
-        Get.snackbar('Error', 'Failed to update user');
+        Get.snackbar('Error', 'Failed to update user ${response.statusCode}');
       }
     } catch (e) {
       Get.snackbar('Controller Error', 'Failed! ${e.toString()}');
     } finally {
       isLoading.value = false;
+      Get.back();
     }
   }
 
@@ -221,18 +232,16 @@ class UserController extends GetxController {
       phone.value = user.phone ?? '';
       email.value = user.email ?? '';
       role.value = user.role;
-      password.value = '';
-      password2.value = '';
-      profileImage.value =
-          user.profileImage != null ? File(user.profileImage!) : null;
+      password.value = user.password;
+      profileImage.value = user.profileImage != null
+          ? File(user.profileImage!)
+          : File(const AssetImage(ImageRasterPath.avatar1).assetName);
     } else {
       id.value = 0;
       username.value = '';
       phone.value = '';
       email.value = '';
       role.value = 0;
-      password.value = '';
-      password2.value = '';
       profileImage.value = null;
     }
   }

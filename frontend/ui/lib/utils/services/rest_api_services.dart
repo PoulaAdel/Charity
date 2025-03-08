@@ -46,6 +46,29 @@ class RestApiServices extends GetxService {
     }
   }
 
+  Future<http.Response> postMultipart(String endpoint,
+      {required Map<String, String> fields,
+      required Map<String, File?> files}) async {
+    final url = Uri.parse('$baseUrl/$endpoint/');
+    var request = http.MultipartRequest('POST', url)
+      ..headers.addAll(await _getHeaders());
+    fields.forEach((key, value) {
+      request.fields[key] = value;
+    });
+    files.forEach((key, file) {
+      if (file != null) {
+        request.files.add(http.MultipartFile(
+          key,
+          file.readAsBytes().asStream(),
+          file.lengthSync(),
+          filename: basename(file.path),
+        ));
+      }
+    });
+    var response = await request.send();
+    return await http.Response.fromStream(response);
+  }
+
   Future<Map<String, dynamic>> post(String endpoint, Map<String, dynamic> data,
       {Map<String, String>? headers}) async {
     final url = Uri.parse('$baseUrl/$endpoint/');
@@ -65,41 +88,15 @@ class RestApiServices extends GetxService {
     }
   }
 
-  Future<http.Response> postMultipart(String endpoint,
-      {required Map<String, String> fields,
-      required Map<String, File?> files}) async {
-    final url = Uri.parse('$baseUrl/$endpoint/');
-    var request = http.MultipartRequest('POST', url);
-
-    fields.forEach((key, value) {
-      request.fields[key] = value;
-    });
-
-    files.forEach((key, file) {
-      if (file != null) {
-        request.files.add(http.MultipartFile(
-          key,
-          file.readAsBytes().asStream(),
-          file.lengthSync(),
-          filename: basename(file.path),
-        ));
-      }
-    });
-
-    var response = await request.send();
-    return await http.Response.fromStream(response);
-  }
-
   Future<http.Response> putMultipart(String endpoint,
       {required Map<String, String> fields,
       required Map<String, File?> files}) async {
     final url = Uri.parse('$baseUrl/$endpoint/');
-    var request = http.MultipartRequest('PUT', url);
-
+    var request = http.MultipartRequest('PUT', url)
+      ..headers.addAll(await _getHeaders());
     fields.forEach((key, value) {
       request.fields[key] = value;
     });
-
     files.forEach((key, file) {
       if (file != null) {
         request.files.add(http.MultipartFile(
@@ -110,7 +107,6 @@ class RestApiServices extends GetxService {
         ));
       }
     });
-
     var response = await request.send();
     return await http.Response.fromStream(response);
   }
@@ -134,17 +130,24 @@ class RestApiServices extends GetxService {
     }
   }
 
-  Future<void> delete(String endpoint, {Map<String, String>? headers}) async {
-    final url = Uri.parse('$baseUrl/$endpoint/');
-    final response =
-        await http.delete(url, headers: await _getHeaders(headers: headers));
-    if (response.statusCode == 204) {
-      Get.snackbar('Success', 'Data deleted successfully');
-    } else {
-      Get.snackbar('API Communication Error',
-          'Failed to delete data: ${response.statusCode}');
-      throw Exception('Failed to delete data: ${response.statusCode}');
-    }
+  Future<http.Response> patchMultipart(String endpoint,
+      {required Map<String, String> fields,
+      required Map<String, File?> files}) async {
+    var request =
+        http.MultipartRequest('PATCH', Uri.parse('$baseUrl/$endpoint/'))
+          ..headers.addAll(await _getHeaders());
+    files.forEach((key, file) {
+      if (file != null) {
+        request.files.add(http.MultipartFile(
+          key,
+          file.readAsBytes().asStream(),
+          file.lengthSync(),
+          filename: file.path.split('/').last,
+        ));
+      }
+    });
+    var streamedResponse = await request.send();
+    return await http.Response.fromStream(streamedResponse);
   }
 
   Future<Map<String, dynamic>> patch(String endpoint, Map<String, dynamic> data,
@@ -163,6 +166,19 @@ class RestApiServices extends GetxService {
       Get.snackbar('API Communication Error',
           'Failed to update data:  ${response.statusCode}');
       throw Exception('Failed to update data:  ${response.statusCode}');
+    }
+  }
+
+  Future<void> delete(String endpoint, {Map<String, String>? headers}) async {
+    final url = Uri.parse('$baseUrl/$endpoint/');
+    final response =
+        await http.delete(url, headers: await _getHeaders(headers: headers));
+    if (response.statusCode == 204) {
+      Get.snackbar('Success', 'Data deleted successfully');
+    } else {
+      Get.snackbar('API Communication Error',
+          'Failed to delete data: ${response.statusCode}');
+      throw Exception('Failed to delete data: ${response.statusCode}');
     }
   }
 }

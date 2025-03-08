@@ -2,10 +2,10 @@ part of user;
 
 class UserForm extends StatelessWidget {
   final User? user;
-  final UserController controller = Get.put(UserController());
+  final UserController controller;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  UserForm({Key? key, this.user}) : super(key: key) {
+  UserForm({Key? key, required this.controller, this.user}) : super(key: key) {
     controller.setUser(user);
   }
 
@@ -35,10 +35,8 @@ class UserForm extends StatelessWidget {
                     )),
                 const SizedBox(height: 20),
                 Obx(() => TextFormField(
-                      initialValue: controller.role.value == 0
-                          ? ''
-                          : controller.role.value.toString(),
-                      decoration: const InputDecoration(labelText: 'Family'),
+                      initialValue: controller.role.value.toString(),
+                      decoration: const InputDecoration(labelText: 'Role ID'),
                       keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -52,13 +50,14 @@ class UserForm extends StatelessWidget {
                 const SizedBox(height: 20),
                 Obx(() => TextFormField(
                       initialValue: controller.phone.value,
-                      decoration: const InputDecoration(labelText: 'Contact'),
+                      decoration:
+                          const InputDecoration(labelText: 'Contact Number'),
                       onChanged: (value) => controller.phone.value = value,
                     )),
                 const SizedBox(height: 20),
                 Obx(() => TextFormField(
                       initialValue: controller.email.value,
-                      decoration: const InputDecoration(labelText: 'Education'),
+                      decoration: const InputDecoration(labelText: 'Email'),
                       onChanged: (value) => controller.email.value = value,
                     )),
                 const SizedBox(height: 20),

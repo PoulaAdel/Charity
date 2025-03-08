@@ -14,9 +14,7 @@ import '../../../../database/models/app_models.dart';
 import '../../../../shared/constants/app_constants.dart';
 import '../../../../shared/widgets/chatting_card.dart';
 import '../../../../shared/widgets/list_profil_image.dart';
-import '../../../../shared/widgets/search_field.dart';
 import '../../../../shared/widgets/sidebar_header.dart';
-import '../../../../shared/widgets/today_text.dart';
 
 // component
 import '../../../../shared/widgets/sidebar.dart';
@@ -56,8 +54,6 @@ class UserScreen extends StatelessWidget {
             controller: controller.scrollController,
             scrollDirection: Axis.vertical,
             child: Column(children: [
-              const SizedBox(height: kSpacing * (kIsWeb ? 1 : 2)),
-              _buildHeader(onPressedMenu: () => controller.openDrawer()),
               const SizedBox(height: kSpacing / 2),
               _buildUsersSection(),
             ]),
@@ -68,14 +64,29 @@ class UserScreen extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildHeader(onPressedMenu: () => controller.openDrawer()),
                 Flexible(
                   flex: (constraints.maxWidth < 950) ? 6 : 9,
                   child: _buildUsersSection(),
                 ),
-                const Flexible(
+                Flexible(
                   flex: 4,
-                  child: Column(),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    primary: false,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: kSpacing * (kIsWeb ? 0.5 : 1.5)),
+                        Obx(() => _buildProfile(data: controller.getProfil())),
+                        const Divider(thickness: 1),
+                        const SizedBox(height: kSpacing),
+                        _buildTeamUser(data: controller.getMember()),
+                        const SizedBox(height: kSpacing),
+                        const Divider(thickness: 1),
+                        const SizedBox(height: kSpacing),
+                        _buildRecentMessages(data: controller.getChatting()),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -102,8 +113,6 @@ class UserScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       const SizedBox(height: kSpacing),
-                      _buildHeader(),
-                      const SizedBox(height: kSpacing * 2),
                       _buildUsersSection(),
                     ],
                   ),
@@ -149,34 +158,6 @@ class UserScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader({Function()? onPressedMenu}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: kSpacing),
-      child: Row(
-        children: [
-          if (onPressedMenu != null)
-            Padding(
-              padding: const EdgeInsets.only(right: kSpacing),
-              child: IconButton(
-                onPressed: onPressedMenu,
-                icon: const Icon(Icons.menu),
-                tooltip: "menu",
-              ),
-            ),
-          Expanded(
-            child: Row(
-              children: [
-                const TodayText(),
-                const SizedBox(width: kSpacing),
-                Expanded(child: SearchField()),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildUsersSection() {
     return Column(
       children: [
@@ -189,6 +170,7 @@ class UserScreen extends StatelessWidget {
                   Get.bottomSheet(
                     UserForm(
                       key: UniqueKey(),
+                      controller: controller,
                     ),
                     backgroundColor: Colors.white,
                     isScrollControlled: true,
@@ -261,6 +243,7 @@ class UserScreen extends StatelessWidget {
                           Get.bottomSheet(
                             UserForm(
                               key: UniqueKey(),
+                              controller: controller,
                               user: user,
                             ),
                             backgroundColor: Colors.white,
@@ -302,6 +285,9 @@ class UserScreen extends StatelessWidget {
                                     fontSize: 24, fontWeight: FontWeight.bold)),
                             const SizedBox(height: 16),
                             Text('Name: ${user.username}',
+                                style: const TextStyle(fontSize: 18)),
+                            const SizedBox(height: 8),
+                            Text('Role: ${user.role}',
                                 style: const TextStyle(fontSize: 18)),
                             const SizedBox(height: 8),
                             Text('Created At: ${user.createdAt}',
