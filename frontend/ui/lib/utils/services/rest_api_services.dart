@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:charity/utils/services/local_secure_storage_services.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'package:path/path.dart';
 
 class RestApiServices extends GetxService {
@@ -62,6 +64,7 @@ class RestApiServices extends GetxService {
           file.readAsBytes().asStream(),
           file.lengthSync(),
           filename: basename(file.path),
+          contentType: MediaType('image', 'jpeg'),
         ));
       }
     });
@@ -104,6 +107,7 @@ class RestApiServices extends GetxService {
           file.readAsBytes().asStream(),
           file.lengthSync(),
           filename: basename(file.path),
+          contentType: MediaType('image', 'jpeg'),
         ));
       }
     });
@@ -143,6 +147,7 @@ class RestApiServices extends GetxService {
           file.readAsBytes().asStream(),
           file.lengthSync(),
           filename: file.path.split('/').last,
+          contentType: MediaType('image', 'jpeg'),
         ));
       }
     });

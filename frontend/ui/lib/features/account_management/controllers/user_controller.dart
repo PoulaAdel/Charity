@@ -19,7 +19,6 @@ class UserController extends GetxController {
   Rx<Profile?> currentProfile = Rx<Profile?>(null);
 
   // for handling form
-
   final RxInt id = 0.obs;
   final RxString username = ''.obs;
   final RxString phone = ''.obs;
@@ -160,7 +159,7 @@ class UserController extends GetxController {
         fields:
             user.toJson().map((key, value) => MapEntry(key, value.toString())),
         files: {
-          'face_img': profileImage,
+          if (profileImage != null) 'profile_image': profileImage,
         },
       );
       if (response.statusCode == 201) {
@@ -179,30 +178,25 @@ class UserController extends GetxController {
   Future<void> updateUser(User user, File? profileImage) async {
     isLoading.value = true;
     try {
-      // Log the data being sent
-      print('Updating user with data: ${user.toJson()}');
-      if (profileImage != null) {
-        print('Profile image path: ${profileImage.path}');
-      }
-
-      var response = await _api.putMultipart(
+      var response = await _api.patchMultipart(
         'users/${user.pk}',
         fields:
             user.toJson().map((key, value) => MapEntry(key, value.toString())),
         files: {
-          'face_img': profileImage,
+          if (profileImage != null) 'profile_image': profileImage,
         },
       );
 
-      // Log the response
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
+      print(response.statusCode);
+      print(response.body);
 
       if (response.statusCode == 200) {
+        Get.snackbar('Success ${response.statusCode}',
+            'User updated successfully  ${response.body}');
         fetchUsers();
-        Get.snackbar('Success', 'User updated successfully');
       } else {
-        Get.snackbar('Error', 'Failed to update user ${response.statusCode}');
+        Get.snackbar('Error ${response.statusCode}',
+            'Failed to update user. ${response.body}');
       }
     } catch (e) {
       Get.snackbar('Controller Error', 'Failed! ${e.toString()}');
@@ -232,10 +226,8 @@ class UserController extends GetxController {
       phone.value = user.phone ?? '';
       email.value = user.email ?? '';
       role.value = user.role;
-      password.value = user.password;
-      profileImage.value = user.profileImage != null
-          ? File(user.profileImage!)
-          : File(const AssetImage(ImageRasterPath.avatar1).assetName);
+      profileImage.value =
+          user.profileImage != null ? File(user.profileImage!) : null;
     } else {
       id.value = 0;
       username.value = '';
@@ -244,6 +236,7 @@ class UserController extends GetxController {
       role.value = 0;
       profileImage.value = null;
     }
+    update();
   }
 
   Future<void> pickFaceImgFile() async {
@@ -270,7 +263,6 @@ class UserController extends GetxController {
           profileImage: profileImage.value?.path,
         );
         await addUser(userData, profileImage.value);
-        Get.snackbar('Success', 'User added successfully');
       } else {
         final userData = User(
           pk: id.value,
@@ -278,15 +270,15 @@ class UserController extends GetxController {
           phone: phone.value,
           email: email.value,
           role: role.value,
-          password: password.value,
+          password: existingUser.password,
           profileImage: profileImage.value?.path,
         );
         await updateUser(userData, profileImage.value);
-        Get.snackbar('Success', 'User updated successfully');
       }
-      Get.back(); // Return to previous screen after submission
     } catch (e) {
       Get.snackbar('Error', 'An error occurred: $e');
+    } finally {
+      Get.back();
     }
   }
 }
