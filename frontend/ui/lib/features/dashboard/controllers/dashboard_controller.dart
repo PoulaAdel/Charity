@@ -12,11 +12,6 @@ class DashboardController extends GetxController {
 
   @override
   void onInit() {
-    // // get current user from secure storage
-    // Future.delayed(Duration.zero, () async {
-    //   //your async 'await' codes goes here
-    //   //..
-    // });
     assignCurrentProfile();
     super.onInit();
   }

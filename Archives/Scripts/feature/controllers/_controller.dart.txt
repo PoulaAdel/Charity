@@ -2,26 +2,19 @@ part of _<name>;
 
 class _<Name>Controller extends GetxController {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  // for handling authenticaion
+  final AuthenticationServices _authService =
+      Get.find<AuthenticationServices>();
 
-  // for handling _<name>s
-  final LocalSecureStorageServices _localSecureStorage = Get.find();
-  final AuthenticationServices _authService = Get.find();
-  final RestApiServices _api = Get.find();
-
-  // for ui
   final ScrollController scrollController = ScrollController();
-  var _<name>s = <_<Name>>[].obs;
-  var isLoading = false.obs;
+  final LocalSecureStorageServices _localSecureStorage =
+      Get.find<LocalSecureStorageServices>();
 
-  final TextEditingController searchController = TextEditingController();
-
-  // for authintication
   Rx<Profile?> currentProfile = Rx<Profile?>(null);
 
   @override
   void onInit() {
     assignCurrentProfile();
-    fetch_<Name>s();
     super.onInit();
   }
 
@@ -36,6 +29,22 @@ class _<Name>Controller extends GetxController {
     Get.offAllNamed(Routes.login);
   }
 
+  void openDrawer() {
+    if (scaffoldKey.currentState != null) {
+      scaffoldKey.currentState!.openDrawer();
+    }
+  }
+
+  void scrollToTop() {
+    double start = 0;
+    // scrollController.jumpTo(start);
+    scrollController.animateTo(
+      start,
+      duration: const Duration(milliseconds: 100),
+      curve: Curves.easeIn,
+    );
+  }
+
   Profile getProfil() {
     return Profile(
       id: currentProfile.value != null ? currentProfile.value!.id : 0,
@@ -48,6 +57,81 @@ class _<Name>Controller extends GetxController {
           : "Loading..",
       role: currentProfile.value != null ? currentProfile.value!.role : 0,
     );
+  }
+
+  List<TaskCardData> getAllTask() {
+    return [
+      const TaskCardData(
+        title: "Landing page UI Design",
+        dueDay: 2,
+        totalComments: 50,
+        type: TaskType.todo,
+        totalContributors: 30,
+        profilContributors: [
+          AssetImage(ImageRasterPath.avatar1),
+          AssetImage(ImageRasterPath.avatar2),
+          AssetImage(ImageRasterPath.avatar3),
+          AssetImage(ImageRasterPath.avatar4),
+        ],
+      ),
+      const TaskCardData(
+        title: "Landing page UI Design",
+        dueDay: -1,
+        totalComments: 50,
+        totalContributors: 34,
+        type: TaskType.inProgress,
+        profilContributors: [
+          AssetImage(ImageRasterPath.avatar5),
+          AssetImage(ImageRasterPath.avatar6),
+          AssetImage(ImageRasterPath.avatar7),
+          AssetImage(ImageRasterPath.avatar8),
+        ],
+      ),
+      const TaskCardData(
+        title: "Landing page UI Design",
+        dueDay: 1,
+        totalComments: 50,
+        totalContributors: 34,
+        type: TaskType.done,
+        profilContributors: [
+          AssetImage(ImageRasterPath.avatar5),
+          AssetImage(ImageRasterPath.avatar3),
+          AssetImage(ImageRasterPath.avatar4),
+          AssetImage(ImageRasterPath.avatar2),
+        ],
+      ),
+    ];
+  }
+
+  SidebarHeaderData getSelectedProject() {
+    return SidebarHeaderData(
+      projectImage: const AssetImage(ImageRasterPath.logo3),
+      projectName: "_<Name>",
+      releaseTime: DateTime.now(),
+    );
+  }
+
+  List<ProjectCardData> getActiveProject() {
+    return [
+      ProjectCardData(
+        percent: .3,
+        projectImage: const AssetImage(ImageRasterPath.logo2),
+        projectName: "Taxi Online",
+        releaseTime: DateTime.now().add(const Duration(days: 130)),
+      ),
+      ProjectCardData(
+        percent: .5,
+        projectImage: const AssetImage(ImageRasterPath.logo3),
+        projectName: "E-Movies Mobile",
+        releaseTime: DateTime.now().add(const Duration(days: 140)),
+      ),
+      ProjectCardData(
+        percent: .8,
+        projectImage: const AssetImage(ImageRasterPath.logo4),
+        projectName: "Video Converter App",
+        releaseTime: DateTime.now().add(const Duration(days: 100)),
+      ),
+    ];
   }
 
   List<ImageProvider> getMember() {
@@ -88,98 +172,5 @@ class _<Name>Controller extends GetxController {
         totalUnread: 1,
       ),
     ];
-  }
-
-  void openDrawer() {
-    if (scaffoldKey.currentState != null) {
-      scaffoldKey.currentState!.openDrawer();
-    }
-  }
-
-  void scrollToTop() {
-    double start = 0;
-    // scrollController.jumpTo(start);
-    scrollController.animateTo(
-      start,
-      duration: const Duration(milliseconds: 100),
-      curve: Curves.easeIn,
-    );
-  }
-
-  SidebarHeaderData getSelectedProject() {
-    return SidebarHeaderData(
-      projectImage: const AssetImage(ImageRasterPath.logo3),
-      projectName: "_<Name>",
-      releaseTime: DateTime.now(),
-    );
-  }
-
-  void search_<Name>s(String query) {
-    if (query.isEmpty) {
-      fetch_<Name>s();
-    } else {
-      var filtered_<Name>s = _<name>s.where((_<name>) {
-        return _<name>.donor
-                .toString()
-                .toLowerCase()
-                .contains(query.toLowerCase()) ||
-            _<name>.pk.toString().contains(query);
-      }).toList();
-      _<name>s.value = filtered_<Name>s;
-    }
-  }
-
-  void fetch_<Name>s() async {
-    isLoading.value = true;
-    try {
-      var fetched_<Name>s = await _api.get('_<name>s');
-      _<name>s.value = (fetched_<Name>s as List)
-          .map((json) => _<Name>.fromJson(json as Map<String, dynamic>))
-          .toList();
-    } catch (e) {
-      Get.snackbar('Controller Error', 'Failed! ${e.toString()}');
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  void add_<Name>(_<Name> _<name>) async {
-    isLoading.value = true;
-    try {
-      var new_<Name> = await _api.post('_<name>s', _<name>.toJson());
-      _<name>s.add(_<Name>.fromJson(new_<Name>));
-    } catch (e) {
-      Get.snackbar('Controller Error', 'Failed: ${e.toString()}');
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  void update_<Name>(_<Name> _<name>) async {
-    isLoading.value = true;
-    try {
-      var updated_<Name> =
-          await _api.put('_<name>s/${_<name>.pk}', _<name>.toJson());
-      int index = _<name>s.indexWhere((s) => s.pk == _<name>.pk);
-      if (index != -1) {
-        _<name>s[index] = _<Name>.fromJson(updated_<Name>);
-      }
-    } catch (e) {
-      Get.snackbar('Controller Error', 'Failed: ${e.toString()}');
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  void delete_<Name>(int pk) async {
-    isLoading.value = true;
-    try {
-      await _api.delete('_<name>s/$pk');
-      _<name>s.removeWhere((_<name>) => _<name>.pk == pk);
-    } catch (e) {
-      Get.snackbar('Controller Error', 'Failed to delete _<name>');
-    } finally {
-      isLoading.value = false;
-    }
   }
 }

@@ -1,22 +1,24 @@
+import 'package:charity/features/orgnization_assets/services/views/screens/services_screen.dart';
 import 'package:get/get.dart';
 
-import '../../features/account_management/views/screens/donor_screen.dart';
-import '../../features/account_management/views/screens/user_screen.dart';
+import '../../features/account_management/donors/views/screens/donors_screen.dart';
+import '../../features/account_management/users/views/screens/users_screen.dart';
+
 import '../../features/action_plan/views/screens/check_screen.dart';
 import '../../features/action_plan/views/screens/supply_screen.dart';
+
 import '../../features/auth/views/screens/login_screen.dart';
 import '../../features/auth/views/screens/register_screen.dart';
 
 import '../../features/dashboard/views/screens/dashboard_screen.dart';
 
-import '../../features/orgnization_assets/views/screens/donation_screen.dart';
-import '../../features/orgnization_assets/views/screens/family_screen.dart';
-import '../../features/orgnization_assets/views/screens/member_screen.dart';
-import '../../features/orgnization_assets/views/screens/service_screen.dart';
+import '../../features/orgnization_assets/donations/views/screens/donations_screen.dart';
+import '../../features/orgnization_assets/families/views/screens/families_screen.dart';
+import '../../features/orgnization_assets/members/views/screens/members_screen.dart';
 
-import '../../features/statement/views/screens/final_decision_screen.dart';
-import '../../features/statement/views/screens/info_gathering_screen.dart';
-import '../../features/statement/views/screens/info_processing_screen.dart';
+import '../../features/statement/final_decision/views/screens/final_decision_screen.dart';
+import '../../features/statement/info_gathering/views/screens/info_gathering_screen.dart';
+import '../../features/statement/info_processing/views/screens/info_processing_screen.dart';
 import '../../features/welcome/views/screens/welcome_screen.dart';
 
 import '../../middleware/auth_middleware.dart';
@@ -52,38 +54,39 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.users,
-      page: () => UserScreen(),
-      binding: UserBinding(),
+      page: () => UserManagementScreen(),
+      binding: UserManagementBinding(),
       middlewares: [AuthMiddleware()],
     ),
     GetPage(
       name: _Paths.donors,
-      page: () => DonorScreen(),
-      binding: DonorBinding(),
+      page: () => DonorManagementScreen(),
+      binding: DonorManagementBinding(),
       middlewares: [AuthMiddleware()],
     ),
+
     GetPage(
       name: _Paths.services,
-      page: () => ServiceScreen(),
-      binding: ServiceBinding(),
+      page: () => ServiceManagementScreen(),
+      binding: ServiceManagementBinding(),
       middlewares: [AuthMiddleware()],
     ),
     GetPage(
       name: _Paths.donations,
-      page: () => DonationScreen(),
-      binding: DonationBinding(),
+      page: () => DonationManagementScreen(),
+      binding: DonationManagementBinding(),
       middlewares: [AuthMiddleware()],
     ),
     GetPage(
       name: _Paths.families,
-      page: () => FamilyScreen(),
-      binding: FamilyBinding(),
+      page: () => FamilyManagementScreen(),
+      binding: FamilyManagementBinding(),
       middlewares: [AuthMiddleware()],
     ),
     GetPage(
       name: _Paths.members,
-      page: () => MemberScreen(),
-      binding: MemberBinding(),
+      page: () => MemberManagementScreen(),
+      binding: MemeberManagementBinding(),
       middlewares: [AuthMiddleware()],
     ),
     // GetPage(
@@ -110,6 +113,7 @@ class AppPages {
       binding: FinalDecisionBinding(),
       middlewares: [AuthMiddleware()],
     ),
+
     GetPage(
       name: _Paths.supplies,
       page: () => SupplyScreen(),

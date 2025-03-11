@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../shared/widgets/sidebar_header.dart';
 
-import '../../features/account_management/views/screens/donor_screen.dart';
-import '../../features/account_management/views/screens/user_screen.dart';
+import '../../features/account_management/donors/views/screens/donors_screen.dart';
+import '../../features/account_management/users/views/screens/users_screen.dart';
 import '../../features/action_plan/views/screens/check_screen.dart';
 import '../../features/action_plan/views/screens/supply_screen.dart';
 import '../../features/dashboard/views/screens/dashboard_screen.dart';
-import '../../features/orgnization_assets/views/screens/donation_screen.dart';
-import '../../features/orgnization_assets/views/screens/family_screen.dart';
-import '../../features/orgnization_assets/views/screens/member_screen.dart';
-import '../../features/orgnization_assets/views/screens/service_screen.dart';
-import '../../features/statement/views/screens/final_decision_screen.dart';
-import '../../features/statement/views/screens/info_gathering_screen.dart';
-import '../../features/statement/views/screens/info_processing_screen.dart';
+import '../../features/orgnization_assets/donations/views/screens/donations_screen.dart';
+import '../../features/orgnization_assets/families/views/screens/families_screen.dart';
+import '../../features/orgnization_assets/members/views/screens/members_screen.dart';
+import '../../features/orgnization_assets/services/views/screens/services_screen.dart';
+import '../../features/statement/final_decision/views/screens/final_decision_screen.dart';
+import '../../features/statement/info_gathering/views/screens/info_gathering_screen.dart';
+import '../../features/statement/info_processing/views/screens/info_processing_screen.dart';
 import '../constants/app_constants.dart';
 
 class Sidebar extends StatelessWidget {
@@ -56,14 +56,16 @@ class Sidebar extends StatelessWidget {
                     leading: const Icon(Icons.list),
                     title: const Text("Users"),
                     onTap: () {
-                      Get.offAll(() => UserScreen(), binding: UserBinding());
+                      Get.offAll(() => UserManagementScreen(),
+                          binding: UserManagementBinding());
                     },
                   ),
                   ListTile(
                     leading: const Icon(Icons.code_off),
                     title: const Text("Donors"),
                     onTap: () {
-                      Get.offAll(() => DonorScreen(), binding: DonorBinding());
+                      Get.offAll(() => DonorManagementScreen(),
+                          binding: DonorManagementBinding());
                     },
                   ),
                 ],
@@ -75,32 +77,32 @@ class Sidebar extends StatelessWidget {
                     leading: const Icon(Icons.list),
                     title: const Text("Donations"),
                     onTap: () {
-                      Get.offAll(() => DonationScreen(),
-                          binding: DonationBinding());
+                      Get.offAll(() => DonationManagementScreen(),
+                          binding: DonationManagementBinding());
                     },
                   ),
                   ListTile(
                     leading: const Icon(Icons.code_off),
                     title: const Text("Services"),
                     onTap: () {
-                      Get.offAll(() => ServiceScreen(),
-                          binding: ServiceBinding());
+                      Get.offAll(() => ServiceManagementScreen(),
+                          binding: ServiceManagementBinding());
                     },
                   ),
                   ListTile(
                     leading: const Icon(Icons.print),
                     title: const Text("Served Families"),
                     onTap: () {
-                      Get.offAll(() => FamilyScreen(),
-                          binding: FamilyBinding());
+                      Get.offAll(() => FamilyManagementScreen(),
+                          binding: FamilyManagementBinding());
                     },
                   ),
                   ListTile(
                     leading: const Icon(Icons.print),
                     title: const Text("Served Members"),
                     onTap: () {
-                      Get.offAll(() => MemberScreen(),
-                          binding: MemberBinding());
+                      Get.offAll(() => MemberManagementScreen(),
+                          binding: MemeberManagementBinding());
                     },
                   ),
                 ],

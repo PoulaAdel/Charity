@@ -1,8 +1,8 @@
-part of <name>_;
+part of _<name>;
 
-class <Name>_Binding extends Bindings {
+class _<Name>Binding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => <Name>_Controller());
+    Get.lazyPut(() => _<Name>Controller());
   }
 }

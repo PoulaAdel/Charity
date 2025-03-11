@@ -8,12 +8,6 @@ Copyright ©,All rights reserved
 from django.contrib.auth.models import Group
 from rest_framework import serializers
 from api.models import *
-
-
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = ['url', 'username', 'email', 'groups']
         
         
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
@@ -24,24 +18,24 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 """
 :User Serializer
 """
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
-        extra_kwargs = {'password': {'write_only': True}}
-
-    def create(self, validated_data):
-        user = User.objects.create_user(**validated_data)
-        return user
+        fields = ['url','id', 'username', 'email', 'phone', 'password', 'role', 'groups', 'profile_image', 'created_at', 'updated_at']
+        extra_kwargs = {
+            'password': {'write_only': True},
+        }
 
     def update(self, instance, validated_data):
         instance.username = validated_data.get('username', instance.username)
         instance.email = validated_data.get('email', instance.email)
         instance.phone = validated_data.get('phone', instance.phone)
+        instance.role = validated_data.get('role', instance.role)
         if 'password' in validated_data:
             instance.set_password(validated_data['password'])
+        instance.profile_image = validated_data.get('profile_image', instance.profile_image)
         instance.save()
-        return super().update(instance, validated_data)
+        return instance
         
 """
 :Authenticated User Serializer

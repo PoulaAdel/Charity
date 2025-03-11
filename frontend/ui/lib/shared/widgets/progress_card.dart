@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import '../../../shared/constants/app_constants.dart';
 
 class ProgressCardData {
@@ -38,7 +39,7 @@ class ProgressCard extends StatelessWidget {
                 child: SizedBox(
                   height: 200,
                   width: 200,
-                  child: Image.asset(
+                  child: SvgPicture.asset(
                     ImageVectorPath.happy2,
                     fit: BoxFit.fitHeight,
                   ),

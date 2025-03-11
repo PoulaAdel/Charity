@@ -39,6 +39,7 @@ dependencies:
   percent_indicator:
   email_validator:
   image_picker:
+  flutter_svg:
 
 
   # The following adds the Cupertino Icons font to your application.
