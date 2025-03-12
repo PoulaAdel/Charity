@@ -19,7 +19,7 @@ class SearchField extends StatelessWidget {
           borderSide: BorderSide.none,
         ),
         prefixIcon: const Icon(Icons.search),
-        hintText: (hText == null) ? "Search ..." : hText,
+        hintText: (hText == null) ? "Go to..." : hText,
         isDense: true,
         fillColor: Theme.of(context).cardColor,
       ),
