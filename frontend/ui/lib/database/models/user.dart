@@ -30,7 +30,7 @@ class User {
   final String username;
   final String? phone;
   final String? email;
-  final String password;
+  final String? password;
   final int role;
   final String? profileImage;
   final DateTime? createdAt;
@@ -41,7 +41,7 @@ class User {
     required this.username,
     this.phone,
     this.email,
-    required this.password,
+    this.password,
     required this.role,
     this.profileImage,
     this.createdAt,
@@ -49,11 +49,11 @@ class User {
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-        pk: json["id"] as int,
+        pk: json["id"] as int?,
         username: json["username"] as String,
         email: json["email"] as String?,
         phone: json["phone"] as String?,
-        password: json["password"] as String,
+        password: json["password"] as String?,
         role: json["role"] as int,
         profileImage: json["profile_image"] as String?,
         createdAt: json['created_at'] != null

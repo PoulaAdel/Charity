@@ -40,6 +40,10 @@ class ProfilTile extends StatelessWidget {
         onSelected: (String result) {
           if (result == 'logout') {
             onPressedLogOut();
+          } else if (result == 'update_profile') {
+            // Do something
+          } else if (result == 'update_Password') {
+            // Do something
           } else if (result == 'toggle_theme') {
             _toggleTheme(context);
           }
@@ -57,6 +61,26 @@ class ProfilTile extends StatelessWidget {
                 ],
               );
             }),
+          ),
+          const PopupMenuItem<String>(
+            value: 'update_profile',
+            child: Row(
+              children: [
+                Icon(Icons.person),
+                SizedBox(width: 8),
+                Text('Update Profile'),
+              ],
+            ),
+          ),
+          const PopupMenuItem<String>(
+            value: 'update_Password',
+            child: Row(
+              children: [
+                Icon(Icons.lock),
+                SizedBox(width: 8),
+                Text('Update Password'),
+              ],
+            ),
           ),
           const PopupMenuItem<String>(
             value: 'logout',
