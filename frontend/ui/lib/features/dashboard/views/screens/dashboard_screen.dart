@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../config/routes/app_pages.dart';
 import '../../../../shared/widgets/active_project_card.dart';
+import '../../../../shared/widgets/header.dart';
 import '../../../../shared/widgets/overview_header.dart';
 import '../../../../shared/widgets/profile.dart';
 import '../../../../shared/widgets/profile_tile.dart';
@@ -18,16 +19,13 @@ import '../../../../shared/widgets/list_profil_image.dart';
 import '../../../../shared/widgets/progress_card.dart';
 import '../../../../shared/widgets/progress_report_card.dart';
 import '../../../../shared/widgets/project_card.dart';
-import '../../../../shared/widgets/search_field.dart';
 import '../../../../shared/widgets/task_card.dart';
-import '../../../../shared/widgets/today_text.dart';
 import '../../../../utils/helpers/app_helpers.dart';
 import '../../../../utils/ui/ui_utils.dart';
 
 // component
 import '../../../../shared/widgets/sidebar.dart';
 part '../components/active_project_card.dart';
-part '../components/header.dart';
 part '../components/overview_header.dart';
 part '../components/recent_messages.dart';
 part '../components/team_member.dart';
@@ -235,7 +233,7 @@ class DashboardScreen extends StatelessWidget {
                 tooltip: "menu",
               ),
             ),
-          const Expanded(child: _Header()),
+          const Expanded(child: Header()),
         ],
       ),
     );

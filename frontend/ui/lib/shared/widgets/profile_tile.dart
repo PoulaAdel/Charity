@@ -52,7 +52,7 @@ class ProfilTile extends StatelessWidget {
           PopupMenuItem<String>(
             value: 'toggle_theme',
             child: Obx(() {
-              final isDarkMode = _themeService.themeMode == ThemeMode.dark;
+              final isDarkMode = (_themeService.themeMode == ThemeMode.dark);
               return Row(
                 children: [
                   Icon(isDarkMode ? Icons.light_mode : Icons.dark_mode),
