@@ -2,47 +2,65 @@ part of info_gathering;
 
 class InfoGatheringController extends GetxController {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  // for handling authentication
   final AuthenticationServices _authService = Get.find();
   final LocalSecureStorageServices _localSecureStorage = Get.find();
-
+  final RestApiServices _api = Get.find();
   final ScrollController scrollController = ScrollController();
 
   Rx<Profile?> currentProfile = Rx<Profile?>(null);
-  RxString selectedFamily = ''.obs;
-  RxString selectedStatement = ''.obs;
+  Rx<Family?> selectedFamily = Rx<Family?>(null);
+  Rx<Statement?> selectedStatement = Rx<Statement?>(null);
+  var families = <Family>[].obs;
+  var statements = <Statement>[].obs;
+  RxBool isLoading = false.obs;
 
   @override
   void onInit() {
-    assignCurrentProfile();
     super.onInit();
+    assignCurrentProfile();
+    assignFamilyAndStatement();
+    fetchFamilies();
+    fetchStatements(null);
   }
 
+  // Assign the current profile from local secure storage
   void assignCurrentProfile() async {
     Profile? secureData = await _localSecureStorage.getProfile;
     currentProfile.value = secureData;
     update();
   }
 
+  // Check and load family and statement from local storage
+  void assignFamilyAndStatement() async {
+    Family? storedFamily = await _localSecureStorage.getFamily();
+    if (storedFamily != null) {
+      selectedFamily.value = storedFamily;
+    }
+
+    Statement? storedStatement = await _localSecureStorage.getStatement();
+    if (storedStatement != null) {
+      selectedStatement.value = storedStatement;
+    }
+  }
+
+  // Logout the user and navigate to login screen
   void logoutUser() {
     _authService.logout();
     Get.offAllNamed(Routes.login);
   }
 
+  // Get the profile data
   Profile getProfil() {
     return Profile(
-      id: currentProfile.value != null ? currentProfile.value!.id : 0,
+      id: currentProfile.value?.id ?? 0,
       photo: const AssetImage(ImageRasterPath.avatar1),
-      username: currentProfile.value != null
-          ? currentProfile.value!.username.toString()
-          : "Loading..",
-      email: currentProfile.value != null
-          ? currentProfile.value!.email.toString()
-          : "Loading..",
-      role: currentProfile.value != null ? currentProfile.value!.role : 0,
+      username: currentProfile.value?.username.toString() ?? "Loading..",
+      email: currentProfile.value?.email.toString() ?? "Loading..",
+      role: currentProfile.value?.role ?? 0,
     );
   }
 
+  // Get the list of member images
   List<ImageProvider> getMember() {
     return const [
       AssetImage(ImageRasterPath.avatar1),
@@ -54,6 +72,7 @@ class InfoGatheringController extends GetxController {
     ];
   }
 
+  // Get the list of chatting card data
   List<ChattingCardData> getChatting() {
     return const [
       ChattingCardData(
@@ -83,22 +102,21 @@ class InfoGatheringController extends GetxController {
     ];
   }
 
+  // Open the drawer
   void openDrawer() {
-    if (scaffoldKey.currentState != null) {
-      scaffoldKey.currentState!.openDrawer();
-    }
+    scaffoldKey.currentState?.openDrawer();
   }
 
+  // Scroll to the top of the page
   void scrollToTop() {
-    double start = 0;
-    // scrollController.jumpTo(start);
     scrollController.animateTo(
-      start,
+      0,
       duration: const Duration(milliseconds: 100),
       curve: Curves.easeIn,
     );
   }
 
+  // Get the selected project data for the sidebar
   SidebarHeaderData getSelectedProject() {
     return SidebarHeaderData(
       projectImage: const AssetImage(ImageRasterPath.logo3),
@@ -107,103 +125,205 @@ class InfoGatheringController extends GetxController {
     );
   }
 
-  void onNewStatementPressed(BuildContext context) async {
-    final family = await chooseFamily(context);
-    if (family != null) {
-      selectedFamily.value = family;
-      _showStatementOptions(context, family, null);
+  // Fetch the list of families from the API
+  Future<void> fetchFamilies() async {
+    try {
+      var fetchedFamilies = await _api.get('families');
+      families.value = (fetchedFamilies as List)
+          .map((json) => Family.fromJson(json as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to fetch families: ${e.toString()}');
     }
   }
 
-  void onExistingStatementPressed(BuildContext context) async {
-    final family = await chooseFamily(context);
-    if (family != null) {
-      selectedFamily.value = family;
-      final statement = await chooseStatement(context, family);
-      if (statement != null) {
-        selectedStatement.value = statement;
-        _showStatementOptions(context, family, statement);
+  // Fetch the list of statements from the API
+  Future<void> fetchStatements(int? familyID) async {
+    try {
+      var fetchedStatements = await _api.get('statements');
+      statements.value = (fetchedStatements as List)
+          .map((json) => Statement.fromJson(json as Map<String, dynamic>))
+          .toList();
+      if (familyID != null) {
+        statements.value = statements
+            .where((statement) => statement.family == familyID.toString())
+            .toList();
       }
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to fetch statements: ${e.toString()}');
     }
   }
 
-  Future<String?> chooseFamily(BuildContext context) async {
-    // Replace with your logic to choose a family
-    return await Get.dialog<String>(
-      AlertDialog(
-        title: const Text('Choose Family'),
-        content: const Text('Family selection logic goes here'),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(result: 'Family 1'),
-            child: const Text('Family 1'),
-          ),
-          TextButton(
-            onPressed: () => Get.back(result: 'Family 2'),
-            child: const Text('Family 2'),
-          ),
-        ],
-      ),
-    );
-  }
+  // Choose a family from the list
+  Future<Family?> chooseFamily(BuildContext context) async {
+    RxList<Family> filteredFamilies = families;
 
-  Future<String?> chooseStatement(BuildContext context, String family) async {
-    // Replace with your logic to choose a statement
-    return await Get.dialog<String>(
+    Family? selectedFamily = await Get.dialog<Family>(
       AlertDialog(
-        title: const Text('Choose Statement'),
-        content: const Text('Statement selection logic goes here'),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(result: 'Statement 1'),
-            child: const Text('Statement 1'),
-          ),
-          TextButton(
-            onPressed: () => Get.back(result: 'Statement 2'),
-            child: const Text('Statement 2'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showStatementOptions(
-      BuildContext context, String family, String? statement) {
-    Get.dialog(
-      AlertDialog(
-        title: const Text('Edit Statement'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
+        title: Row(
           children: [
-            ElevatedButton(
-              onPressed: () =>
-                  _editStatement(context, family, statement, 'Spiritual'),
-              child: const Text('Edit Spiritual Statement'),
-            ),
-            ElevatedButton(
-              onPressed: () =>
-                  _editStatement(context, family, statement, 'Economical'),
-              child: const Text('Edit Economical Statement'),
-            ),
-            ElevatedButton(
-              onPressed: () =>
-                  _editStatement(context, family, statement, 'Residential'),
-              child: const Text('Edit Residential Statement'),
-            ),
-            ElevatedButton(
-              onPressed: () =>
-                  _editStatement(context, family, statement, 'Social'),
-              child: const Text('Edit Social Statement'),
+            const Text('Choose Family'),
+            const SizedBox(width: 10),
+            const Divider(),
+            const SizedBox(width: 10),
+            Expanded(
+              child: TextField(
+                decoration: const InputDecoration(
+                  hintText: 'Filter by name or ID',
+                  border: OutlineInputBorder(),
+                ),
+                onChanged: (value) async {
+                  isLoading.value = true;
+                  if (value.isNotEmpty) {
+                    filteredFamilies.value = families.where((family) {
+                      return family.name
+                              .toLowerCase()
+                              .contains(value.toLowerCase()) ||
+                          family.pk.toString().contains(value);
+                    }).toList();
+                  } else {
+                    await fetchFamilies();
+                  }
+                  isLoading.value = false;
+                },
+              ),
             ),
           ],
         ),
+        content: Obx(
+          () {
+            if (isLoading.value) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (filteredFamilies.isEmpty) {
+              return const Center(
+                child: Text('No families found'),
+              );
+            } else {
+              return SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: filteredFamilies.map((family) {
+                    return TextButton(
+                      onPressed: () => Get.back(result: family),
+                      child: Text(
+                        '# ${family.pk} : ${family.name}',
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    );
+                  }).toList(),
+                ),
+              );
+            }
+          },
+        ),
       ),
     );
+
+    if (selectedFamily != null) {
+      resetStatement();
+      return families.firstWhere((family) => family.pk == selectedFamily.pk);
+    }
+    return null;
   }
 
-  void _editStatement(
-      BuildContext context, String family, String? statement, String type) {
-    // Replace with your logic to edit the statement
-    Get.back(); // Close the dialog
+  // Choose a statement from the list
+  Future<Statement?> chooseStatement(
+      BuildContext context, Family family) async {
+    var familyStatements =
+        statements.where((statement) => statement.family == family.pk).toList();
+
+    RxList<Statement> filteredStatements = familyStatements.obs;
+
+    Statement? selectedStatement = await Get.dialog<Statement>(
+      AlertDialog(
+        title: Row(
+          children: [
+            const Text('Choose Statement'),
+            const SizedBox(width: 10),
+            const Divider(),
+            const SizedBox(width: 10),
+            Expanded(
+              child: TextField(
+                decoration: const InputDecoration(
+                  hintText: 'Filter by ID',
+                  border: OutlineInputBorder(),
+                ),
+                onChanged: (value) {
+                  isLoading.value = true;
+                  if (value.isNotEmpty) {
+                    filteredStatements.value =
+                        familyStatements.where((statement) {
+                      return statement.pk.toString().contains(value);
+                    }).toList();
+                  } else {
+                    filteredStatements.value = familyStatements;
+                  }
+                  isLoading.value = false;
+                },
+              ),
+            ),
+          ],
+        ),
+        content: Obx(
+          () {
+            if (isLoading.value) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (filteredStatements.isEmpty) {
+              return const Center(
+                child: Text('No statements found'),
+              );
+            } else {
+              return SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: filteredStatements.map((statement) {
+                    return TextButton(
+                      onPressed: () => Get.back(result: statement),
+                      child: Text(
+                        'Statement ${statement.pk}',
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    );
+                  }).toList(),
+                ),
+              );
+            }
+          },
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: const Text('Cancel'),
+          ),
+        ],
+      ),
+    );
+
+    if (selectedStatement != null) {
+      return familyStatements
+          .firstWhere((statement) => statement.pk == selectedStatement.pk);
+    }
+    return null;
+  }
+
+  Future<void> resetStatement() async {
+    // Reset the selected statement
+    selectedStatement.value = null;
+    await _localSecureStorage.deleteStatement();
+  }
+
+  Future<void> resetFamily() async {
+    // Reset the selected family
+    selectedFamily.value = null;
+    await _localSecureStorage.deleteFamily();
+  }
+
+  Future<void> clearData() async {
+    await resetFamily();
+    await resetStatement();
   }
 }

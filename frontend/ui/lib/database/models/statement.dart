@@ -17,7 +17,7 @@ class StatementFields {
 
 class Statement {
   int? pk;
-  final String family;
+  final int family;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -30,7 +30,7 @@ class Statement {
 
   factory Statement.fromJson(Map<String, dynamic> json) => Statement(
         pk: json["id"] as int,
-        family: json["family"] as String,
+        family: json["family"] as int,
         createdAt: (json['created_at'] != null)
             ? DateTime.parse(json['created_at'])
             : null,

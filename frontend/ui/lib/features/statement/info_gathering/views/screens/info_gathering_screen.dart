@@ -2,26 +2,27 @@ library info_gathering;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../../../../config/routes/app_pages.dart';
+import '../../../../../database/models/app_models.dart';
 import '../../../../../shared/constants/app_constants.dart';
 import '../../../../../shared/widgets/chatting_card.dart';
 import '../../../../../shared/widgets/get_premium_card.dart';
+import '../../../../../shared/widgets/header.dart';
 import '../../../../../shared/widgets/list_profil_image.dart';
 import '../../../../../shared/widgets/profile.dart';
 import '../../../../../shared/widgets/profile_tile.dart';
-import '../../../../../shared/widgets/search_field.dart';
 import '../../../../../shared/widgets/sidebar_header.dart';
-import '../../../../../shared/widgets/today_text.dart';
 import '../../../../../utils/services/authetication_services.dart';
 import '../../../../../utils/services/local_secure_storage_services.dart';
+import '../../../../../utils/services/rest_api_services.dart';
 import '../../../../../utils/ui/ui_utils.dart';
 
 // component
 import '../../../../../shared/widgets/sidebar.dart';
 part '../components/active_project_card.dart';
-part '../components/header.dart';
 part '../components/overview_header.dart';
 part '../components/recent_messages.dart';
 part '../components/team_member.dart';
@@ -219,7 +220,7 @@ class InfoGatheringScreen extends StatelessWidget {
                 tooltip: "menu",
               ),
             ),
-          const Expanded(child: _Header()),
+          const Expanded(child: Header()),
         ],
       ),
     );
@@ -273,17 +274,22 @@ class InfoGatheringScreen extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            // Family ID Section
             Column(
               children: [
                 const Text('Family ID',
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 const SizedBox(height: 8),
-                Obx(() => Text(controller.selectedFamily.value)),
+                Obx(() => Text(
+                      controller.selectedFamily.value?.pk.toString() ?? '',
+                      overflow: TextOverflow.ellipsis,
+                    )),
                 const SizedBox(height: 8),
                 ElevatedButton(
                   onPressed: () async {
                     final family = await controller.chooseFamily(context);
                     if (family != null) {
+                      controller._localSecureStorage.saveFamily(family);
                       controller.selectedFamily.value = family;
                     }
                   },
@@ -291,23 +297,73 @@ class InfoGatheringScreen extends StatelessWidget {
                 ),
               ],
             ),
+            // Statement ID Section
             Column(
               children: [
                 const Text('Statement ID',
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 const SizedBox(height: 8),
-                Obx(() => Text(controller.selectedStatement.value)),
+                Obx(() => Text(
+                      controller.selectedStatement.value?.pk.toString() ?? '',
+                      overflow: TextOverflow.ellipsis,
+                    )),
                 const SizedBox(height: 8),
                 ElevatedButton(
                   onPressed: () async {
                     final statement = await controller.chooseStatement(
-                        context, controller.selectedFamily.value);
+                        context, controller.selectedFamily.value!);
                     if (statement != null) {
                       controller.selectedStatement.value = statement;
                     }
                   },
                   child: const Text('Change Statement'),
                 ),
+              ],
+            ),
+            // Action Buttons Section
+            Column(
+              children: [
+                SizedBox(
+                  width: 150, // Set a fixed width for the buttons
+                  child: ElevatedButton.icon(
+                    onPressed: controller.clearData,
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                    icon: const Icon(Icons.delete, color: Colors.white),
+                    label: const Text('Clear Data'),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: 150, // Set a fixed width for the buttons
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      final familyId =
+                          controller.selectedFamily.value?.pk.toString() ?? '';
+                      Clipboard.setData(ClipboardData(text: familyId));
+                      Get.snackbar('Copied', 'Family ID copied to clipboard');
+                    },
+                    icon: const Icon(Icons.copy, color: Colors.white),
+                    label: const Text('Family ID'),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: 150, // Set a fixed width for the buttons
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      final statementId =
+                          controller.selectedStatement.value?.pk.toString() ??
+                              '';
+                      Clipboard.setData(ClipboardData(text: statementId));
+                      Get.snackbar(
+                          'Copied', 'Statement ID copied to clipboard');
+                    },
+                    icon: const Icon(Icons.copy, color: Colors.white),
+                    label: const Text('Statement ID'),
+                  ),
+                ),
+                const SizedBox(height: 8),
               ],
             ),
           ],
@@ -317,31 +373,23 @@ class InfoGatheringScreen extends StatelessWidget {
   }
 
   Widget _buildInfoGatheringSection(BuildContext context) {
-    return Card(
+    return const Card(
       elevation: 4,
-      margin: const EdgeInsets.all(8.0),
+      margin: EdgeInsets.all(8.0),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0),
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: kSpacing),
+              padding: EdgeInsets.symmetric(horizontal: kSpacing),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ElevatedButton(
-                    onPressed: () => controller.onNewStatementPressed(context),
-                    child: const Text('New Statement'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () =>
-                        controller.onExistingStatementPressed(context),
-                    child: const Text('Existing Statement'),
-                  ),
+                  // TODO: Add your widgets here
                 ],
               ),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
           ],
         ),
       ),
