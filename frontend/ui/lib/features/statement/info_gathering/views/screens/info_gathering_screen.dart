@@ -22,6 +22,7 @@ import '../../../../../utils/ui/ui_utils.dart';
 
 // component
 import '../../../../../shared/widgets/sidebar.dart';
+part '../components/edit_statement_form.dart';
 part '../components/active_project_card.dart';
 part '../components/overview_header.dart';
 part '../components/recent_messages.dart';
@@ -373,23 +374,130 @@ class InfoGatheringScreen extends StatelessWidget {
   }
 
   Widget _buildInfoGatheringSection(BuildContext context) {
-    return const Card(
+    return Card(
       elevation: 4,
-      margin: EdgeInsets.all(8.0),
+      margin: const EdgeInsets.all(12.0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.0),
+      ),
       child: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: kSpacing),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  // TODO: Add your widgets here
-                ],
-              ),
+            Text(
+              'Info Gathering',
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+              textAlign: TextAlign.center,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 20),
+            Obx(() {
+              final isEnabled = controller.selectedStatement.value != null;
+              return _buildButtonRow(
+                buttons: [
+                  _buildSquareButton(
+                    'Spiritual',
+                    Icons.self_improvement,
+                    isEnabled
+                        ? () {
+                            Get.dialog(
+                              EditStatementForm(modelType: 'spiritual'),
+                              barrierDismissible: false,
+                            );
+                          }
+                        : null,
+                  ),
+                  _buildSquareButton(
+                    'Economical',
+                    Icons.attach_money,
+                    isEnabled
+                        ? () {
+                            Get.dialog(
+                              EditStatementForm(modelType: 'economical'),
+                              barrierDismissible: false,
+                            );
+                          }
+                        : null,
+                  ),
+                ],
+              );
+            }),
+            const SizedBox(height: 20),
+            Obx(() {
+              final isEnabled = controller.selectedStatement.value != null;
+              return _buildButtonRow(
+                buttons: [
+                  _buildSquareButton(
+                    'Residential',
+                    Icons.home,
+                    isEnabled
+                        ? () {
+                            Get.dialog(
+                              EditStatementForm(modelType: 'residential'),
+                              barrierDismissible: false,
+                            );
+                          }
+                        : null,
+                  ),
+                  _buildSquareButton(
+                    'Social',
+                    Icons.people,
+                    isEnabled
+                        ? () {
+                            Get.dialog(
+                              EditStatementForm(modelType: 'social'),
+                              barrierDismissible: false,
+                            );
+                          }
+                        : null,
+                  ),
+                ],
+              );
+            }),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildButtonRow({required List<Widget> buttons}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: buttons
+          .expand(
+              (button) => [Expanded(child: button), const SizedBox(width: 16)])
+          .toList()
+        ..removeLast(), // Remove trailing spacer
+    );
+  }
+
+  Widget _buildSquareButton(
+      String label, IconData icon, VoidCallback? onPressed) {
+    return SizedBox(
+      width: 60, // Set fixed width for smaller buttons
+      height: 60, // Set fixed height for smaller buttons
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          padding: const EdgeInsets.all(2.0), // Further reduce padding
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 36), // Increase icon size
+            const SizedBox(height: 2), // Maintain small spacing
+            Text(
+              label,
+              style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold), // Increase font size
+              textAlign: TextAlign.center,
+            ),
           ],
         ),
       ),
