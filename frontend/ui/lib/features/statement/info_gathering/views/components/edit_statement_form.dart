@@ -1,28 +1,15 @@
 part of info_gathering;
 
-class EditStatementFormController extends GetxController {
-  final formKey = GlobalKey<FormState>();
-  final formData = <String, dynamic>{}.obs;
-
-  void submitForm(String modelType) {
-    if (formKey.currentState?.validate() ?? false) {
-      formKey.currentState?.save();
-      // TODO: Save formData to the database for the specific model type
-      Get.snackbar('Success', '$modelType model updated!',
-          snackPosition: SnackPosition.BOTTOM);
-    }
-  }
-}
-
 class EditStatementForm extends StatelessWidget {
   final String modelType; // "spiritual", "economical", "social", "residential"
   EditStatementForm({Key? key, required this.modelType}) : super(key: key);
 
   final EditStatementFormController controller =
-      Get.put(EditStatementFormController());
+      Get.find<EditStatementFormController>();
 
   @override
   Widget build(BuildContext context) {
+    controller.setModelType(modelType);
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit ${modelType.capitalizeFirst} Statement'),
@@ -51,23 +38,12 @@ class EditStatementForm extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   _buildTextField(
-                    label: 'Field 1',
-                    onSaved: (value) => controller.formData['field1'] = value,
-                  ),
-                  const SizedBox(height: 16),
-                  _buildTextField(
-                    label: 'Field 2',
-                    onSaved: (value) => controller.formData['field2'] = value,
-                  ),
-                  const SizedBox(height: 16),
-                  _buildTextField(
-                    label: 'Field 3',
-                    onSaved: (value) => controller.formData['field3'] = value,
+                    label: 'Content',
+                    onSaved: (value) => controller.typeContent.value = value!,
                   ),
                   const SizedBox(height: 24),
                   ElevatedButton(
-                    onPressed: () =>
-                        controller.submitForm(modelType.capitalizeFirst!),
+                    onPressed: () => controller.submitForm(),
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 14.0),
                       shape: RoundedRectangleBorder(
@@ -93,16 +69,24 @@ class EditStatementForm extends StatelessWidget {
     required String label,
     required FormFieldSetter<String> onSaved,
   }) {
-    return TextFormField(
-      decoration: InputDecoration(
-        labelText: label,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-      ),
-      onSaved: onSaved,
-      validator: (value) =>
-          value == null || value.isEmpty ? 'This field is required' : null,
+    return Card(
+      child: Obx(() => TextFormField(
+            decoration: InputDecoration(
+              labelText: label,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+            ),
+            initialValue: controller.typeContent.value.isNotEmpty
+                ? controller.typeContent.value
+                : null,
+            onSaved: onSaved,
+            validator: (value) => value == null || value.isEmpty
+                ? 'This field is required'
+                : null,
+            maxLines: 10, // Allow multiple lines
+            keyboardType: TextInputType.multiline,
+          )),
     );
   }
 }

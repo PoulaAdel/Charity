@@ -33,6 +33,7 @@ part '../../bindings/info_gathering_binding.dart';
 
 // controller
 part '../../controllers/info_gathering_controller.dart';
+part '../../controllers/edit_statement_form_controller.dart';
 
 // models
 

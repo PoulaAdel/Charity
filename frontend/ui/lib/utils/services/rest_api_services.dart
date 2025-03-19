@@ -1,16 +1,13 @@
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:charity/utils/services/local_secure_storage_services.dart';
+import 'package:dio/dio.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
-import 'package:http_parser/http_parser.dart';
-import 'package:path/path.dart';
+
+import 'local_secure_storage_services.dart';
 
 class RestApiServices extends GetxService {
   final String baseUrl;
+  final Dio dio;
 
-  RestApiServices(this.baseUrl);
+  RestApiServices(this.baseUrl) : dio = Dio(BaseOptions(baseUrl: baseUrl));
 
   Future<Map<String, String>> _getHeaders(
       {Map<String, String>? headers}) async {
@@ -25,165 +22,99 @@ class RestApiServices extends GetxService {
     return defaultHeaders;
   }
 
-  Future<dynamic> get(String endpoint, {Map<String, String>? headers}) async {
-    final url = Uri.parse('$baseUrl/$endpoint/');
-    final response =
-        await http.get(url, headers: await _getHeaders(headers: headers));
-
-    if (response.statusCode == 200) {
-      final decodedResponse = jsonDecode(response.body);
+  Future<dynamic> get(
+    String endpoint, {
+    Map<String, String>? headers,
+    Map<String, String>? queryParameters,
+  }) async {
+    final url = '$baseUrl/$endpoint/';
+    try {
+      final response = await dio.get(
+        url,
+        queryParameters: queryParameters,
+        options: Options(headers: await _getHeaders(headers: headers)),
+      );
+      final decodedResponse = response.data;
       if (decodedResponse is List) {
         return decodedResponse;
       } else if (decodedResponse is Map<String, dynamic>) {
-        return [decodedResponse]; // Wrap the single object in a list
+        return [decodedResponse];
       } else {
         Get.snackbar('API Communication Error',
             'Failed to load data: Unexpected response format');
         throw Exception('Unexpected response format');
       }
-    } else {
+    } catch (e) {
       Get.snackbar('API Communication Error',
-          'Failed to load data: ${response.statusCode}');
-      throw Exception('Failed to load data: ${response.statusCode}');
+          '${e is DioException ? e.response?.statusCode : 'Server Error'}');
+      throw Exception('Failed to load data: ${e.toString()}');
     }
-  }
-
-  Future<http.Response> postMultipart(String endpoint,
-      {required Map<String, String> fields,
-      required Map<String, File?> files}) async {
-    final url = Uri.parse('$baseUrl/$endpoint/');
-    var request = http.MultipartRequest('POST', url)
-      ..headers.addAll(await _getHeaders());
-    fields.forEach((key, value) {
-      request.fields[key] = value;
-    });
-    files.forEach((key, file) {
-      if (file != null) {
-        request.files.add(http.MultipartFile(
-          key,
-          file.readAsBytes().asStream(),
-          file.lengthSync(),
-          filename: basename(file.path),
-          contentType: MediaType('image', 'jpeg'),
-        ));
-      }
-    });
-    var response = await request.send();
-    return await http.Response.fromStream(response);
   }
 
   Future<Map<String, dynamic>> post(String endpoint, Map<String, dynamic> data,
       {Map<String, String>? headers}) async {
-    final url = Uri.parse('$baseUrl/$endpoint/');
-    final response = await http.post(url,
-        headers: await _getHeaders(headers: headers), body: jsonEncode(data));
-
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      Get.snackbar(
-        'Success',
-        'Data saved successfully',
+    final url = '$baseUrl/$endpoint/';
+    try {
+      final response = await dio.post(
+        url,
+        data: data,
+        options: Options(headers: await _getHeaders(headers: headers)),
       );
-      return jsonDecode(response.body);
-    } else {
+      Get.snackbar('Success', 'Data saved successfully');
+      return response.data;
+    } catch (e) {
       Get.snackbar('API Communication Error',
-          'Failed to load data: ${response.statusCode}');
-      throw Exception('Failed to load data: ${response.statusCode}');
+          'Failed to load data: ${e is DioException ? e.response?.statusCode : 'Error'}');
+      throw Exception('Failed to load data: ${e.toString()}');
     }
-  }
-
-  Future<http.Response> putMultipart(String endpoint,
-      {required Map<String, String> fields,
-      required Map<String, File?> files}) async {
-    final url = Uri.parse('$baseUrl/$endpoint/');
-    var request = http.MultipartRequest('PUT', url)
-      ..headers.addAll(await _getHeaders());
-    fields.forEach((key, value) {
-      request.fields[key] = value;
-    });
-    files.forEach((key, file) {
-      if (file != null) {
-        request.files.add(http.MultipartFile(
-          key,
-          file.readAsBytes().asStream(),
-          file.lengthSync(),
-          filename: basename(file.path),
-          contentType: MediaType('image', 'jpeg'),
-        ));
-      }
-    });
-    var response = await request.send();
-    return await http.Response.fromStream(response);
   }
 
   Future<Map<String, dynamic>> put(String endpoint, Map<String, dynamic> data,
       {Map<String, String>? headers}) async {
-    final url = Uri.parse('$baseUrl/$endpoint/');
-    final response = await http.put(url,
-        headers: await _getHeaders(headers: headers), body: jsonEncode(data));
-
-    if (response.statusCode == 200) {
-      Get.snackbar(
-        'Success',
-        'Data updated successfully',
+    final url = '$baseUrl/$endpoint/';
+    try {
+      final response = await dio.put(
+        url,
+        data: data,
+        options: Options(headers: await _getHeaders(headers: headers)),
       );
-      return jsonDecode(response.body);
-    } else {
+      Get.snackbar('Success', 'Data updated successfully');
+      return response.data;
+    } catch (e) {
       Get.snackbar('API Communication Error',
-          'Failed to load data: ${response.statusCode}');
-      throw Exception('Failed to load data: ${response.statusCode}');
+          'Failed to load data: ${e is DioException ? e.response?.statusCode : 'Error'}');
+      throw Exception('Failed to load data: ${e.toString()}');
     }
-  }
-
-  Future<http.Response> patchMultipart(String endpoint,
-      {required Map<String, String> fields,
-      required Map<String, File?> files}) async {
-    var request =
-        http.MultipartRequest('PATCH', Uri.parse('$baseUrl/$endpoint/'))
-          ..headers.addAll(await _getHeaders());
-    files.forEach((key, file) {
-      if (file != null) {
-        request.files.add(http.MultipartFile(
-          key,
-          file.readAsBytes().asStream(),
-          file.lengthSync(),
-          filename: file.path.split('/').last,
-          contentType: MediaType('image', 'jpeg'),
-        ));
-      }
-    });
-    var streamedResponse = await request.send();
-    return await http.Response.fromStream(streamedResponse);
   }
 
   Future<Map<String, dynamic>> patch(String endpoint, Map<String, dynamic> data,
       {Map<String, String>? headers}) async {
-    final url = Uri.parse('$baseUrl/$endpoint/');
-    final response = await http.patch(url,
-        headers: await _getHeaders(headers: headers), body: jsonEncode(data));
-
-    if (response.statusCode == 200) {
-      Get.snackbar(
-        'Success',
-        'Data updated successfully',
+    final url = '$baseUrl/$endpoint/';
+    try {
+      final response = await dio.patch(
+        url,
+        data: data,
+        options: Options(headers: await _getHeaders(headers: headers)),
       );
-      return jsonDecode(response.body);
-    } else {
+      Get.snackbar('Success', 'Data updated successfully');
+      return response.data;
+    } catch (e) {
       Get.snackbar('API Communication Error',
-          'Failed to update data:  ${response.statusCode}');
-      throw Exception('Failed to update data:  ${response.statusCode}');
+          'Failed to update data: ${e is DioException ? e.response?.statusCode : 'Error'}');
+      throw Exception('Failed to update data: ${e.toString()}');
     }
   }
 
   Future<void> delete(String endpoint, {Map<String, String>? headers}) async {
-    final url = Uri.parse('$baseUrl/$endpoint/');
-    final response =
-        await http.delete(url, headers: await _getHeaders(headers: headers));
-    if (response.statusCode == 204) {
+    final url = '$baseUrl/$endpoint/';
+    try {
+      await dio.delete(url,
+          options: Options(headers: await _getHeaders(headers: headers)));
       Get.snackbar('Success', 'Data deleted successfully');
-    } else {
+    } catch (e) {
       Get.snackbar('API Communication Error',
-          'Failed to delete data: ${response.statusCode}');
-      throw Exception('Failed to delete data: ${response.statusCode}');
+          'Failed to delete data: ${e is DioException ? e.response?.statusCode : 'Error'}');
+      throw Exception('Failed to delete data: ${e.toString()}');
     }
   }
 }

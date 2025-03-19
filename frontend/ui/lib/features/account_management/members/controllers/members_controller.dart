@@ -223,17 +223,15 @@ class MemberManagementController extends GetxController {
       Member member, File? nidFile, File? faceImgFile) async {
     isLoading.value = true;
     try {
-      var response = await _api.postMultipart(
+      var response = await _api.post(
         'members/',
-        fields: member
-            .toJson()
-            .map((key, value) => MapEntry(key, value.toString())),
-        files: {
-          'nid': nidFile,
-          'face_img': faceImgFile,
-        },
+        member.toJson().map((key, value) => MapEntry(key, value.toString())),
+        // files: {
+        //   'nid': nidFile,
+        //   'face_img': faceImgFile,
+        // },
       );
-      if (response.statusCode == 201) {
+      if (response.isNotEmpty) {
         fetchMembers();
         Get.snackbar('Success', 'Member added successfully');
       } else {
@@ -250,17 +248,15 @@ class MemberManagementController extends GetxController {
       Member member, File? nidFile, File? faceImgFile) async {
     isLoading.value = true;
     try {
-      var response = await _api.putMultipart(
+      var response = await _api.put(
         'members/${member.pk}/',
-        fields: member
-            .toJson()
-            .map((key, value) => MapEntry(key, value.toString())),
-        files: {
-          'nid': nidFile,
-          'face_img': faceImgFile,
-        },
+        member.toJson().map((key, value) => MapEntry(key, value.toString())),
+        // files: {
+        //   'nid': nidFile,
+        //   'face_img': faceImgFile,
+        // },
       );
-      if (response.statusCode == 200) {
+      if (response.isNotEmpty) {
         fetchMembers();
         Get.snackbar('Success', 'Member updated successfully');
       } else {

@@ -1,68 +1,63 @@
-import 'dart:convert';
-
-import '../../features/auth/views/screens/login_screen.dart';
-import '../../shared/widgets/profile.dart';
+import 'package:dio/dio.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 
 import '../../database/models/app_models.dart';
+import '../../features/auth/views/screens/login_screen.dart';
+import '../../shared/widgets/profile.dart';
 import 'local_secure_storage_services.dart';
 
 class AuthenticationServices extends GetxService {
   final String baseUrl;
+  final Dio dio;
 
-  AuthenticationServices(this.baseUrl);
+  AuthenticationServices(this.baseUrl)
+      : dio = Dio(BaseOptions(baseUrl: baseUrl));
 
   Future<bool> login(String username, String password) async {
-    final url = Uri.parse('$baseUrl/api-token-auth/');
-    final response = await http.post(
-      url,
-      body: jsonEncode({'username': username, 'password': password}),
-      headers: {'Content-Type': 'application/json'},
-    );
+    const url = '/api-token-auth/';
+    try {
+      final response = await dio.post(
+        url,
+        data: {'username': username, 'password': password},
+        options: Options(headers: {'Content-Type': 'application/json'}),
+      );
 
-    if (response.statusCode == 200) {
-      // Save token to secure storage
-      final data = jsonDecode(response.body);
+      final data = response.data;
       final token = data['token'];
       await LocalSecureStorageServices.setToken(token);
-      // Get user profile data
       await updateProfileData();
-      // Redirect to dashboard
       return true;
-    } else {
-      final message = response.body.isNotEmpty
-          ? jsonDecode(response.body).toString()
+    } catch (e) {
+      final message = e is DioException && e.response != null
+          ? e.response!.data.toString()
           : 'Login failed.';
-      Get.snackbar("${response.statusCode}", message);
+      Get.snackbar(
+          "${e is DioException ? e.response?.statusCode : 'Error'}", message);
       return false;
     }
   }
 
   Future<bool> register(User user) async {
-    final url = Uri.parse('$baseUrl/users/register/');
-    final response = await http.post(
-      url,
-      body: jsonEncode(user.toJson()),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    );
-
-    if (response.statusCode == 201) {
+    final url = '/users/register/';
+    try {
+      await dio.post(
+        url,
+        data: user.toJson(),
+        options: Options(headers: {'Content-Type': 'application/json'}),
+      );
       Get.offAll(LoginScreen());
       return true;
-    } else {
-      final message = response.body.isNotEmpty
-          ? jsonDecode(response.body).toString()
+    } catch (e) {
+      final message = e is DioException && e.response != null
+          ? e.response!.data.toString()
           : 'Registration failed.';
-      Get.snackbar("${response.statusCode}", message);
+      Get.snackbar(
+          "${e is DioException ? e.response?.statusCode : 'Error'}", message);
       return false;
     }
   }
 
   Future<void> logout() async {
-    // await _localSecureStorage.secureStorage.delete(key: 'USER');
     await LocalSecureStorageServices.deleteToken();
   }
 
@@ -72,21 +67,26 @@ class AuthenticationServices extends GetxService {
   }
 
   Future<void> updateProfileData() async {
-    final url = Uri.parse('$baseUrl/api/authenticated_user_info/');
-    final response = await http.post(url, headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Token ${await LocalSecureStorageServices.getToken()}',
-    });
+    final url = '/api/authenticated_user_info/';
+    try {
+      final response = await dio.post(
+        url,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Authorization':
+              'Token ${await LocalSecureStorageServices.getToken()}',
+        }),
+      );
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
+      final data = response.data;
       final profile = Profile.fromJson(data);
       await LocalSecureStorageServices.setProfile(profile);
-    } else {
-      final message = response.body.isNotEmpty
-          ? jsonDecode(response.body).toString()
+    } catch (e) {
+      final message = e is DioException && e.response != null
+          ? e.response!.data.toString()
           : 'Failed to get profile data.';
-      Get.snackbar("${response.statusCode}", message);
+      Get.snackbar(
+          "${e is DioException ? e.response?.statusCode : 'Error'}", message);
     }
   }
 }

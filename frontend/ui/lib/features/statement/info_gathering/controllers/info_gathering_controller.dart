@@ -146,7 +146,7 @@ class InfoGatheringController extends GetxController {
           .toList();
       if (familyID != null) {
         statements.value = statements
-            .where((statement) => statement.family == familyID.toString())
+            .where((statement) => statement.family == familyID)
             .toList();
       }
     } catch (e) {

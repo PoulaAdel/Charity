@@ -9,10 +9,11 @@ from django.shortcuts import render
 
 from requests import Response
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import permissions,viewsets
+from rest_framework import permissions,viewsets,filters
 from rest_framework.generics import RetrieveUpdateDestroyAPIView,RetrieveAPIView
 from api.serializers import *
 from api.models import *
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 """
@@ -24,7 +25,9 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     queryset = User.objects.all()
     serializer_class = UserProfileSerializer
-    permission_classes = [IsAuthenticated] # Add authentication if needed
+    permission_classes = [IsAuthenticated]  # Add authentication if needed
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['username', 'email', 'first_name', 'last_name', 'role', 'created_at', 'updated_at']  # Updated fields
         
 """
 :User Item Control
@@ -71,6 +74,8 @@ class DonorViewSet(viewsets.ModelViewSet):
     queryset = Donor.objects.all()
     serializer_class = DonorSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['name', 'created_at', 'updated_at']  # Updated fields
     
 """
 :Donor Item Control
@@ -94,6 +99,8 @@ class ServiceViewSet(viewsets.ModelViewSet):
     queryset = Service.objects.all()
     serializer_class = ServiceSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['name', 'description', 'created_at', 'updated_at']  # Updated fields
     
 """
 :Service Item Control
@@ -117,6 +124,8 @@ class DonationViewSet(viewsets.ModelViewSet):
     queryset = Donation.objects.all()
     serializer_class = DonationSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['donor', 'type', 'amount', 'notes', 'created_at', 'updated_at']  # Updated fields
     
 """
 :Donation Item Control
@@ -140,6 +149,8 @@ class FamilyViewSet(viewsets.ModelViewSet):
     queryset = Family.objects.all()
     serializer_class = FamilySerializer
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['name', 'count', 'created_at', 'updated_at']  # Updated fields
     
 """
 :Family Item Control
@@ -163,6 +174,8 @@ class MemberViewSet(viewsets.ModelViewSet):
     queryset = Member.objects.all()
     serializer_class = MemberSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['family', 'name', 'relation', 'contact', 'age', 'education', 'health', 'income', 'created_at', 'updated_at']  # Updated fields
     
 """
 :Member Item Control
@@ -186,6 +199,8 @@ class StatementViewSet(viewsets.ModelViewSet):
     queryset = Statement.objects.all()
     serializer_class = StatementSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['family', 'created_at', 'updated_at']  # Updated fields
     
 """
 :Statement Item Control
@@ -209,7 +224,9 @@ class SocialViewSet(viewsets.ModelViewSet):
     queryset = Social.objects.all()
     serializer_class = SocialSerializer
     permission_classes = [permissions.IsAuthenticated]
-    
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['statement', 'content', 'created_at', 'updated_at']  # Updated fields
+        
 """
 :Social Item Control
 """
@@ -232,6 +249,8 @@ class SpiritualViewSet(viewsets.ModelViewSet):
     queryset = Spiritual.objects.all()
     serializer_class = SpiritualSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['statement', 'content', 'created_at', 'updated_at']  # Updated fields
     
 """
 :Spiritual Item Control
@@ -255,6 +274,8 @@ class ResidentialViewSet(viewsets.ModelViewSet):
     queryset = Residential.objects.all()
     serializer_class = ResidentialSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['statement', 'content', 'created_at', 'updated_at']    
     
 """
 :Residential Item Control
@@ -278,6 +299,8 @@ class EconomicalViewSet(viewsets.ModelViewSet):
     queryset = Economical.objects.all()
     serializer_class = EconomicalSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['statement', 'content', 'created_at', 'updated_at']
     
 """
 :Economical Item Control
@@ -301,6 +324,8 @@ class OpinionViewSet(viewsets.ModelViewSet):
     queryset = Opinion.objects.all()
     serializer_class = OpinionSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['statement', 'content', 'created_at', 'updated_at']  # Updated fields
     
 """
 :Opinion Item Control
@@ -324,6 +349,8 @@ class SuggestionViewSet(viewsets.ModelViewSet):
     queryset = Suggestion.objects.all()
     serializer_class = SuggestionSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['statement', 'content', 'created_at', 'updated_at']  # Updated fields
     
 """
 :Suggestion Item Control
@@ -347,6 +374,8 @@ class JudgementViewSet(viewsets.ModelViewSet):
     queryset = Judgement.objects.all()
     serializer_class = JudgementSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['statement', 'content', 'sponsor', 'created_at', 'updated_at']  # Updated fields
     
 """
 :Judgement Item Control
@@ -370,6 +399,8 @@ class SupplyViewSet(viewsets.ModelViewSet):
     queryset = Supply.objects.all()
     serializer_class = SupplySerializer
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['family', 'service', 'amount', 'note', 'created_at', 'updated_at']  # Updated fields
     
 """
 :Supply Item Control
@@ -393,6 +424,8 @@ class CheckViewSet(viewsets.ModelViewSet):
     queryset = Check.objects.all()
     serializer_class = CheckSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['supply', 'receiver', 'sponsor', 'created_at', 'updated_at']  # Updated fields
     
 """
 :Check Item Control

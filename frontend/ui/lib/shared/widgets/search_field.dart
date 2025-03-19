@@ -19,7 +19,7 @@ class SearchFieldController extends GetxController {
 }
 
 class SearchField extends StatelessWidget {
-  SearchField({this.onSearch, this.hText, Key? key}) : super(key: key);
+  const SearchField({this.onSearch, this.hText, Key? key}) : super(key: key);
 
   final Function(String value)? onSearch;
   final String? hText;

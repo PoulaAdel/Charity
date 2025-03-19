@@ -31,7 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   get:
-  http:
+  dio:
   path:
   intl:
   flutter_secure_storage:
