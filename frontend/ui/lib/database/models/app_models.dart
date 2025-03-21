@@ -12,7 +12,7 @@ part 'member.dart';
 part 'statement.dart';
 part 'social.dart';
 part 'spiritual.dart';
-part 'resedential.dart';
+part 'residential.dart';
 part 'economical.dart';
 //Statement Processsing
 part 'opinion.dart';

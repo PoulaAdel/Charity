@@ -1,8 +1,8 @@
 part of app_models;
 
-const String resedentialTable = "resedential";
+const String residentialTable = "residential";
 
-class ResedentialFields {
+class ResidentialFields {
   static const String pk = "pk";
   static const String statement = "statement";
   static const String content = "content";
@@ -17,14 +17,14 @@ class ResedentialFields {
   ];
 }
 
-class Resedential {
+class Residential {
   int? pk;
   final int statement;
   final String content;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
-  Resedential({
+  Residential({
     this.pk = 0,
     required this.statement,
     required this.content,
@@ -32,7 +32,7 @@ class Resedential {
     this.updatedAt,
   });
 
-  factory Resedential.fromJson(Map<String, dynamic> json) => Resedential(
+  factory Residential.fromJson(Map<String, dynamic> json) => Residential(
         pk: json["id"] as int,
         statement: json["statement"] as int,
         content: json["content"] as String,

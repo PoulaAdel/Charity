@@ -139,18 +139,20 @@ class InfoGatheringController extends GetxController {
 
   // Fetch the list of statements from the API
   Future<void> fetchStatements(int? familyID) async {
-    try {
-      var fetchedStatements = await _api.get('statements');
-      statements.value = (fetchedStatements as List)
-          .map((json) => Statement.fromJson(json as Map<String, dynamic>))
-          .toList();
-      if (familyID != null) {
-        statements.value = statements
-            .where((statement) => statement.family == familyID)
+    if (familyID != null) {
+      try {
+        var fetchedStatements = await _api.get(
+          'statements',
+          queryParameters: {'family': familyID.toString()},
+        );
+        statements.value = (fetchedStatements as List)
+            .map((json) => Statement.fromJson(json as Map<String, dynamic>))
             .toList();
+      } catch (e) {
+        Get.snackbar('Error', 'Failed to fetch statements: ${e.toString()}');
       }
-    } catch (e) {
-      Get.snackbar('Error', 'Failed to fetch statements: ${e.toString()}');
+    } else {
+      statements.clear();
     }
   }
 
@@ -222,7 +224,7 @@ class InfoGatheringController extends GetxController {
     );
 
     if (selectedFamily != null) {
-      resetStatement();
+      fetchStatements(selectedFamily.pk);
       return families.firstWhere((family) => family.pk == selectedFamily.pk);
     }
     return null;
@@ -231,10 +233,7 @@ class InfoGatheringController extends GetxController {
   // Choose a statement from the list
   Future<Statement?> chooseStatement(
       BuildContext context, Family family) async {
-    var familyStatements =
-        statements.where((statement) => statement.family == family.pk).toList();
-
-    RxList<Statement> filteredStatements = familyStatements.obs;
+    RxList<Statement> filteredStatements = statements;
 
     Statement? selectedStatement = await Get.dialog<Statement>(
       AlertDialog(
@@ -253,12 +252,11 @@ class InfoGatheringController extends GetxController {
                 onChanged: (value) {
                   isLoading.value = true;
                   if (value.isNotEmpty) {
-                    filteredStatements.value =
-                        familyStatements.where((statement) {
+                    filteredStatements.value = statements.where((statement) {
                       return statement.pk.toString().contains(value);
                     }).toList();
                   } else {
-                    filteredStatements.value = familyStatements;
+                    filteredStatements.value = statements;
                   }
                   isLoading.value = false;
                 },
@@ -304,7 +302,7 @@ class InfoGatheringController extends GetxController {
     );
 
     if (selectedStatement != null) {
-      return familyStatements
+      return statements
           .firstWhere((statement) => statement.pk == selectedStatement.pk);
     }
     return null;
@@ -325,5 +323,6 @@ class InfoGatheringController extends GetxController {
   Future<void> clearData() async {
     await resetFamily();
     await resetStatement();
+    update();
   }
 }

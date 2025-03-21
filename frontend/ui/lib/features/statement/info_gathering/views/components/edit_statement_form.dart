@@ -2,14 +2,19 @@ part of info_gathering;
 
 class EditStatementForm extends StatelessWidget {
   final String modelType; // "spiritual", "economical", "social", "residential"
-  EditStatementForm({Key? key, required this.modelType}) : super(key: key);
+  final EditStatementFormController controller;
+  final int statementID;
 
-  final EditStatementFormController controller =
-      Get.find<EditStatementFormController>();
+  const EditStatementForm(
+      {Key? key,
+      required this.modelType,
+      required this.controller,
+      required this.statementID})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    controller.setModelType(modelType);
+    controller.setData(statementID.toString(), modelType);
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit ${modelType.capitalizeFirst} Statement'),
@@ -39,7 +44,7 @@ class EditStatementForm extends StatelessWidget {
                   const SizedBox(height: 20),
                   _buildTextField(
                     label: 'Content',
-                    onSaved: (value) => controller.typeContent.value = value!,
+                    onSaved: (value) => () {},
                   ),
                   const SizedBox(height: 24),
                   ElevatedButton(
@@ -70,23 +75,20 @@ class EditStatementForm extends StatelessWidget {
     required FormFieldSetter<String> onSaved,
   }) {
     return Card(
-      child: Obx(() => TextFormField(
-            decoration: InputDecoration(
-              labelText: label,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-            ),
-            initialValue: controller.typeContent.value.isNotEmpty
-                ? controller.typeContent.value
-                : null,
-            onSaved: onSaved,
-            validator: (value) => value == null || value.isEmpty
-                ? 'This field is required'
-                : null,
-            maxLines: 10, // Allow multiple lines
-            keyboardType: TextInputType.multiline,
-          )),
+      child: TextFormField(
+        controller: controller.textController, // Ensure this is accessible
+        decoration: InputDecoration(
+          labelText: label,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+        ),
+        onSaved: onSaved,
+        validator: (value) =>
+            value == null || value.isEmpty ? 'This field is required' : null,
+        maxLines: 10, // Allow multiple lines
+        keyboardType: TextInputType.multiline,
+      ),
     );
   }
 }

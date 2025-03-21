@@ -41,6 +41,8 @@ class InfoGatheringScreen extends StatelessWidget {
   InfoGatheringScreen({Key? key}) : super(key: key);
 
   final InfoGatheringController controller = Get.find();
+  final EditStatementFormController editStatementFormController =
+      Get.find(); // Ensure this is properly initialized
 
   @override
   Widget build(BuildContext context) {
@@ -269,91 +271,52 @@ class InfoGatheringScreen extends StatelessWidget {
 
   Widget _buildStickySection(BuildContext context) {
     return Card(
-      elevation: 4,
-      margin: const EdgeInsets.all(8.0),
+      elevation: 6,
+      margin: const EdgeInsets.all(16.0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16.0),
+      ),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Family ID Section
-            Column(
-              children: [
-                const Text('Family ID',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 8),
-                Obx(() => Text(
-                      controller.selectedFamily.value?.pk.toString() ?? '',
-                      overflow: TextOverflow.ellipsis,
-                    )),
-                const SizedBox(height: 8),
-                ElevatedButton(
-                  onPressed: () async {
-                    final family = await controller.chooseFamily(context);
-                    if (family != null) {
-                      controller._localSecureStorage.saveFamily(family);
-                      controller.selectedFamily.value = family;
-                    }
-                  },
-                  child: const Text('Change Family'),
-                ),
-              ],
-            ),
-            // Statement ID Section
-            Column(
-              children: [
-                const Text('Statement ID',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 8),
-                Obx(() => Text(
-                      controller.selectedStatement.value?.pk.toString() ?? '',
-                      overflow: TextOverflow.ellipsis,
-                    )),
-                const SizedBox(height: 8),
-                ElevatedButton(
-                  onPressed: () async {
-                    final statement = await controller.chooseStatement(
-                        context, controller.selectedFamily.value!);
-                    if (statement != null) {
-                      controller.selectedStatement.value = statement;
-                    }
-                  },
-                  child: const Text('Change Statement'),
-                ),
-              ],
-            ),
-            // Action Buttons Section
-            Column(
-              children: [
-                SizedBox(
-                  width: 150, // Set a fixed width for the buttons
-                  child: ElevatedButton.icon(
-                    onPressed: controller.clearData,
-                    style:
-                        ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                    icon: const Icon(Icons.delete, color: Colors.white),
-                    label: const Text('Clear Data'),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                SizedBox(
-                  width: 150, // Set a fixed width for the buttons
-                  child: ElevatedButton.icon(
-                    onPressed: () {
+            Obx(() {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildInfoCard(
+                    title: 'Family ID',
+                    value:
+                        controller.selectedFamily.value?.pk.toString() ?? 'N/A',
+                    onChange: () async {
+                      final family = await controller.chooseFamily(context);
+                      if (family != null) {
+                        controller._localSecureStorage.saveFamily(family);
+                        controller.selectedFamily.value = family;
+                      }
+                    },
+                    onCopy: () {
                       final familyId =
                           controller.selectedFamily.value?.pk.toString() ?? '';
                       Clipboard.setData(ClipboardData(text: familyId));
                       Get.snackbar('Copied', 'Family ID copied to clipboard');
                     },
-                    icon: const Icon(Icons.copy, color: Colors.white),
-                    label: const Text('Family ID'),
                   ),
-                ),
-                const SizedBox(height: 8),
-                SizedBox(
-                  width: 150, // Set a fixed width for the buttons
-                  child: ElevatedButton.icon(
-                    onPressed: () {
+                  const SizedBox(width: 16),
+                  _buildInfoCard(
+                    title: 'Statement ID',
+                    value: controller.selectedStatement.value?.pk.toString() ??
+                        'N/A',
+                    onChange: () async {
+                      final statement = await controller.chooseStatement(
+                          context, controller.selectedFamily.value!);
+                      if (statement != null) {
+                        controller._localSecureStorage.saveStatement(statement);
+                        controller.selectedStatement.value = statement;
+                      }
+                    },
+                    onCopy: () {
                       final statementId =
                           controller.selectedStatement.value?.pk.toString() ??
                               '';
@@ -361,14 +324,111 @@ class InfoGatheringScreen extends StatelessWidget {
                       Get.snackbar(
                           'Copied', 'Statement ID copied to clipboard');
                     },
-                    icon: const Icon(Icons.copy, color: Colors.white),
-                    label: const Text('Statement ID'),
                   ),
+                ],
+              );
+            }),
+            const SizedBox(height: 20),
+            _buildFullWidthActionButton(
+              label: 'Clear Data',
+              icon: Icons.delete,
+              color: Colors.red,
+              onPressed: controller.clearData,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoCard({
+    required String title,
+    required String value,
+    required VoidCallback onChange,
+    required VoidCallback onCopy,
+  }) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12.0),
+          boxShadow: [
+            BoxShadow(
+              color: const Color.fromARGB(255, 158, 158, 158).withOpacity(0.2),
+              blurRadius: 6,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              value,
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.grey,
+              ),
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: onChange,
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  child: const Text('Change'),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(width: 8),
+                IconButton(
+                  onPressed: onCopy,
+                  icon: const Icon(Icons.copy, color: Colors.blue),
+                  tooltip: 'Copy',
+                ),
               ],
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFullWidthActionButton({
+    required String label,
+    required IconData icon,
+    required Color color,
+    required VoidCallback onPressed,
+  }) {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton.icon(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: color,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 16.0),
+        ),
+        icon: Icon(icon, color: Colors.white),
+        label: Text(
+          label,
+          style: const TextStyle(color: Colors.white, fontSize: 16),
         ),
       ),
     );
@@ -404,7 +464,12 @@ class InfoGatheringScreen extends StatelessWidget {
                     isEnabled
                         ? () {
                             Get.dialog(
-                              EditStatementForm(modelType: 'spiritual'),
+                              EditStatementForm(
+                                modelType: 'spiritual',
+                                controller: editStatementFormController,
+                                statementID:
+                                    controller.selectedStatement.value!.pk!,
+                              ),
                               barrierDismissible: false,
                             );
                           }
@@ -416,7 +481,12 @@ class InfoGatheringScreen extends StatelessWidget {
                     isEnabled
                         ? () {
                             Get.dialog(
-                              EditStatementForm(modelType: 'economical'),
+                              EditStatementForm(
+                                modelType: 'economical',
+                                controller: editStatementFormController,
+                                statementID:
+                                    controller.selectedStatement.value!.pk!,
+                              ),
                               barrierDismissible: false,
                             );
                           }
@@ -436,7 +506,12 @@ class InfoGatheringScreen extends StatelessWidget {
                     isEnabled
                         ? () {
                             Get.dialog(
-                              EditStatementForm(modelType: 'residential'),
+                              EditStatementForm(
+                                modelType: 'residential',
+                                controller: editStatementFormController,
+                                statementID:
+                                    controller.selectedStatement.value!.pk!,
+                              ),
                               barrierDismissible: false,
                             );
                           }
@@ -448,7 +523,12 @@ class InfoGatheringScreen extends StatelessWidget {
                     isEnabled
                         ? () {
                             Get.dialog(
-                              EditStatementForm(modelType: 'social'),
+                              EditStatementForm(
+                                modelType: 'social',
+                                controller: editStatementFormController,
+                                statementID:
+                                    controller.selectedStatement.value!.pk!,
+                              ),
                               barrierDismissible: false,
                             );
                           }
