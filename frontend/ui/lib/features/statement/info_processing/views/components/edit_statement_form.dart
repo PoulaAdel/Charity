@@ -1,7 +1,7 @@
-part of info_gathering;
+part of info_processing;
 
 class EditStatementForm extends StatelessWidget {
-  final String modelType; // "spiritual", "economical", "social", "residential"
+  final String modelType; // "opinion", "suggestion"
   final EditStatementFormController controller;
   final int statementID;
 

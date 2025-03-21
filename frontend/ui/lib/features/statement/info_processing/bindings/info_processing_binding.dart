@@ -4,5 +4,6 @@ class InfoProcessingBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut(() => InfoProcessingController());
+    Get.lazyPut(() => EditStatementFormController());
   }
 }
