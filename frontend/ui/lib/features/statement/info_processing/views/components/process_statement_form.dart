@@ -1,11 +1,11 @@
 part of info_processing;
 
-class EditStatementForm extends StatelessWidget {
+class ProcessStatementForm extends StatelessWidget {
   final String modelType; // "opinion", "suggestion"
-  final EditStatementFormController controller;
+  final ProcessStatementFormController controller;
   final int statementID;
 
-  const EditStatementForm(
+  const ProcessStatementForm(
       {Key? key,
       required this.modelType,
       required this.controller,

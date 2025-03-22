@@ -22,7 +22,7 @@ import '../../../../../utils/ui/ui_utils.dart';
 
 // component
 import '../../../../../shared/widgets/sidebar.dart';
-part '../components/edit_statement_form.dart';
+part '../components/process_statement_form.dart';
 part '../components/active_project_card.dart';
 part '../components/overview_header.dart';
 part '../components/recent_messages.dart';
@@ -33,7 +33,7 @@ part '../../bindings/info_processing_binding.dart';
 
 // controller
 part '../../controllers/info_processing_controller.dart';
-part '../../controllers/edit_statement_form_controller.dart';
+part '../../controllers/process_statement_form_controller.dart';
 
 // models
 
@@ -41,7 +41,7 @@ class InfoProcessingScreen extends StatelessWidget {
   InfoProcessingScreen({Key? key}) : super(key: key);
 
   final InfoProcessingController controller = Get.find();
-  final EditStatementFormController editStatementFormController = Get.find();
+  final ProcessStatementFormController editStatementFormController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -470,7 +470,7 @@ class InfoProcessingScreen extends StatelessWidget {
                     isEnabled
                         ? () {
                             Get.dialog(
-                              EditStatementForm(
+                              ProcessStatementForm(
                                 modelType: 'opinion',
                                 controller: editStatementFormController,
                                 statementID:
@@ -487,7 +487,7 @@ class InfoProcessingScreen extends StatelessWidget {
                     isEnabled
                         ? () {
                             Get.dialog(
-                              EditStatementForm(
+                              ProcessStatementForm(
                                 modelType: 'suggestion',
                                 controller: editStatementFormController,
                                 statementID:

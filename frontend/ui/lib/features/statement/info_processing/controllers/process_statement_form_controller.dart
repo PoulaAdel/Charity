@@ -1,6 +1,6 @@
 part of info_processing;
 
-class EditStatementFormController extends GetxController {
+class ProcessStatementFormController extends GetxController {
   final RestApiServices _api = Get.find();
   final formKey = GlobalKey<FormState>();
   final textController = TextEditingController();
