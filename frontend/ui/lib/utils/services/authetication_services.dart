@@ -38,7 +38,7 @@ class AuthenticationServices extends GetxService {
   }
 
   Future<bool> register(User user) async {
-    final url = '/users/register/';
+    const url = '/users/register/';
     try {
       await dio.post(
         url,
@@ -67,7 +67,7 @@ class AuthenticationServices extends GetxService {
   }
 
   Future<void> updateProfileData() async {
-    final url = '/api/authenticated_user_info/';
+    const url = '/api/authenticated_user_info/';
     try {
       final response = await dio.post(
         url,

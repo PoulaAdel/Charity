@@ -352,13 +352,7 @@ class InfoGatheringScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12.0),
-          boxShadow: [
-            BoxShadow(
-              color: const Color.fromARGB(255, 158, 158, 158).withOpacity(0.2),
-              blurRadius: 6,
-              offset: const Offset(0, 4),
-            ),
-          ],
+          border: Border.all(color: Colors.grey.shade300),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -375,8 +369,9 @@ class InfoGatheringScreen extends StatelessWidget {
             Text(
               value,
               style: const TextStyle(
-                fontSize: 14,
-                color: Colors.grey,
+                fontSize: 18,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
               ),
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,

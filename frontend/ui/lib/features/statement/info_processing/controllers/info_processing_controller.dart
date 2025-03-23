@@ -337,9 +337,15 @@ class InfoProcessingController extends GetxController {
           'statement': selectedStatement.value!.pk.toString(),
         });
         if (response.isNotEmpty) {
-          spiritual.value = Spiritual.fromJson(response.first);
+          final spiritualObj = Spiritual.fromJson(response.first);
+          if (spiritualObj.content.isNotEmpty) {
+            spiritual.value = spiritualObj;
+          } else {
+            spiritual.value = null;
+          }
         } else {
-          Get.snackbar('Error', 'Failed to fetch spiritual data',
+          spiritual.value = null;
+          Get.snackbar('N/A', 'No Data Found!',
               snackPosition: SnackPosition.BOTTOM);
         }
       } catch (e) {
@@ -359,9 +365,15 @@ class InfoProcessingController extends GetxController {
           'statement': selectedStatement.value!.pk.toString(),
         });
         if (response.isNotEmpty) {
-          economical.value = Economical.fromJson(response.first);
+          final economicalObj = Economical.fromJson(response.first);
+          if (economicalObj.content.isNotEmpty) {
+            economical.value = economicalObj;
+          } else {
+            economical.value = null;
+          }
         } else {
-          Get.snackbar('Error', 'Failed to fetch economical data',
+          economical.value = null;
+          Get.snackbar('N/A', 'No Data Found!',
               snackPosition: SnackPosition.BOTTOM);
         }
       } catch (e) {
@@ -381,9 +393,15 @@ class InfoProcessingController extends GetxController {
           'statement': selectedStatement.value!.pk.toString(),
         });
         if (response.isNotEmpty) {
-          social.value = Social.fromJson(response.first);
+          final socialObj = Social.fromJson(response.first);
+          if (socialObj.content.isNotEmpty) {
+            social.value = socialObj;
+          } else {
+            social.value = null;
+          }
         } else {
-          Get.snackbar('Error', 'Failed to fetch social data',
+          social.value = null;
+          Get.snackbar('N/A', 'No Data Found!',
               snackPosition: SnackPosition.BOTTOM);
         }
       } catch (e) {
@@ -403,9 +421,15 @@ class InfoProcessingController extends GetxController {
           'statement': selectedStatement.value!.pk.toString(),
         });
         if (response.isNotEmpty) {
-          residential.value = Residential.fromJson(response.first);
+          final residentialObj = Residential.fromJson(response.first);
+          if (residentialObj.content.isNotEmpty) {
+            residential.value = residentialObj;
+          } else {
+            residential.value = null;
+          }
         } else {
-          Get.snackbar('Error', 'Failed to fetch residential data',
+          residential.value = null;
+          Get.snackbar('N/A', 'No Data Found!',
               snackPosition: SnackPosition.BOTTOM);
         }
       } catch (e) {

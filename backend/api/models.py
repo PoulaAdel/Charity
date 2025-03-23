@@ -147,7 +147,7 @@ class Statement(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.family} - {self.created_at}"
+        return f"{self.pk} - {self.family}"
 
 
 # Statement Leaves

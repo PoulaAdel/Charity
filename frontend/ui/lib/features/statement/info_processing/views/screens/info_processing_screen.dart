@@ -68,6 +68,12 @@ class InfoProcessingScreen extends StatelessWidget {
                 const Divider(),
                 _buildProfile(data: controller.getProfil()),
                 const SizedBox(height: kSpacing),
+                _buildStickySection(),
+                const SizedBox(height: kSpacing),
+                _buildOverviewSection(context),
+                const SizedBox(height: kSpacing),
+                _buildEditingOptions(context),
+                const SizedBox(height: kSpacing),
                 _buildTeamMember(data: controller.getMember()),
                 const SizedBox(height: kSpacing),
                 Padding(
@@ -75,12 +81,6 @@ class InfoProcessingScreen extends StatelessWidget {
                   child: GetPremiumCard(onPressed: () {}),
                 ),
                 const SizedBox(height: kSpacing * 2),
-                _buildStickySection(),
-                const SizedBox(height: kSpacing),
-                _buildOverviewSection(context),
-                const SizedBox(height: kSpacing),
-                _buildEditingOptions(context),
-                const SizedBox(height: kSpacing),
               ],
             ),
           );
@@ -358,13 +358,7 @@ class InfoProcessingScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12.0),
-          boxShadow: [
-            BoxShadow(
-              color: const Color.fromARGB(255, 158, 158, 158).withOpacity(0.2),
-              blurRadius: 6,
-              offset: const Offset(0, 4),
-            ),
-          ],
+          border: Border.all(color: Colors.grey.shade300),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -381,8 +375,9 @@ class InfoProcessingScreen extends StatelessWidget {
             Text(
               value,
               style: const TextStyle(
-                fontSize: 14,
-                color: Colors.grey,
+                fontSize: 18,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
               ),
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
@@ -577,26 +572,28 @@ class InfoProcessingScreen extends StatelessWidget {
                 children: [
                   _buildSquareButton(
                     'Spiritual',
-                    Icons.panorama_wide_angle,
+                    Icons.self_improvement,
                     isEnabled
                         ? () async {
                             await controller.fetchSpiritual();
                             _showDialog(
                               title: 'Spiritual',
-                              content: controller.spiritual.value!.content,
+                              content: controller.spiritual.value?.content ??
+                                  'No data avialable',
                             );
                           }
                         : null,
                   ),
                   _buildSquareButton(
                     'Economical',
-                    Icons.money,
+                    Icons.attach_money,
                     isEnabled
                         ? () async {
                             await controller.fetchEconomical();
                             _showDialog(
                               title: 'Economical',
-                              content: controller.economical.value!.content,
+                              content: controller.economical.value?.content ??
+                                  'No data avialable',
                             );
                           }
                         : null,
@@ -609,7 +606,8 @@ class InfoProcessingScreen extends StatelessWidget {
                             await controller.fetchResidential();
                             _showDialog(
                               title: 'Residential',
-                              content: controller.residential.value!.content,
+                              content: controller.residential.value?.content ??
+                                  'No data avialable',
                             );
                           }
                         : null,
@@ -622,7 +620,8 @@ class InfoProcessingScreen extends StatelessWidget {
                             await controller.fetchSocial();
                             _showDialog(
                               title: 'Social',
-                              content: controller.social.value!.content,
+                              content: controller.social.value?.content ??
+                                  'No data avialable',
                             );
                           }
                         : null,
@@ -640,7 +639,7 @@ class InfoProcessingScreen extends StatelessWidget {
     Get.dialog(
       AlertDialog(
         title: Text(title),
-        content: Text(content),
+        content: Text(content.isNotEmpty ? content : 'No content available.'),
         actions: [
           TextButton(
             onPressed: () => Get.back(),
