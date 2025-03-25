@@ -2,37 +2,44 @@ library supply;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+
 import '../../../../../config/routes/app_pages.dart';
+
+import '../../../../../database/models/app_models.dart';
+import '../../../../../shared/widgets/sidebar_header.dart';
+import '../../../../../utils/helpers/app_helpers.dart';
+import '../../../../../utils/services/rest_api_services.dart';
+import '../../../../../utils/ui/ui_utils.dart';
+import '../../../../../utils/services/authetication_services.dart';
+import '../../../../../utils/services/local_secure_storage_services.dart';
+
+import '../../../../../shared/constants/app_constants.dart';
+import '../../../../../shared/widgets/header.dart';
+import '../../../../../shared/widgets/sidebar.dart';
 import '../../../../../shared/widgets/profile.dart';
 import '../../../../../shared/widgets/profile_tile.dart';
 import '../../../../../shared/widgets/project_card.dart';
-import '../../../../../shared/widgets/sidebar_header.dart';
 import '../../../../../shared/widgets/task_card.dart';
-import '../../../../../utils/helpers/app_helpers.dart';
-import '../../../../../utils/services/authetication_services.dart';
-import '../../../../../utils/services/local_secure_storage_services.dart';
-import '../../../../../shared/constants/app_constants.dart';
 import '../../../../../shared/widgets/chatting_card.dart';
 import '../../../../../shared/widgets/get_premium_card.dart';
 import '../../../../../shared/widgets/list_profil_image.dart';
-import '../../../../../shared/widgets/search_field.dart';
-import '../../../../../shared/widgets/today_text.dart';
-import '../../../../../utils/ui/ui_utils.dart';
 
 // component
-import '../../../../../shared/widgets/sidebar.dart';
-part '../components/active_project_card.dart';
-part '../components/header.dart';
-part '../components/overview_header.dart';
 part '../components/recent_messages.dart';
 part '../components/team_member.dart';
+part '../components/supply_form.dart';
+part '../components/filter_section.dart';
+part '../components/supply_list.dart';
 
 // binding
 part '../../bindings/supply_binding.dart';
 
 // controller
 part '../../controllers/supply_controller.dart';
+part '../../controllers/supply_list_controller.dart';
+part '../../controllers/supply_form_controller.dart';
 
 // models
 
@@ -66,6 +73,10 @@ class SupplyScreen extends StatelessWidget {
                 const Divider(),
                 _buildProfile(data: controller.getProfil()),
                 const SizedBox(height: kSpacing),
+                _buildStickySection(),
+                const SizedBox(height: kSpacing),
+                // SupplyList(),
+                const SizedBox(height: kSpacing),
                 _buildTeamMember(data: controller.getMember()),
                 const SizedBox(height: kSpacing),
                 Padding(
@@ -73,10 +84,6 @@ class SupplyScreen extends StatelessWidget {
                   child: GetPremiumCard(onPressed: () {}),
                 ),
                 const SizedBox(height: kSpacing * 2),
-                /*******
-                 * TODO: add UI
-                 * sections goes here
-                 */
               ],
             ),
           );
@@ -95,10 +102,10 @@ class SupplyScreen extends StatelessWidget {
                         onPressedMenu: () => controller.openDrawer(),
                       ),
                       const SizedBox(height: kSpacing * 2),
-                      /*******
-                       * TODO: add UI
-                       * sections goes here
-                       */
+                      _buildStickySection(),
+                      const SizedBox(height: kSpacing),
+                      // SupplyList(),
+                      const SizedBox(height: kSpacing),
                       const SizedBox(height: kSpacing),
                     ],
                   ),
@@ -154,10 +161,10 @@ class SupplyScreen extends StatelessWidget {
                       const SizedBox(height: kSpacing),
                       _buildHeader(),
                       const SizedBox(height: kSpacing * 2),
-                      /*******
-                       * TODO: add UI
-                       * sections goes here
-                       */
+                      _buildStickySection(),
+                      const SizedBox(height: kSpacing),
+                      // SupplyList(),
+                      const SizedBox(height: kSpacing),
                       const SizedBox(height: kSpacing),
                     ],
                   ),
@@ -224,7 +231,7 @@ class SupplyScreen extends StatelessWidget {
                 tooltip: "menu",
               ),
             ),
-          const Expanded(child: _Header()),
+          const Expanded(child: Header()),
         ],
       ),
     );

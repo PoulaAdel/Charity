@@ -3,12 +3,9 @@ part of supply;
 class SupplyController extends GetxController {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   // for handling authenticaion
-  final AuthenticationServices _authService =
-      Get.find<AuthenticationServices>();
-
+  final AuthenticationServices _authService = Get.find();
   final ScrollController scrollController = ScrollController();
-  final LocalSecureStorageServices _localSecureStorage =
-      Get.find<LocalSecureStorageServices>();
+  final LocalSecureStorageServices _localSecureStorage = Get.find();
 
   Rx<Profile?> currentProfile = Rx<Profile?>(null);
 

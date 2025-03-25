@@ -7,6 +7,7 @@ class SupplyFields {
   static const String family = "family";
   static const String service = "service";
   static const String amount = "amount";
+  static const String note = "note";
   static const String createdAt = "created_at";
   static const String updatedAt = "updated_at";
   static const List<String> values = [
@@ -14,6 +15,7 @@ class SupplyFields {
     family,
     service,
     amount,
+    note,
     createdAt,
     updatedAt,
   ];
@@ -24,6 +26,7 @@ class Supply {
   final int family;
   final int service;
   final double amount;
+  final String? note;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -32,6 +35,7 @@ class Supply {
     required this.family,
     required this.service,
     required this.amount,
+    this.note,
     this.createdAt,
     this.updatedAt,
   });
@@ -41,6 +45,7 @@ class Supply {
         family: json["family"] as int,
         service: json["service"] as int,
         amount: json["amount"] as double,
+        note: json["note"] as String?,
         createdAt: (json['created_at'] != null)
             ? DateTime.parse(json['created_at'])
             : null,
@@ -54,6 +59,7 @@ class Supply {
         "family": family,
         "service": service,
         "amount": amount,
+        "note": note,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
       };

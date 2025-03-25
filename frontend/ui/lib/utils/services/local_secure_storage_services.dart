@@ -49,7 +49,7 @@ class LocalSecureStorageServices extends GetxService {
   }
 
   /// *
-  /// for family and statement management
+  /// for family and statement and service management
   /// *
 
   Future<Family?> getFamily() async {
@@ -67,6 +67,10 @@ class LocalSecureStorageServices extends GetxService {
     );
   }
 
+  Future<void> deleteFamily() async {
+    await _secureStorage.delete(key: 'FAMILY');
+  }
+
   Future<Statement?> getStatement() async {
     String? data = await _secureStorage.read(key: 'STATEMENT');
     if (data != null && data.isNotEmpty) {
@@ -82,11 +86,26 @@ class LocalSecureStorageServices extends GetxService {
     );
   }
 
-  Future<void> deleteFamily() async {
-    await _secureStorage.delete(key: 'FAMILY');
-  }
-
   Future<void> deleteStatement() async {
     await _secureStorage.delete(key: 'STATEMENT');
+  }
+
+  Future<Service?> getService() async {
+    String? data = await _secureStorage.read(key: 'SERVICE');
+    if (data != null && data.isNotEmpty) {
+      return Service.fromJson(jsonDecode(data));
+    }
+    return null;
+  }
+
+  Future<void> saveService(Service service) async {
+    await _secureStorage.write(
+      key: 'FAMILY',
+      value: jsonEncode(service.toJson()),
+    );
+  }
+
+  Future<void> deleteService() async {
+    await _secureStorage.delete(key: 'FAMILY');
   }
 }
