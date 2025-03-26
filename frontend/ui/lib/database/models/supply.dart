@@ -44,7 +44,7 @@ class Supply {
         pk: json["id"] as int,
         family: json["family"] as int,
         service: json["service"] as int,
-        amount: json["amount"] as double,
+        amount: double.parse(json["amount"]),
         note: json["note"] as String?,
         createdAt: (json['created_at'] != null)
             ? DateTime.parse(json['created_at'])

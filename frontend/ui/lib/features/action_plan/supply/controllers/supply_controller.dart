@@ -6,6 +6,7 @@ class SupplyController extends GetxController {
   final AuthenticationServices _authService = Get.find();
   final ScrollController scrollController = ScrollController();
   final LocalSecureStorageServices _localSecureStorage = Get.find();
+  final RxBool isSupplyListScrolled = false.obs;
 
   Rx<Profile?> currentProfile = Rx<Profile?>(null);
 
@@ -13,6 +14,12 @@ class SupplyController extends GetxController {
   void onInit() {
     assignCurrentProfile();
     super.onInit();
+  }
+
+  @override
+  void onClose() {
+    scrollController.dispose(); // Dispose of the ScrollController
+    super.onClose();
   }
 
   void assignCurrentProfile() async {
@@ -33,12 +40,18 @@ class SupplyController extends GetxController {
   }
 
   void scrollToTop() {
-    double start = 0;
-    // scrollController.jumpTo(start);
     scrollController.animateTo(
-      start,
-      duration: const Duration(milliseconds: 100),
-      curve: Curves.easeIn,
+      0,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  void scrollSupplyListToTop() {
+    scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
     );
   }
 

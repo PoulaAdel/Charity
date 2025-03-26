@@ -73,10 +73,14 @@ class SupplyListController extends GetxController {
     errorMessage.value = '';
     try {
       final data = await _apiService.get(_endPoint);
-      supplies.value = data;
-      filteredSupplies.value = data; // Initialize filtered list
+      supplies.value = (data as List)
+          .map((json) => Supply.fromJson(json as Map<String, dynamic>))
+          .toList();
+      filteredSupplies.value = supplies;
+      print('Supplies fetched: ${supplies.length}');
     } catch (e) {
       errorMessage.value = 'Failed to fetch supplies: $e';
+      Get.snackbar('Error', errorMessage.value); // Show snackbar
     } finally {
       isLoading.value = false;
     }
@@ -91,6 +95,7 @@ class SupplyListController extends GetxController {
       filteredSupplies.add(Supply.fromJson(newSupply));
     } catch (e) {
       errorMessage.value = 'Failed to add supply: $e';
+      Get.snackbar('Error', errorMessage.value); // Show snackbar
     } finally {
       isLoading.value = false;
     }
@@ -113,6 +118,7 @@ class SupplyListController extends GetxController {
       }
     } catch (e) {
       errorMessage.value = 'Failed to update supply: $e';
+      Get.snackbar('Error', errorMessage.value); // Show snackbar
     } finally {
       isLoading.value = false;
     }
@@ -127,6 +133,7 @@ class SupplyListController extends GetxController {
       filteredSupplies.removeWhere((s) => s.pk == id);
     } catch (e) {
       errorMessage.value = 'Failed to delete supply: $e';
+      Get.snackbar('Error', errorMessage.value); // Show snackbar
     } finally {
       isLoading.value = false;
     }

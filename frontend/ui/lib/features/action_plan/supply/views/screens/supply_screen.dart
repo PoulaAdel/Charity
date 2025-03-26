@@ -63,7 +63,8 @@ class SupplyScreen extends StatelessWidget {
       body: ResponsiveBuilder(
         mobileBuilder: (context, constraints) {
           return SingleChildScrollView(
-            controller: controller.scrollController,
+            controller:
+                controller.scrollController, // Ensure controller is used
             scrollDirection: Axis.vertical,
             child: Column(
               children: [
@@ -75,7 +76,7 @@ class SupplyScreen extends StatelessWidget {
                 const SizedBox(height: kSpacing),
                 _buildStickySection(),
                 const SizedBox(height: kSpacing),
-                // SupplyList(),
+                _buildSupplyListSection(context),
                 const SizedBox(height: kSpacing),
                 _buildTeamMember(data: controller.getMember()),
                 const SizedBox(height: kSpacing),
@@ -90,6 +91,8 @@ class SupplyScreen extends StatelessWidget {
         },
         tabletBuilder: (context, constraints) {
           return SingleChildScrollView(
+            controller:
+                controller.scrollController, // Ensure controller is used
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -104,7 +107,7 @@ class SupplyScreen extends StatelessWidget {
                       const SizedBox(height: kSpacing * 2),
                       _buildStickySection(),
                       const SizedBox(height: kSpacing),
-                      // SupplyList(),
+                      _buildSupplyListSection(context),
                       const SizedBox(height: kSpacing),
                       const SizedBox(height: kSpacing),
                     ],
@@ -155,6 +158,8 @@ class SupplyScreen extends StatelessWidget {
                 flex: 9,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
+                  controller:
+                      controller.scrollController, // Ensure controller is used
                   primary: false,
                   child: Column(
                     children: [
@@ -163,8 +168,7 @@ class SupplyScreen extends StatelessWidget {
                       const SizedBox(height: kSpacing * 2),
                       _buildStickySection(),
                       const SizedBox(height: kSpacing),
-                      // SupplyList(),
-                      const SizedBox(height: kSpacing),
+                      _buildSupplyListSection(context),
                       const SizedBox(height: kSpacing),
                     ],
                   ),
@@ -208,7 +212,11 @@ class SupplyScreen extends StatelessWidget {
               hoverColor: const Color.fromARGB(255, 106, 136, 151),
               foregroundColor: Colors.white,
               onPressed: () {
-                controller.scrollToTop();
+                controller.scrollController.animateTo(
+                  0,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                );
               },
               heroTag: null,
               child: const Icon(Icons.arrow_upward),
@@ -231,7 +239,8 @@ class SupplyScreen extends StatelessWidget {
                 tooltip: "menu",
               ),
             ),
-          const Expanded(child: Header()),
+          const Expanded(
+              child: Header()), // Ensure Header is wrapped in Expanded
         ],
       ),
     );
@@ -273,6 +282,25 @@ class SupplyScreen extends StatelessWidget {
         const SizedBox(height: kSpacing / 2),
         ...data.map((e) => ChattingCard(data: e, onPressed: () {})).toList(),
       ],
+    );
+  }
+
+  Widget _buildSupplyListSection(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: kSpacing),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Supply List",
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+          const SizedBox(height: kSpacing),
+          SupplyList(), // Embed the SupplyList widget here
+        ],
+      ),
     );
   }
 }
