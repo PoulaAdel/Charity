@@ -10,16 +10,6 @@ class SupplyList extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Supplies List'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () async {
-              // Navigate to the supply form for adding a new supply
-              await Get.toNamed('/supply_form');
-              controller.fetchSupplies(); // Refresh the list after adding
-            },
-          ),
-        ],
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
@@ -46,7 +36,7 @@ class SupplyList extends StatelessWidget {
                       icon: const Icon(Icons.edit),
                       onPressed: () async {
                         // Navigate to the supply form for editing
-                        await Get.toNamed('/supply_form', arguments: supply);
+                        await Get.dialog(SupplyForm(supply: supply));
                         controller
                             .fetchSupplies(); // Refresh the list after editing
                       },
