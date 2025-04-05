@@ -77,7 +77,6 @@ class SupplyListController extends GetxController {
           .map((json) => Supply.fromJson(json as Map<String, dynamic>))
           .toList();
       filteredSupplies.value = supplies;
-      print('Supplies fetched: ${supplies.length}');
     } catch (e) {
       errorMessage.value = 'Failed to fetch supplies: $e';
       Get.snackbar('Error', errorMessage.value); // Show snackbar

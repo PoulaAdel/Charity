@@ -4,21 +4,35 @@ class SupplyController extends GetxController {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   // for handling authenticaion
   final AuthenticationServices _authService = Get.find();
-  final ScrollController scrollController = ScrollController();
   final LocalSecureStorageServices _localSecureStorage = Get.find();
-  final RxBool isSupplyListScrolled = false.obs;
+
+  final ScrollController scrollController = ScrollController();
+  final ScrollController listScrollController = ScrollController();
+  final RxBool showFab = false.obs;
+  final RxBool showListFab = false.obs;
 
   Rx<Profile?> currentProfile = Rx<Profile?>(null);
 
   @override
   void onInit() {
     assignCurrentProfile();
+
+    // Add listeners for both scroll controllers
+    scrollController.addListener(() {
+      showFab.value = scrollController.offset > 50;
+    });
+    listScrollController.addListener(() {
+      showListFab.value = listScrollController.offset > 50;
+    });
+
     super.onInit();
   }
 
   @override
   void onClose() {
-    scrollController.dispose(); // Dispose of the ScrollController
+    // Dispose both scroll controllers
+    scrollController.dispose();
+    listScrollController.dispose();
     super.onClose();
   }
 
@@ -48,7 +62,7 @@ class SupplyController extends GetxController {
   }
 
   void scrollSupplyListToTop() {
-    scrollController.animateTo(
+    listScrollController.animateTo(
       0,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
